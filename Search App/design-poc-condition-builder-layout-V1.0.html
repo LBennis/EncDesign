@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en" id="backgrounds" class="theme-a">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - Version 1.0</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+
+<style>
+
+
+  *
+  {
+    box-sizing: border-box;
+    transition: 0.8s ease-out all;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #0A0B33;
+  }
+
+  html
+  {
+    background: #F4F6FB;
+    height: 100%;
+  }
+
+
+  body
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+
+  button
+  {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #e9edf7; 
+    text-wrap: nowrap;
+  } 
+
+  button.active
+  {
+    background: #8fe0e2;
+  }
+
+  button.icon-only
+  {
+    padding: 8px 10px;
+  }
+
+  .header
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+      .breadcrumbs
+      {
+        width: 100%;
+        padding: 16px;
+        border-bottom: 1px solid #E7EBF5;
+      }
+
+      .search-bar
+      {
+        width: 100%;
+        padding: 24px 16px;
+      }
+
+  .view-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    background: white;
+    flex-grow: 1;
+    border-top: 1px solid #E7EBF5;
+    overflow: hidden;
+  }
+
+  .results-wrapper
+  {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    border-right: 1px solid #E7EBF5;
+  }
+
+  .section-header
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-block: 16px;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 21;
+  }
+
+  .header-tags
+  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .header-actions
+  {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .conditions-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+      .conditions-sidebar
+      {
+        display: flex;
+        flex-direction: column;
+        padding: 0px;
+        width: 0px;
+        gap: 24px;
+        overflow: hidden;
+      }
+
+      .conditions-sidebar.show /* Conditions ---------------------- */
+      {
+        width: 45vw;
+        max-width: 66vw;
+        min-width: 55rem;
+        padding: 24px;
+      }
+
+      .condition-group
+      {
+        opacity: 0;
+        padding: 24px;
+        border: 1px solid #E7EBF5;
+        border-radius: 8px;
+      }
+
+      .conditions-sidebar.show .condition-group
+      {
+        opacity: 1;
+      }
+
+
+      .result-listings-wrapper
+      {
+        flex: 1;
+        padding: 8px;
+        container-name: listings;
+        container-type: inline-size;
+        overflow: auto;
+        overflow-y: scroll;
+      }
+
+      .list-compact .comp-result-listing .tag-wrapper
+      {
+        display: none;
+      }
+
+      .list-compact .comp-result-listing .content-wrapper
+      {
+        display: block;
+      }
+
+      .list-compact .comp-result-listing .member-link,
+      .list-compact .comp-result-listing .repo-link,
+      .list-compact .comp-result-listing .date
+      {
+        display: inline-block;
+        margin: 8px 16px 0px 0px;
+      }
+
+          .comp-result-listing
+          {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+            padding: 24px 16px;
+          }
+
+          .comp-result-listing:hover
+          {
+            background: rgba(0, 0, 120, 0.03);
+          }
+
+          .comp-result-listing .left-content-wrapper
+          {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+            gap: 8px;
+            overflow: ;
+          }
+
+          .comp-result-listing .content-wrapper
+          {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 4px;
+            overflow: ;
+          }
+
+                  .comp-result-listing .icon
+                  {
+                    font-size: 24px;
+                    margin-top: -4px;
+                  }
+
+                  .comp-result-listing .title
+                  {
+                    font-size: 18px;
+                    font-weight: bold;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    cursor: pointer;
+                  }
+
+                  .comp-result-listing .member-link,
+                  .comp-result-listing .repo-link
+                  {
+                    font-size: 14px;
+                    color: teal;
+                  }
+
+                  .comp-result-listing .date
+                  {
+                    font-size: 14px;
+                    opacity: 0.4;
+                  }
+
+
+        .comp-result-listing .tag-wrapper
+        {
+          display: flex;
+          align-items: flex-end;
+          flex-direction: column;
+          justify-content: space-between;
+          flex-shrink: 0;
+          gap: 24px;
+          width: 45ch;
+        }
+
+                  .comp-result-listing .type-wrapper,
+                  .comp-result-listing .perspective-wrapper 
+                  {
+                    display: inline-flex;
+                    flex-direction: row;
+                    gap: 4px;
+                    flex-wrap: wrap;
+                    justify-content: flex-end;
+                  }
+
+                              @media screen and (max-width: 1440px) {
+                                .comp-result-listing .type-wrapper,
+                                .comp-result-listing .perspective-wrapper 
+                                {
+                                  width: calc(50% - 24px);
+                                }
+                              }
+
+                  .comp-result-listing .type-wrapper .tag,
+                  .comp-result-listing .perspective-wrapper .tag
+                  {
+                    display: inline-block;
+                  }
+
+                  .comp-result-listing .tag,
+                  .tag
+                  {
+                    padding: 4px 8px;
+                    border-radius: 8px;
+                    text-transform: uppercase;
+                    background: #e9edf7;
+                    font-size: 12px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    max-width: 384px;
+                  }
+
+
+          /* Facet + filters Items */
+
+          .comp-filter-set
+          {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 8px;
+          }
+
+          
+          /* Details Pane Items */
+
+          .details-item
+          {
+            display: flex;
+            flex-direction: row;
+            padding-block: 8px;
+            gap: 8px;
+          }
+
+          .details-item div:nth-child(1)
+          {
+            font-weight: bold;
+            min-width: 256px;
+          }
+
+          .details-item div:nth-child(2)
+          {
+           
+          }
+
+
+                @media screen and (max-width: 1440px) {
+                  .details-item
+                  {
+                    flex-direction: column;
+                  }
+                }
+
+
+
+
+          /* Container quieries for the Item List Item */
+
+          @media screen and (max-width: 1450px){
+
+
+          @container listings (max-width: 850px) {
+            .comp-result-listing
+            {
+              flex-direction: column;
+            }
+
+            .comp-result-listing .content-wrapper
+            {
+              display: block;
+            }
+
+            .comp-result-listing .member-link,
+            .comp-result-listing .repo-link,
+            .comp-result-listing .date
+            {
+              display: inline-block;
+              margin: 8px 16px 0px 0px;
+            }
+
+            .comp-result-listing .tag-wrapper
+            {
+              flex-direction: row;
+              align-items: flex-start;
+              justify-content: flex-start;
+              width: 100%;
+            }
+
+            .comp-result-listing .type-wrapper
+            {
+              justify-content: flex-start;
+            }
+          }
+
+
+
+          @container listings (max-width: 600px) {
+            
+            .comp-result-listing .perspective-wrapper 
+            {
+              display: none;
+            }
+
+          }
+        }
+
+
+          /* Details Pane styles below -------------------------- */
+
+
+
+          .details-pane-wrapper
+          {
+            display: flex;
+            flex-direction: row;
+            position: relative;
+          }
+
+          .details-wrapper
+          {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 0px;
+            padding: 0px;
+            overflow: hidden;
+          }
+
+
+          .details-wrapper.show /* Details ------------------------------- */
+          {
+            width: min(45rem, 33vw);
+            padding: 16px 24px;
+          }
+
+
+
+
+      .details-tabs
+      {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 52px;
+        padding: 8px;
+        border-left: 1px solid #E7EBF5;
+      }
+
+
+
+</style>
+
+
+</head>
+
+  
+<body>
+
+
+
+<div class="header">
+  <div class="breadcrumbs">Home > Text Search</div>
+  <div class="search-bar">
+    <input type="text" placeholder="Search..." 
+    style="
+    min-height: 32px; 
+    border-radius: 8px; 
+    border: 1px solid #E7EBF5; 
+    min-width: 640px;
+    padding: 12px;
+    ">
+  </div>
+</div>
+
+<div class="view-wrapper">
+
+
+
+    <div class="conditions-wrapper">
+
+
+
+      <div class="details-tabs">
+        <button id="conditions-toggle" class="icon-only">↔</button>
+      </div>
+
+
+  
+
+      <div class="conditions-sidebar show">
+
+        <div class="title">Conditions</div>
+
+        <div class="condition-group"><div> Condition Group</div></div>
+        <div class="condition-group"><div> Condition Group</div></div>
+        <div class="condition-group"><div> Condition Group</div></div>
+        <div class="condition-group"><div> Condition Group</div></div>
+        <div class="condition-group"><div> Condition Group</div></div>
+        <div class="condition-group"><div> Condition Group</div></div>
+        <div class="condition-group"><div> Condition Group</div></div>
+        <div class="condition-group"><div> Condition Group</div></div>
+
+      </div>
+
+
+      <div class="result-listings-wrapper list-compac">
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title - EMP2123</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label</div>
+              <div class="tag">much longer tag label</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title Medium Length - EMP9876</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label that is very long</div>
+              <div class="tag">much longer tag label that is definitely pushing past the maximum size and will show the overflow behaviour</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title - EMP4792</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">much very ery long tag label</div>
+              <div class="tag">much longer tag label</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title Much Longer Title Length - EMP0812</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label</div>
+              <div class="tag">much longer tag label</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title with an unrealistic length label, it's far too long and will wrap on the card - EMP6539</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label</div>
+              <div class="tag">much longer tag label</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title Medium Length - EMP6539</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label</div>
+              <div class="tag">much longer tag label</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title Much Longer Title Length - EMP1768</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label</div>
+              <div class="tag">much longer tag label</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title with an unrealistic length label, it's far too long and will wrap on the card - EMP6539</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label</div>
+              <div class="tag">much longer tag label</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title with an unrealistic length label, it's far too long and will wrap on the card - EMP6539</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">much longer tag label that is definitely pushing past the maximum size and will show the overflow behaviour</div>
+              <div class="tag">much longer tag label that is definitely pushing past the maximum size and will show the overflow behaviour</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">much longer tag label that is definitely pushing past the maximum size and will show the overflow behaviour</div>
+              <div class="tag">much longer tag label that is definitely pushing past the maximum size and will show the overflow behaviour</div>
+              <div class="tag">much longer tag label that is definitely pushing past the maximum size and will show the overflow behaviour</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title - EMP2123</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label</div>
+              <div class="tag">much longer tag label</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title Medium Length - EMP9876</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label that is very long</div>
+              <div class="tag">much longer tag label that is definitely pushing past the maximum size and will show the overflow behaviour</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title - EMP2123</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label</div>
+              <div class="tag">much longer tag label</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-result-listing">
+          <div class="left-content-wrapper">
+            <div class="icon">▢</div>
+            <div class="content-wrapper">
+              <div class="title">List Item File Title Medium Length - EMP9876</div>
+              <div class="member-link">23 member items</div>
+              <div class="repo-link">Repository Name</div>
+              <div class="date">23 June 2018</div>
+            </div>
+          </div>
+          <div class="tag-wrapper">
+            <div></div>
+            <div class="type-wrapper">
+              <div class="tag">short tag label</div>
+              <div class="tag">much longer tag label</div>
+            </div>
+            <div class="perspective-wrapper">
+              <div class="tag">tag label that is very long</div>
+              <div class="tag">much longer tag label that is definitely pushing past the maximum size and will show the overflow behaviour</div>
+              <div class="tag">short tag label</div>
+              <div class="tag">...</div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+
+  <div class="details-pane-wrapper">
+    <div class="details-wrapper width-close">
+
+      <div class="section-header">
+        <div>
+          <strong>Details Header</strong>
+        </div>
+        <div>
+        <button class="icon-only">▢</button>
+      </div>
+    </div>
+
+      <div class="content-wrapper">
+
+        <h3>Accordion Title</h3>
+        <div class="details-item"><div>Details Label</div><div>Some Text Value</div></div>
+        <div class="details-item"><div>Details label</div><div>Chip Here</div></div>
+        <div class="details-item"><div>Details Label</div><div>4th Feb 2014</div></div>
+        <div class="details-item"><div>Details Label</div><div>A very long text value like a ulr or some other path</div></div>
+        <div class="details-item"><div>Details label</div><div>Some text value</div></div>
+        <div class="details-item"><div>Details Label</div><div>47VH533</div></div>
+
+        <h3><br><br>Accordion Title</h3>
+        <div class="details-item"><div>Details Label</div><div>Some Text Value</div></div>
+        <div class="details-item"><div>Details label</div><div>Chip Here</div></div>
+        <div class="details-item"><div>Details Label</div><div>4th Feb 2014</div></div>
+        <div class="details-item"><div>Details Label</div><div>A very long text value like a ulr or some other path</div></div>
+        <div class="details-item"><div>Details label</div><div>Some text value</div></div>
+        <div class="details-item"><div>Details Label</div><div>47VH533</div></div>
+
+        <h3><br><br>Accordion Title</h3>
+        <div class="details-item"><div>Details Label</div><div>Some Text Value</div></div>
+        <div class="details-item"><div>Details label</div><div>Chip Here</div></div>
+        <div class="details-item"><div>Details Label</div><div>4th Feb 2014</div></div>
+        <div class="details-item"><div>Details Label</div><div>A very long text value like a ulr or some other path</div></div>
+        <div class="details-item"><div>Details label</div><div>Some text value</div></div>
+        <div class="details-item"><div>Details Label</div><div>47VH533</div></div>
+
+      </div>
+
+
+    </div>
+    <div class="details-tabs">
+      <div class="view-tabs">
+        <button id="details-toggle" class="icon-only">▢</button>
+        <div style="margin: 4px;"></div>
+        <button class="icon-only">▢</button>
+      </div>
+
+      <div>
+        <button id="btn-size-toggle" class="icon-only">↔</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+</body>
+
+<script>
+
+
+    $(document).on('click', '#conditions-toggle', function () {
+      $(".conditions-sidebar").toggleClass("show");
+      $(".details-wrapper").toggleClass("show");
+    });
+
+    $(document).on('click', '#details-toggle', function () {
+      $(".details-wrapper").toggleClass("show");
+      $(".conditions-sidebar").toggleClass("show");
+    });
+
+    $(document).on('click', '.comp-result-listing', function () {
+      $(".details-wrapper").toggleClass("show");
+      $(".conditions-sidebar").toggleClass("show");
+    });
+
+
+</script>
+
+</html>

@@ -1,0 +1,293 @@
+@import url('Avenir');
+
+*
+{
+    box-sizing: border-box;
+}
+
+:root
+{
+
+    /* Radius */
+    --radius-sm: var(--size-0-5);
+    --radius-md: var(--size-1);
+    --radius-lg: var(--size-2);
+    --radius-round: 9999rem;
+
+    /* Type */
+    --body-size: 1rem;
+
+    --transition: 0.4s ease;
+    --transition-slow: 0.8s ease;
+
+    /* Sizing */
+    --size-base: 8px;
+
+    --size-0-5: calc(var(--size-base)*0.5);
+    --size-1: var(--size-base);
+    --size-1-5: calc(var(--size-base)*1.5);
+    --size-2-5: calc(var(--size-base)*2);
+    --size-2: calc(var(--size-base)*2.5);
+    --size-3: calc(var(--size-base)*3);
+    --size-4: calc(var(--size-base)*4);
+    --size-5: calc(var(--size-base)*5);
+    --size-6: calc(var(--size-base)*6);
+    --size-7: calc(var(--size-base)*7);
+    --size-8: calc(var(--size-base)*8);
+    --size-9: calc(var(--size-base)*9);
+    --size-10: calc(var(--size-base)*10);
+    --size-11: calc(var(--size-base)*11);
+    --size-12: calc(var(--size-base)*12);
+    --size-13: calc(var(--size-base)*13);
+    --size-14: calc(var(--size-base)*14);
+    --size-15: calc(var(--size-base)*15);
+    --size-16: calc(var(--size-base)*16);
+    --size-17: calc(var(--size-base)*17);
+    --size-18: calc(var(--size-base)*18);
+    --size-19: calc(var(--size-base)*19);
+    --size-20: calc(var(--size-base)*20);
+    --size-21: calc(var(--size-base)*21);
+    --size-22: calc(var(--size-base)*22);
+    --size-23: calc(var(--size-base)*23);
+    --size-24: calc(var(--size-base)*24);
+    --size-25: calc(var(--size-base)*25);
+    --size-26: calc(var(--size-base)*26);
+    --size-27: calc(var(--size-base)*27);
+    --size-28: calc(var(--size-base)*28);
+    --size-29: calc(var(--size-base)*29);
+    --size-30: calc(var(--size-base)*30);
+
+    /* Colours */
+
+    --white: #ffffff;
+
+    --text-primary: var(--navy-900);
+    --heading-secondary: var(--bley-800);
+    --text-disabled: var(--bley-600);
+
+    --primary: var(--aqua-800);
+    --secondar: var(--grape-600);
+
+    --bg-default: var(--white);
+    --bg-opaque: rgba(25, 255, 255, 0.85);
+
+
+    /* Colour Palettes */
+
+    /* Aqua */
+    --aqua-25: #F5FFFF;
+    --aqua-50: #D9F3F3;
+    --aqua-100: #96F6F1;
+    --aqua-200: #00EFEA;
+    --aqua-300: #00E5E5;
+    --aqua-400: #00DCE0;
+    --aqua-500: #00D4DE;
+    --aqua-600: #00C3CB;
+    --aqua-700: #00ADB0;
+    --aqua-800: #008486;
+    --aqua-900: #066667;
+
+    /* Juice */
+    --juice-50: #FFF3E0;
+    --juice-100: #FFE0B2;
+    --juice-200: #FFCD80;
+    --juice-300: #FFB84D;
+    --juice-400: #FFA826;
+    --juice-500: #FF9700;
+    --juice-600: #F88D00;
+    --juice-700: #F67D00;
+    --juice-800: #EF6D00;
+    --juice-900: #E65200;
+
+    /* Lapis */
+    --lapis-50: #F0E5FC;
+    --lapis-100: #CEC5F4;
+    --lapis-200: #AC9EEE;
+    --lapis-300: #8876E8;
+    --lapis-400: #6959E3;
+    --lapis-500: #443CDD;
+    --lapis-600: #3538D7;
+    --lapis-700: #1530CE;
+    --lapis-800: #002BC7;
+    --lapis-900: #001FBD;
+
+    /* Grape */
+    --grape-50: #F0E5FC;
+    --grape-100: #D7C0F7;
+    --grape-200: #BD95F2;
+    --grape-300: #A167EE;
+    --grape-400: #8B40EA;
+    --grape-500: #7200E5;
+    --grape-600: #6700D7;
+    --grape-700: #5600D7;
+    --grape-800: #4400D2;
+    --grape-900: #1600CB;
+
+    /* Navy */
+    --navy-50: #E5E5EB;
+    --navy-100: #B9BDCF;
+    --navy-200: #8393AE;
+    --navy-300: #626A8F;
+    --navy-400: #454D7A;
+    --navy-500: #273267;
+    --navy-600: #212C5F;
+    --navy-700: #1A2455;
+    --navy-800: #131B49;
+    --navy-900: #0A0B33;
+
+    /* Opaque Navy */
+    --opaque-navy-10: #0A0B331A;
+    --opaque-navy-20: #0A0B3333;
+    --opaque-navy-30: #0A0B334D;
+    --opaque-navy-40: #0A0B3366;
+    --opaque-navy-50: #0A0B3380;
+    --opaque-navy-60: #0A0B3399;
+    --opaque-navy-70: #0A0B33B2;
+    --opaque-navy-80: #0A0B33CC;
+    --opaque-navy-90: #0A0B33E5;
+
+    /* Bley */
+    --bley-50: #F8F9FB;
+    --bley-100: #F4F6FB;
+    --bley-200: #F1F3F8;
+    --bley-300: #EEF0F7;
+    --bley-400: #E7EBF5;
+    --bley-500: #DCE1EF;
+    --bley-600: #9EA7BF;
+    --bley-700: #687186;
+    --bley-800: #4D456B;
+    --bley-900: #252837;
+
+    /* Burnt Pink */
+    --burnt-pink-50: #F8E2EC;
+    --burnt-pink-100: #EEB8D0;
+    --burnt-pink-200: #E288B1;
+    --burnt-pink-300: #D65891;
+    --burnt-pink-400: #CE357A;
+    --burnt-pink-500: #C51162;
+    --burnt-pink-600: #BF0F5A;
+    --burnt-pink-700: #B80C50;
+    --burnt-pink-800: #B00A46;
+    --burnt-pink-900: #A30534;
+
+    /* Burnt Pink Opaque */
+    --burnt-pink-opaque-5: rgba(163, 5, 52, 0.05);
+    --burnt-pink-opaque-10: rgba(163, 5, 52, 0.10);
+    --burnt-pink-opaque-20: rgba(163, 5, 52, 0.20);
+    --burnt-pink-opaque-30: rgba(163, 5, 52, 0.30);
+    --burnt-pink-opaque-40: rgba(163, 5, 52, 0.40);
+    --burnt-pink-opaque-50: rgba(163, 5, 52, 0.50);
+    --burnt-pink-opaque-60: rgba(163, 5, 52, 0.60);
+    --burnt-pink-opaque-70: rgba(163, 5, 52, 0.70);
+    --burnt-pink-opaque-80: rgba(163, 5, 52, 0.80);
+    --burnt-pink-opaque-90: rgba(163, 5, 52, 0.90);
+
+    /* Aqua Opaque */
+    --aqua-opaque-5: rgba(6, 102, 103, 0.05);
+    --aqua-opaque-10: rgba(6, 102, 103, 0.10);
+    --aqua-opaque-20: rgba(6, 102, 103, 0.20);
+    --aqua-opaque-30: rgba(6, 102, 103, 0.30);
+    --aqua-opaque-40: rgba(6, 102, 103, 0.40);
+    --aqua-opaque-50: rgba(6, 102, 103, 0.50);
+    --aqua-opaque-60: rgba(6, 102, 103, 0.60);
+    --aqua-opaque-70: rgba(6, 102, 103, 0.70);
+    --aqua-opaque-80: rgba(6, 102, 103, 0.80);
+    --aqua-opaque-90: rgba(6, 102, 103, 0.90);
+
+    /* Aqua Light Opaque */
+    --aqua-light-opaque-5: rgba(0, 173, 176, 0.05);
+    --aqua-light-opaque-10: rgba(0, 173, 176, 0.10);
+    --aqua-light-opaque-20: rgba(0, 173, 176, 0.20);
+    --aqua-light-opaque-30: rgba(0, 173, 176, 0.30);
+    --aqua-light-opaque-40: rgba(0, 173, 176, 0.40);
+    --aqua-light-opaque-50: rgba(0, 173, 176, 0.50);
+    --aqua-light-opaque-60: rgba(0, 173, 176, 0.60);
+    --aqua-light-opaque-70: rgba(0, 173, 176, 0.70);
+    --aqua-light-opaque-80: rgba(0, 173, 176, 0.80);
+    --aqua-light-opaque-90: rgba(0, 173, 176, 0.90);
+
+    /* Grape Opaque */
+    --grape-opaque-5: rgba(22, 0, 203, 0.05);
+    --grape-opaque-10: rgba(22, 0, 203, 0.10);
+    --grape-opaque-20: rgba(22, 0, 203, 0.20);
+    --grape-opaque-30: rgba(22, 0, 203, 0.30);
+    --grape-opaque-40: rgba(22, 0, 203, 0.40);
+    --grape-opaque-50: rgba(22, 0, 203, 0.50);
+    --grape-opaque-60: rgba(22, 0, 203, 0.60);
+    --grape-opaque-70: rgba(22, 0, 203, 0.70);
+    --grape-opaque-80: rgba(22, 0, 203, 0.80);
+    --grape-opaque-90: rgba(22, 0, 203, 0.90);
+
+    /* Juice Opaque */
+    --juice-opaque-5: rgba(230, 82, 0, 0.05);
+    --juice-opaque-10: rgba(230, 82, 0, 0.10);
+    --juice-opaque-20: rgba(230, 82, 0, 0.20);
+    --juice-opaque-30: rgba(230, 82, 0, 0.30);
+    --juice-opaque-40: rgba(230, 82, 0, 0.40);
+    --juice-opaque-50: rgba(230, 82, 0, 0.50);
+    --juice-opaque-60: rgba(230, 82, 0, 0.60);
+    --juice-opaque-70: rgba(230, 82, 0, 0.70);
+    --juice-opaque-80: rgba(230, 82, 0, 0.80);
+    --juice-opaque-90: rgba(230, 82, 0, 0.90);
+
+    /* Lapis Opaque */
+    --lapis-opaque-5: rgba(0, 31, 189, 0.05);
+    --lapis-opaque-10: rgba(0, 31, 189, 0.10);
+    --lapis-opaque-20: rgba(0, 31, 189, 0.20);
+    --lapis-opaque-30: rgba(0, 31, 189, 0.30);
+    --lapis-opaque-40: rgba(0, 31, 189, 0.40);
+    --lapis-opaque-50: rgba(0, 31, 189, 0.50);
+    --lapis-opaque-60: rgba(0, 31, 189, 0.60);
+    --lapis-opaque-70: rgba(0, 31, 189, 0.70);
+    --lapis-opaque-80: rgba(0, 31, 189, 0.80);
+    --lapis-opaque-90: rgba(0, 31, 189, 0.90);
+
+    /* Navy Opaque */
+    --navy-opaque-5: rgba(10, 11, 51, 0.05);
+    --navy-opaque-10: rgba(10, 11, 51, 0.10);
+    --navy-opaque-20: rgba(10, 11, 51, 0.20);
+    --navy-opaque-30: rgba(10, 11, 51, 0.30);
+    --navy-opaque-40: rgba(10, 11, 51, 0.40);
+    --navy-opaque-50: rgba(10, 11, 51, 0.50);
+    --navy-opaque-60: rgba(10, 11, 51, 0.60);
+    --navy-opaque-70: rgba(10, 11, 51, 0.70);
+    --navy-opaque-80: rgba(10, 11, 51, 0.80);
+    --navy-opaque-90: rgba(10, 11, 51, 0.90);
+
+    /* Bley Opaque */
+    --bley-opaque-5: rgba(104, 113, 134, 0.05);
+    --bley-opaque-10: rgba(104, 113, 134, 0.10);
+    --bley-opaque-20: rgba(104, 113, 134, 0.20);
+    --bley-opaque-30: rgba(104, 113, 134, 0.30);
+    --bley-opaque-40: rgba(104, 113, 134, 0.40);
+    --bley-opaque-50: rgba(104, 113, 134, 0.50);
+    --bley-opaque-60: rgba(104, 113, 134, 0.60);
+    --bley-opaque-70: rgba(104, 113, 134, 0.70);
+    --bley-opaque-80: rgba(104, 113, 134, 0.80);
+    --bley-opaque-90: rgba(104, 113, 134, 0.90);
+
+}
+
+
+
+
+/* Typography -------------------------------- */
+
+*
+{
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+    transition: var(--transition);
+}
+
+body
+{
+  font-family: 'Arial', sans-serif;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.4;
+}

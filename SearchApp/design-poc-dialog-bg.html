@@ -61,12 +61,12 @@
 
   .custom-bg
   {
-    --color-a: hsl(268deg 100% 42% / 4%); /* Color is "Primary"" */
-    --color-b: hsl(180deg 100% 26% / 7%); /* Color is "Secondary" */
+    --color-a: hsl(268deg 100% 42% / 3%); /* Color is "Primary"" */
+    --color-b: hsl(180deg 100% 26% / 6%); /* Color is "Secondary" */
     background-color: var(--bg-light-grey);
     background-image: radial-gradient(circle at center, transparent 30%, var(--color-a) 37%, var(--color-b) 40%, transparent 55%);
     background-size: 166% 166%;
-    background-position: 72% 66%;
+    background-position: 70% 66%;
     background-repeat: no-repeat;
   }
 
@@ -111,6 +111,11 @@
     min-height: 96vh;
   }
 
+  .width-full #posBot
+  {
+    display: none;
+  }
+
   .header
   {
     display: flex;
@@ -125,7 +130,7 @@
     padding: var(--size-2) var(--size-3);
     border-style: solid;
     border-width: 1px 0px 1px 0px;
-    border-color: var(--bley-opaque-20);
+    border-color: var(--bley-opaque-10);
   }
 
   .txt-input
@@ -178,10 +183,10 @@
     </div>
 
     <div class="content-wrapper">
-      <p>Content area<br><br></p>
+      <p>Content area example text.<br><br></p>
       <button id="btn-size-toggle">Size Toggle</button>
       <p><br><br>Position<br><br></p>
-      <button id="posBot">Bottom</button>
+      <button id="posBot">Toggle Bottom</button>
     </div>
 
     <div class="footer">

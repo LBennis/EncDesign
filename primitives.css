@@ -66,10 +66,11 @@
     --text-disabled: var(--bley-600);
 
     --primary: var(--aqua-800);
-    --secondar: var(--grape-600);
+    --secondary: var(--grape-600);
 
     --bg-default: var(--white);
     --bg-opaque: rgba(25, 255, 255, 0.85);
+    --bg-light-grey: #FBFCFE;
 
 
     /* Colour Palettes */
@@ -135,16 +136,6 @@
     --navy-800: #131B49;
     --navy-900: #0A0B33;
 
-    /* Opaque Navy */
-    --opaque-navy-10: #0A0B331A;
-    --opaque-navy-20: #0A0B3333;
-    --opaque-navy-30: #0A0B334D;
-    --opaque-navy-40: #0A0B3366;
-    --opaque-navy-50: #0A0B3380;
-    --opaque-navy-60: #0A0B3399;
-    --opaque-navy-70: #0A0B33B2;
-    --opaque-navy-80: #0A0B33CC;
-    --opaque-navy-90: #0A0B33E5;
 
     /* Bley */
     --bley-50: #F8F9FB;
@@ -285,9 +276,49 @@
 
 body
 {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Avenir', sans-serif;
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.4;
+}
+
+button
+{
+    border-radius: var(--radius-md);
+    background: var(--primary);
+    color: var(--white);
+    border: 1px solid transparent;
+    padding: var(--size-1) var(--size-2);
+    font-size: 14px;
+    min-height: 40px;
+    cursor: pointer;
+}
+
+button:hover
+{
+    background: var(--aqua-900);
+}
+
+button.large
+{
+    font-size: 1rem;
+    min-height: 48px;
+}
+
+button.small
+{
+    min-height: 32px;
+}
+
+button.secondary
+{
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
+}
+
+button.secondary:hover
+{
+    background: var(--aqua-opaque-10);
 }

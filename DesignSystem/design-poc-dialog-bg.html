@@ -61,8 +61,8 @@
 
   .custom-bg
   {
-    --color-a: hsl(268deg 100% 42% / 3%); /* Color is "Primary"" */
-    --color-b: hsl(180deg 100% 26% / 6%); /* Color is "Secondary" */
+    --color-a: hsl(268deg 100% 42% / 4%); /* Color is "Primary"" */
+    --color-b: hsl(180deg 100% 26% / 8%); /* Color is "Secondary" */
     background-color: var(--bg-light-grey);
     background-image: radial-gradient(circle at center, transparent 30%, var(--color-a) 37%, var(--color-b) 40%, transparent 55%);
     background-size: 166% 166%;
@@ -120,14 +120,15 @@
   {
     display: flex;
     justify-content: space-between;
-    padding: var(--size-4) var(--size-3);
+    align-items: center;
+    padding: var(--size-3) var(--size-3);
   }
 
   .action-bar
   {
     display: flex;
     justify-content: space-between;
-    padding: var(--size-2) var(--size-3);
+    padding: var(--size-1-5) var(--size-3);
     border-style: solid;
     border-width: 1px 0px 1px 0px;
     border-color: var(--bley-opaque-10);
@@ -152,6 +153,9 @@
 
   .footer
   {
+    display: flex;
+    flex-direction: row;
+    gap: var(--size-1);
     padding: var(--size-3);
     background: white;
     border-style: solid;
@@ -174,7 +178,7 @@
 
     <div class="header">
       <div><p class="title-2">❤ Dialog Title</p></div>
-      <div>✕</div>
+      <div><button class="tertiary circle">✕</button></div>
     </div>
 
     <div class="action-bar">

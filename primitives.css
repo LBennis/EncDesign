@@ -311,6 +311,13 @@ button.small
     min-height: 32px;
 }
 
+button.circle
+{
+    width: 40px;
+    padding: 0px; 
+    border-radius: var(--radius-round);
+}
+
 button.secondary
 {
     border: 1px solid var(--primary);
@@ -321,4 +328,21 @@ button.secondary
 button.secondary:hover
 {
     background: var(--aqua-opaque-10);
+}
+
+button.tertiary
+{
+    color: var(--primary);
+    background: transparent;
+}
+
+button.tertiary:hover
+{
+    background: var(--aqua-opaque-10);
+}
+
+
+.title-2
+{
+    font-size: 18px;
 }

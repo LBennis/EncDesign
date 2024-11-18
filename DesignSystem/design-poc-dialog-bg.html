@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+                
 
 <style>
 
@@ -19,9 +20,6 @@
 
   *
   {
-    box-sizing: border-box;
-    transition: 0.1s linear;
-    font-family: Arial, Helvetica, sans-serif;
     color: #0A0B33;
     transition: 1.2s;
   }
@@ -63,6 +61,10 @@
   {
     --color-a: hsl(268deg 100% 42% / 4%); /* Color is "Primary"" */
     --color-b: hsl(180deg 100% 26% / 8%); /* Color is "Secondary" */
+
+    --color-a: #6400d60a; /* Color is "Primary"" */
+    --color-b: #00858514; /* Color is "Secondary" */
+
     background-color: var(--bg-light-grey);
     background-image: radial-gradient(circle at center, transparent 30%, var(--color-a) 37%, var(--color-b) 40%, transparent 55%);
     background-size: 166% 166%;
@@ -108,7 +110,7 @@
   .pos-bottom .dialog-wrapper
   {
     border-radius: var(--radius-lg) var(--radius-lg) 0px 0px;
-    min-height: 96vh;
+    min-height: 98vh;
   }
 
   .width-full #posBot

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - Version 1.0</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+                
+
+<style>
+
+  @import url(../primitives.css);
+  @import url(../styles.css);
+
+  html
+  {
+    overflow: hidden;
+  }
+
+  .bg-white
+  {
+    background: white;
+  }
+
+  .bg-grey
+  {
+    background: var(--bg-light-grey);
+  }
+
+  .bg-dot
+  {
+    background: radial-gradient(circle at center, var(--bley-opaque-20) 25%, transparent 25%);
+    background-repeat: repeat;
+    background-size: 8px 8px;
+  }
+
+
+  body
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: var(--size-2);
+    max-height: 100vh;
+    width: min(100%, 100ch);
+    margin-inline: auto;
+    padding-block: var(--size-12);
+    overflow-y: scroll;
+    padding-inline: var(--size-6);
+  }
+
+  .section-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--size-2);
+    width: 100%;
+  }
+
+  .section-wrapper label
+  {
+    width: 100%;
+  }
+
+ 
+  .item
+  {
+    display: flex;  
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--size-1);
+    padding: var(--size-2) var(--size-3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    min-width: 48%;
+    position: relative;
+    border: 1px solid transparent;
+    outline: 1px solid transparent;
+    outline-offset: -2px;
+
+    .icon
+    {
+      font-size: var(--size-2-5);
+      color: var(--primary);
+    }
+
+    &::before
+    {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -6px;
+      width: 3px;
+      height: 100%;
+      border-radius: var(--radius-round);
+      background: transparent;
+    }
+  }
+
+
+  /* Selection States -------------------------------- */
+
+  .item.selected
+  {
+    background: var(--aqua-light-opaque-10);
+  } 
+
+  .item.primary-select
+  {
+    background: var(--aqua-light-opaque-10);
+  }
+
+  .item.secondary-select
+  {
+    background: var(--bley-opaque-5);
+    border: 1px solid var(--bley-opaque-10);
+
+    &:hover
+    {
+      border-color: transparent;
+    }
+  }
+
+  .item.primary-select::before
+  {
+    left: 0px;
+    background: var(--primary);
+  }
+
+  /* Focus States -------------------------------- */
+
+  .item:focus-visible, .item.focus
+    {
+      outline: 1px solid var(--primary);
+      outline-offset: -1px;
+    }
+
+
+  /* Themes -------------------------------- */
+
+  .theme-default
+  {
+    background: white;
+
+    &:hover, &.hover
+    {
+      background: var(--bley-opaque-5);
+    }
+  }
+
+  .theme-grey
+  {
+    background: var(--bley-opaque-5);
+
+    &:hover, &.hover
+    {
+      background: var(--bley-opaque-10);
+    }
+  }
+
+  .theme-clear
+  {
+    background: transparent;
+
+    &:hover, &.hover
+    {
+      background: transparent;
+    }
+  }
+
+  .theme-ghost
+  {
+    background: transparent;
+
+    &:hover, &.hover
+    {
+      background: var(--bley-opaque-5);
+    }
+  }
+
+</style>
+
+
+</head>
+
+  
+<body>
+
+  <h1>EncompaaS Standard Component Themes</h1>
+
+  <button id="btn-bg-toggle" class="secondary">Toggle BG Style</button>
+  <br><br>
+
+  <h2>Default</h2>
+
+  <div class="section-wrapper">
+
+    <div class="item theme-default" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
+    <label>Interaction</label>
+    <div class="item theme-default hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+    <div class="item theme-default focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+
+    <label>Selection</label>
+    <div class="item theme-default selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+    <div class="item theme-default primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+    <div class="item theme-default secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+
+  </div>
+
+  
+  <h2><br><br>Grey</h2>
+
+  <div class="section-wrapper">
+
+    <div class="item theme-grey" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
+    <label>Interaction</label>
+    <div class="item theme-grey hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+    <div class="item theme-grey focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+
+    <label>Selection</label>
+    <div class="item theme-grey selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+    <div class="item theme-grey primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+    <div class="item theme-default secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+
+  </div>
+
+  <h2><br><br>Clear</h2>
+
+  <div class="section-wrapper">
+
+    <div class="item theme-clear" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
+    <label>Interaction</label>
+    <div class="item theme-clear hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+    <div class="item theme-clear focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+
+    <label>Selection</label>
+    <div class="item theme-clear selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+    <div class="item theme-clear primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+    <div class="item theme-default secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+
+  </div>
+
+  <h2><br><br>Ghost</h2>
+
+  <div class="section-wrapper">
+
+    <div class="item theme-ghost" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
+    <label>Interaction</label>
+    <div class="item theme-ghost hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+    <div class="item theme-ghost focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+
+    <label>Selection</label>
+    <div class="item theme-ghost selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+    <div class="item theme-ghost primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+    <div class="item theme-default secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+
+  </div>
+
+
+</body>
+
+<script>
+
+  /* This JQuery logic is for mockup only & has some flaws, 
+    this logic needs to be more robust for things like button states and details width changes */
+
+  
+    $(document).ready(function () {
+      var classes = ['default-bg', 'bg-dot', 'bg-white'];
+      var classIndex = 0;
+
+      $('#btn-bg-toggle').click(function () {
+        $('html').removeClass(classes);
+        $('html').toggleClass(classes[classIndex]);
+        classIndex = (classIndex + 1) % classes.length;
+      });
+    });
+
+</script>
+
+</html>

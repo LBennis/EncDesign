@@ -1,0 +1,155 @@
+@import url('Avenir');
+
+@import url('https://fonts.cdnfonts.com/css/avenir');
+
+
+
+/* Typography -------------------------------- */
+
+*
+{
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+    transition: var(--transition);
+    box-sizing: border-box;
+}
+
+
+html, body
+{
+    font-family: 'Avenir', sans-serif;
+    color: var(--text-primary);
+}
+
+body
+{
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    line-height: 1.4;
+}
+
+h1 { font-size: var(--size-3); }
+
+h2 { font-size: var(--size-2-5); }
+
+h3 { font-size: 1.125rem; }
+
+h4 { font-size: var(--size-2); }
+
+h5 { font-size: 0.875rem; }
+
+h6 { font-size: 0.75rem; }
+
+.subtitle-1 { font-size: var(--size-2); }
+.subtitle-2 { font-size: var(--size-2); }
+
+p, p.body-1 { font-size: var(--size-2); }
+p.body-2 { font-size: 0.875rem; }
+
+
+/* Buttons -------------------------------- */
+
+
+button
+{
+    border-radius: var(--radius-md);
+    background: var(--primary);
+    color: var(--white);
+    border: 1px solid transparent;
+    padding: var(--size-1) var(--size-2);
+    font-size: 14px;
+    min-height: 40px;
+    cursor: pointer;
+}
+
+button:hover
+{
+    background: var(--aqua-900);
+}
+
+button.large
+{
+    font-size: 1rem;
+    min-height: 48px;
+}
+
+button.small
+{
+    min-height: 32px;
+}
+
+button.circle
+{
+    width: 40px;
+    padding: 0px; 
+    border-radius: var(--radius-round);
+}
+
+button.secondary
+{
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
+}
+
+button.secondary:hover
+{
+    background: var(--aqua-opaque-10);
+}
+
+button.tertiary
+{
+    color: var(--primary);
+    background: transparent;
+}
+
+button.tertiary:hover
+{
+    background: var(--aqua-opaque-10);
+}
+
+
+
+/* EncompaaS Standard Styles -------------------------------- */
+
+
+/* Background -------------------------------- */
+
+.default-bg
+{
+  --color-a: hsl(268deg 100% 42% / 4%); /* Color is "Primary"" */
+  --color-b: hsl(180deg 100% 26% / 8%); /* Color is "Secondary" */
+
+  --color-a: #6400d60a; /* Color is "Primary"" */
+  --color-b: #00858514; /* Color is "Secondary" */
+
+  background-color: var(--bg-light-grey);
+  background-image: radial-gradient(circle at center, transparent 30%, var(--color-a) 37%, var(--color-b) 40%, transparent 55%);
+  background-size: 166% 166%;
+  background-position: 10% 55%;
+  background-repeat: no-repeat;
+}
+
+.custom-bg
+{
+  --color-a: hsl(268deg 100% 42% / 4%); /* Color is "Primary"" */
+  --color-b: hsl(180deg 100% 26% / 8%); /* Color is "Secondary" */
+
+  --color-a: #6400d60a; /* Color is "Primary"" */
+  --color-b: #00858514; /* Color is "Secondary" */
+
+  background-color: var(--bg-light-grey);
+  background-image: radial-gradient(circle at center, transparent 30%, var(--color-a) 37%, var(--color-b) 40%, transparent 55%);
+  background-size: 166% 166%;
+  background-position: 70% 66%;
+  background-repeat: no-repeat;
+}

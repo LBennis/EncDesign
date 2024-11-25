@@ -55,6 +55,16 @@ h6 { font-size: 0.75rem; }
 p, p.body-1 { font-size: var(--size-2); }
 p.body-2 { font-size: 0.875rem; }
 
+.text-primary
+{
+    color: var(--text-primary);
+}
+
+.text-secondary
+{
+    color: var(--text-secondary);
+}
+
 
 /* Buttons -------------------------------- */
 

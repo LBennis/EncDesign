@@ -53,22 +53,35 @@
     margin-inline: auto;
     padding-block: 10vh 33vh;
     overflow-y: scroll;
-    padding-inline: var(--size-6);
+    padding-inline: var(--size-16);
   }
 
-  .section-wrapper
+  details
+  {
+    border: 1px solid var(--bley-opaque-10);
+    padding: var(--size-1) var(--size-2);
+  }
+
+  .section-wrapper, details > div
   {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
     flex-wrap: wrap;
+    padding-block: var(--size-4);
     gap: var(--size-2);
     width: 100%;
   }
 
-  .section-wrapper label
+  .section-wrapper label, .section-wrapper .item:nth-child(1)
   {
+    width: 100%;
+  }
+
+  .section-wrapper details
+  {
+    flex-grow: 1;
     width: 100%;
   }
 
@@ -90,8 +103,7 @@
 
     .icon
     {
-      font-size: var(--size-2-5);
-      color: var(--primary);
+      font-size: 1.25rem;
     }
 
     &::before
@@ -105,6 +117,15 @@
       border-radius: var(--radius-round);
       background: transparent;
     }
+  }
+
+
+  .item.disabled
+  {
+    background: var(--bley-100);
+    color: var(--text-disabled);
+    border: 1px solid transparent !important;
+    --accent: var(--text-disabled) !important;
   }
 
 
@@ -153,9 +174,10 @@
 
   /* Themes -------------------------------- */
 
-  .theme-default
+  .theme-white
   {
     background: white;
+    color: var(--text-primary);
 
     &:hover, &.hover 
     {
@@ -163,13 +185,43 @@
     }
   }
 
-  .theme-grey
+  .theme-white-accent
   {
-    background: var(--bley-opaque-5);
+    --accent: var(--primary);
+    background: white;
+
+    &:hover, &.hover 
+    {
+      background: var(--bley-opaque-5);
+    }
+    .icon
+    {
+      color: var(--accent);
+    }
+  }
+
+  .theme-outline
+  {
+    border-color: var(--bley-opaque-5);
 
     &:hover, &.hover
     {
-      background: var(--bley-opaque-10);
+      border-color: var(--bley-opaque-20);
+    }
+  }
+
+  .theme-outline-accent
+  {
+    --accent: var(--primary);
+    border-color: var(--bley-opaque-5);
+
+    &:hover, &.hover
+    {
+      border-color: var(--bley-opaque-20);
+    }
+    .icon
+    {
+      color: var(--accent);
     }
   }
 
@@ -179,17 +231,22 @@
 
     &:hover, &.hover
     {
-      background: transparent;
+      background: var(--bley-opaque-5);
     }
   }
 
-  .theme-ghost
+  .theme-clear-accent
   {
+    --accent: var(--primary);
     background: transparent;
 
     &:hover, &.hover
     {
       background: var(--bley-opaque-5);
+    }
+    .icon
+    {
+      color: var(--accent);
     }
   }
 
@@ -204,39 +261,93 @@
   <h1>EncompaaS Standard Component Themes</h1>
 
   <button id="btn-bg-toggle" class="secondary">Toggle BG Style</button>
-  <br><br>
 
-  <h2>Default</h2>
+  <h2><br><br>White</h2>
 
   <div class="section-wrapper">
 
-    <div class="item theme-default" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
-    <label>Interaction</label>
-    <div class="item theme-default hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
-    <div class="item theme-default focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+    <div class="item theme-white" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
 
-    <label>Selection</label>
-    <div class="item theme-default selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
-    <div class="item theme-default primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
-    <div class="item theme-default secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+    <details><summary>States</summary>
+    <div>
+      <label>Interaction</label>
+      <div class="item theme-white hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+      <div class="item theme-white focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+
+      <label>Selection</label>
+      <div class="item theme-white selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+      <div class="item theme-white primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+      <div class="item theme-white secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+      <div class="item theme-white disabled" tabindex="0"><div class="icon">★</div><p>Item: Disabled</p></div>
+
+    </div>
+    </details>
+
+  </div>
+
+  <h2><br><br>White + Accent</h2>
+
+  <div class="section-wrapper">
+
+    <div class="item theme-white-accent" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
+
+    <details><summary>States</summary>
+    <div>
+      <label>Interaction</label>
+      <div class="item theme-white-accent hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+      <div class="item theme-white-accent focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+
+      <label>Selection</label>
+      <div class="item theme-white-accent selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+      <div class="item theme-white-accent primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+      <div class="item theme-white-accent secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+      <div class="item theme-white-accent disabled" tabindex="0"><div class="icon">★</div><p>Item: Disabled</p></div>
+      </div>
+    </details>
 
   </div>
 
   
-  <h2><br><br>Grey</h2>
+  <h2><br><br>Outline</h2>
 
   <div class="section-wrapper">
 
-    <div class="item theme-grey" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
-    <label>Interaction</label>
-    <div class="item theme-grey hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
-    <div class="item theme-grey focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+    <div class="item theme-outline" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
 
-    <label>Selection</label>
-    <div class="item theme-grey selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
-    <div class="item theme-grey primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
-    <div class="item theme-default secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+    <details><summary>States</summary>
+    <div>
+      <label>Interaction</label>
+      <div class="item theme-outline hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+      <div class="item theme-outline focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
 
+      <label>Selection</label>
+      <div class="item theme-outline selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+      <div class="item theme-outline primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+      <div class="item theme-outline secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+      <div class="item theme-outline disabled" tabindex="0"><div class="icon">★</div><p>Item: Disabled</p></div>
+    </div>
+    </details>
+  </div>
+
+  <h2><br><br>Outline + Accent</h2>
+
+  <div class="section-wrapper">
+
+    <div class="item theme-outline-accent" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
+
+    <details><summary>States</summary>
+    <div>
+      <label>Interaction</label>
+      <div class="item theme-outline-accent hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+      <div class="item theme-outline-accent focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+
+      <label>Selection</label>
+      <div class="item theme-outline-accent selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+      <div class="item theme-outline-accent primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+      <div class="item theme-outline-accent secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+      <div class="item theme-outline-accent disabled" tabindex="0"><div class="icon">★</div><p>Item: Disabled</p></div>
+    </div>
+    </details>
   </div>
 
   <h2><br><br>Clear</h2>
@@ -244,32 +355,43 @@
   <div class="section-wrapper">
 
     <div class="item theme-clear" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
-    <label>Interaction</label>
-    <div class="item theme-clear hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
-    <div class="item theme-clear focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
 
-    <label>Selection</label>
-    <div class="item theme-clear selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
-    <div class="item theme-clear primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
-    <div class="item theme-default secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+    <details><summary>States</summary>
+    <div>
+      <label>Interaction</label>
+      <div class="item theme-clear hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+      <div class="item theme-clear focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
 
+      <label>Selection</label>
+      <div class="item theme-clear selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+      <div class="item theme-clear primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+      <div class="item theme-clear secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+      <div class="item theme-clear disabled" tabindex="0"><div class="icon">★</div><p>Item: Disabled</p></div>
+    </div>
+    </details>
   </div>
 
-  <h2><br><br>Ghost</h2>
+  <h2><br><br>Clear + Accent</h2>
 
   <div class="section-wrapper">
 
-    <div class="item theme-ghost" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
-    <label>Interaction</label>
-    <div class="item theme-ghost hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
-    <div class="item theme-ghost focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
+    <div class="item theme-clear-accent" tabindex="0"><div class="icon">★</div><p>Item Example</p></div>
 
-    <label>Selection</label>
-    <div class="item theme-ghost selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
-    <div class="item theme-ghost primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
-    <div class="item theme-default secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+    <details><summary>States</summary>
+    <div>
+      <label>Interaction</label>
+      <div class="item theme-clear-accent hover" tabindex="0"><div class="icon">★</div><p>Item: hover</p></div>
+      <div class="item theme-clear-accent focus" tabindex="0"><div class="icon">★</div><p>Item: focus</p></div>
 
+      <label>Selection</label>
+      <div class="item theme-clear-accent selected" tabindex="0"><div class="icon">★</div><p>Item: Selected</p></div>
+      <div class="item theme-clear-accent primary-select" tabindex="0"><div class="icon">★</div><p>Item: Primary Selection</p></div>
+      <div class="item theme-clear-accent secondary-select" tabindex="0"><div class="icon">★</div><p>Item: Secondary Selection</p></div>
+      <div class="item theme-clear-accent disabled" tabindex="0"><div class="icon">★</div><p>Item: Disabled</p></div>
+    </div>
+    </details>
   </div>
+
 
 
 </body>

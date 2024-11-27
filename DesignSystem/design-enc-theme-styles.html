@@ -58,8 +58,8 @@
 
   details
   {
-    border: 1px solid var(--bley-opaque-10);
-    padding: var(--size-1) var(--size-2);
+    margin-top: var(--size-4);
+    cursor: pointer;
   }
 
   .section-wrapper, details > div
@@ -120,9 +120,9 @@
   }
 
 
-  .item.disabled
+  .item.disabled, .item.disabled:hover
   {
-    background: var(--bley-100);
+    background: var(--bley-opaque-10);
     color: var(--text-disabled);
     border: 1px solid transparent !important;
     --accent: var(--text-disabled) !important;
@@ -134,29 +134,33 @@
   .item.selected
   {
     background: var(--aqua-light-opaque-10);
-  } 
-
-  .item.primary-select
-  {
-    background: var(--aqua-light-opaque-10);
-  }
-
-  .item.secondary-select
-  {
-    background: var(--bley-opaque-5);
-    border: 1px solid var(--bley-opaque-10);
-
     &:hover
     {
-      background: var(--bley-opaque-5);
-      border-color: transparent;
+      background: var(--aqua-light-opaque-10);
     }
+  } 
+
+  .item.primary-select, .item.primary-select:hover
+  {
+    background: var(--aqua-light-opaque-10);
+    border-color: transparent;
   }
 
-  .item.primary-select::before
+          .item.primary-select::before
+          {
+            left: 0px;
+            background: var(--primary);
+          }
+
+
+  .item.secondary-select, .item.secondary-select:hover
   {
-    left: 0px;
-    background: var(--primary);
+    background: var(--bley-opaque-5);
+    border: 1px solid var(--bley-opaque-10) !important;
+    &:hover
+    {
+      border-color: var(--bley-opaque-30) !important;
+    }
   }
 
 
@@ -168,7 +172,6 @@
     outline: 1px solid var(--primary);
     outline-offset: -1px;
   }
-
 
 
 
@@ -202,22 +205,30 @@
 
   .theme-outline
   {
-    border-color: var(--bley-opaque-5);
+    border-color: var(--bley-opaque-10);
 
     &:hover, &.hover
     {
-      border-color: var(--bley-opaque-20);
+      border-color: var(--bley-opaque-30);
+    }
+    &.item.selected, &.item.primary-select, &.item.secondary-select
+    {
+      border-color: transparent;
     }
   }
 
   .theme-outline-accent
   {
     --accent: var(--primary);
-    border-color: var(--bley-opaque-5);
+    border-color: var(--bley-opaque-10);
 
     &:hover, &.hover
     {
-      border-color: var(--bley-opaque-20);
+      border-color: var(--bley-opaque-30);
+    }
+    &.item.selected, &.item.primary-select, &.item.secondary-select
+    {
+      border-color: transparent;
     }
     .icon
     {

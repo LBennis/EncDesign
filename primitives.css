@@ -56,6 +56,15 @@
     --size-29: calc(var(--size-base)*29);
     --size-30: calc(var(--size-base)*30);
 
+    --title-1: var(--size-3);
+    --title-2: var(--size-2-5);
+    --title-3: 1.125rem;
+    --title-4: var(--size-2);
+    --title-5: 0.875rem;
+    --title-6: 0.75rem;
+    --body-2: 0.875rem;
+
+
     /* Colours */
 
     --white: #ffffff;
@@ -70,6 +79,11 @@
     --bg-default: var(--white);
     --bg-opaque: rgba(25, 255, 255, 0.85);
     --bg-light-grey: #FBFCFE;
+
+
+    --shadow-sm: 0px 1px 2px var(--bley-opaque-5), 0px 0px 4px var(--bley-opaque-5), 0px 4px 8px var(--bley-opaque-5);
+    --shadow-md: 0px 1px 2px var(--bley-opaque-10), 0px 2px 8px var(--bley-opaque-10), 0px 8px 16px var(--bley-opaque-10);
+    --shadow-lg: 0px 2px 3px var(--bley-opaque-10), 0px 4px 12px var(--bley-opaque-10), 0px 12px 24px var(--bley-opaque-10);
 
 
     /* Colour Palettes */
@@ -245,7 +259,7 @@
     --navy-opaque-90: rgba(10, 11, 51, 0.90);
 
     /* Bley Opaque */
-    --bley-opaque-5: rgba(104, 113, 134, 0.03);
+    --bley-opaque-3: rgba(104, 113, 134, 0.03);
     --bley-opaque-5: rgba(104, 113, 134, 0.05);
     --bley-opaque-10: rgba(104, 113, 134, 0.10);
     --bley-opaque-20: rgba(104, 113, 134, 0.20);

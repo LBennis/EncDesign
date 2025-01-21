@@ -86,14 +86,12 @@
     gap: var(--size-0-5) var(--size-2);
   }
 
-  .title-wrapper-alt
+  .title-wrapper .title
   {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--size-0-5) var(--size-1);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; 
   }
 
   .chip-wrapper
@@ -150,6 +148,8 @@
 
   
 <body>
+
+  <h1 style="text-align: center; line-height: 4;">Item Header Responsive Examples</h1>
 
 <!-- Example --> 
 
@@ -278,63 +278,6 @@
 </div>
 
 
-<h1>Alternate Inline Layout<br><br></h1>
-
-
-<!-- Example --> 
-
-<div class="content-wrapper custom-bg">
-  <div class="header-wrapper">
-    <div class="item-wrapper">
-      <div class="icon">♫</div> 
-        <div class="text-wrapper">
-          <div class="title-wrapper-alt">
-            <div class="title"><h1>Example Item Title Text</h1></div>
-              <div class="chip small fill darkGray">Chip example</div>
-              <div class="chip small fill">Chip example</div>
-              <div class="chip small fill">Chip example</div>
-          </div>
-          <div class="sub-title">Example sub title text</div>
-      </div>
-    </div>
-    <div class="actions-wrapper">
-      <button class="secondary">Button</buton>
-      <button class="">Button</buton>
-      <button class="tertiary circle">🞩</button>
-    </div>
-  </div>
-  <div class="content-area">Content Area</div>
-</div>
-
-
-
-<!-- Example --> 
-
-<div class="content-wrapper custom-bg">
-  <div class="header-wrapper">
-    <div class="item-wrapper">
-      <div class="icon">♫</div> 
-        <div class="text-wrapper">
-          <div class="title-wrapper-alt">
-            <div class="title"><h1>Example Item with much longer Title Text example</h1></div>
-              <div class="chip small fill darkGray">Chip example</div>
-              <div class="chip small fill">Chip example</div>
-              <div class="chip small fill">Chip example</div>
-              <div class="chip small fill darkGray">Chip example</div>
-              <div class="chip small fill">Chip example</div>
-              <div class="chip small fill">Chip example</div>
-          </div>
-          <div class="sub-title">Example sub title text</div>
-      </div>
-    </div>
-    <div class="actions-wrapper">
-      <button class="secondary">Button</buton>
-      <button class="">Button</buton>
-      <button class="tertiary circle">🞩</button>
-    </div>
-  </div>
-  <div class="content-area">Content Area</div>
-</div>
 
 
 

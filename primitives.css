@@ -84,6 +84,7 @@
     --shadow-sm: 0px 1px 2px var(--bley-opaque-5), 0px 0px 4px var(--bley-opaque-5), 0px 4px 8px var(--bley-opaque-5);
     --shadow-md: 0px 1px 2px var(--bley-opaque-10), 0px 2px 8px var(--bley-opaque-10), 0px 8px 16px var(--bley-opaque-10);
     --shadow-lg: 0px 2px 3px var(--bley-opaque-10), 0px 4px 12px var(--bley-opaque-10), 0px 12px 24px var(--bley-opaque-10);
+    --shadow-xlg: 0px 4px 8px var(--bley-opaque-5), 0px 0px 24px var(--bley-opaque-5), 0px 24px 56px var(--bley-opaque-5);
 
 
     /* Colour Palettes */

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" id="backgrounds" class="theme-a">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - Version 1.0</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+                
+
+<style>
+
+  @import url(../primitives.css);
+  @import url(../styles.css);
+
+
+  html, body
+  {
+    background: #F4F6FB;
+    width: 100%;
+  }
+
+  body
+  {
+    margin-block: 4%;
+  }
+
+  .content-wrapper
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: min(90%, 1480px);
+    margin-inline: auto;
+    margin-bottom: 4vh;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .header-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: var(--size-6);
+    padding: var(--size-3) var(--size-2);
+    width: 100%;
+    border-bottom: 1px solid var(--bley-opaque-10);
+  }
+
+  .item-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--size-2);
+    width: 100%;
+  }
+
+  .text-wrapper
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    gap: var(--size-0-5);
+    width: 100%;
+  }
+
+  .title-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--size-0-5) var(--size-2);
+  }
+
+  .title-wrapper-alt
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--size-0-5) var(--size-1);
+  }
+
+  .chip-wrapper
+  {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--size-1);
+  }
+
+  .sub-title
+  {
+    color: var(--primary);
+  }
+
+  .icon
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    background: var(--white);
+    border-radius: var(--radius-round);
+    min-width: 64px;
+    height: 64px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .actions-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: var(--size-1);
+  }
+
+
+  .content-area
+  {
+    background: var(--white);
+    padding: var(--size-12);
+    width: 100%;
+  }
+
+
+</style>
+
+
+</head>
+
+  
+<body>
+
+<!-- Example --> 
+
+<div class="content-wrapper custom-bg">
+  <div class="header-wrapper">
+    <div class="item-wrapper">
+      <div class="icon">♫</div> 
+        <div class="text-wrapper">
+          <div class="title-wrapper">
+            <div class="title"><h1>Example Item Title Text</h1></div>
+            <div class="chip-wrapper">
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+            </div>
+          </div>
+          <div class="sub-title">Example sub title text</div>
+      </div>
+    </div>
+    <div class="actions-wrapper">
+      <button class="secondary">Button</buton>
+      <button class="">Button</buton>
+      <button class="tertiary circle">🞩</button>
+    </div>
+  </div>
+  <div class="content-area">Content Area</div>
+</div>
+
+
+<!-- Example --> 
+
+<div class="content-wrapper custom-bg">
+  <div class="header-wrapper">
+    <div class="item-wrapper">
+      <div class="icon">♫</div> 
+        <div class="text-wrapper">
+          <div class="title-wrapper">
+            <div class="title"><h1>Example Item With Extremely Long Label, Like very very long, To Review Responsive layout behaviour and position</h1></div>
+            <div class="chip-wrapper">
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+            </div>
+          </div>
+          <div class="sub-title">Example sub title text</div>
+      </div>
+    </div>
+    <div class="actions-wrapper">
+      <button class="secondary">Button</buton>
+      <button class="">Button</buton>
+      <button class="tertiary circle">🞩</button>
+    </div>
+  </div>
+  <div class="content-area">Content Area</div>
+</div>
+
+
+<!-- Example --> 
+
+<div class="content-wrapper custom-bg">
+  <div class="header-wrapper">
+    <div class="item-wrapper">
+      <div class="icon">♫</div> 
+        <div class="text-wrapper">
+          <div class="title-wrapper">
+            <div class="title"><h1>Example Item With Many Chips</h1></div>
+            <div class="chip-wrapper">
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example label</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example very long label</div>
+              <div class="chip small fill">Chip</div>
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example label</div>
+              <div class="chip small fill">Chip example</div>
+            </div>
+          </div>
+          <div class="sub-title">Example sub title text</div>
+      </div>
+    </div>
+    <div class="actions-wrapper">
+      <button class="secondary">Button</buton>
+      <button class="">Button</buton>
+      <button class="tertiary circle">🞩</button>
+    </div>
+  </div>
+  <div class="content-area">Content Area</div>
+</div>
+
+
+<!-- Example --> 
+
+<div class="content-wrapper custom-bg">
+  <div class="header-wrapper">
+    <div class="item-wrapper">
+      <div class="icon">♫</div> 
+        <div class="text-wrapper">
+          <div class="title-wrapper">
+            <div class="title"><h1>Example Item With Extremely Long Label, Like very very long, To Review Responsive layout behaviour and position</h1></div>
+            <div class="chip-wrapper">
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example label</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example very long label</div>
+              <div class="chip small fill">Chip</div>
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example label</div>
+              <div class="chip small fill">Chip example</div>
+            </div>
+          </div>
+          <div class="sub-title">Example sub title text</div>
+      </div>
+    </div>
+    <div class="actions-wrapper">
+      <button class="secondary">Button</buton>
+      <button class="">Button</buton>
+      <button class="tertiary circle">🞩</button>
+    </div>
+  </div>
+  <div class="content-area">Content Area</div>
+</div>
+
+
+<h1>Alternate Inline Layout<br><br></h1>
+
+
+<!-- Example --> 
+
+<div class="content-wrapper custom-bg">
+  <div class="header-wrapper">
+    <div class="item-wrapper">
+      <div class="icon">♫</div> 
+        <div class="text-wrapper">
+          <div class="title-wrapper-alt">
+            <div class="title"><h1>Example Item Title Text</h1></div>
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+          </div>
+          <div class="sub-title">Example sub title text</div>
+      </div>
+    </div>
+    <div class="actions-wrapper">
+      <button class="secondary">Button</buton>
+      <button class="">Button</buton>
+      <button class="tertiary circle">🞩</button>
+    </div>
+  </div>
+  <div class="content-area">Content Area</div>
+</div>
+
+
+
+<!-- Example --> 
+
+<div class="content-wrapper custom-bg">
+  <div class="header-wrapper">
+    <div class="item-wrapper">
+      <div class="icon">♫</div> 
+        <div class="text-wrapper">
+          <div class="title-wrapper-alt">
+            <div class="title"><h1>Example Item with much longer Title Text example</h1></div>
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill darkGray">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+              <div class="chip small fill">Chip example</div>
+          </div>
+          <div class="sub-title">Example sub title text</div>
+      </div>
+    </div>
+    <div class="actions-wrapper">
+      <button class="secondary">Button</buton>
+      <button class="">Button</buton>
+      <button class="tertiary circle">🞩</button>
+    </div>
+  </div>
+  <div class="content-area">Content Area</div>
+</div>
+
+
+
+</body>
+
+<script>
+
+
+</script>
+
+</html>

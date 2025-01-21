@@ -22,6 +22,7 @@ html, body
 {
     font-family: 'Avenir', sans-serif;
     color: var(--text-primary);
+    text-align: left;
 }
 
 body
@@ -35,6 +36,8 @@ body
 h1, h2, h3, h4, h5, h6
 {
     line-height: 1.4;
+    font-weight: 400;
+    text-transform: capitalize;
 }
 
 h1, .title-1 { font-size: var(--title-1); }
@@ -102,6 +105,7 @@ button.circle
     width: 40px;
     padding: 0px; 
     border-radius: var(--radius-round);
+    font-size: 24px;
 }
 
 button.circle.small
@@ -142,6 +146,43 @@ button.tertiary:hover
 }
 
 
+
+/* Chips ------------------------------------- */
+
+.chip
+{
+    --accent: var(--bley-opaque-10);
+    --content: var(--text-primary);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    padding-inline: var(--size-2);
+    min-height: 32px;
+    border-radius: var(--radius-round);
+    background: var(--accent);
+    color: var(--content);
+}
+
+.chip.small
+{
+    min-height: 24px;
+    padding-inline: var(--size-1);
+}
+
+.chip.outline
+{
+    --accent: var(--bley-400);
+    background: transparent !important;
+    border: 1px solid var(--accent);
+}
+
+.chip.darkGray
+{
+    --accent: var(--bley-opaque-60);
+    --content: var(--white);
+}
 
 /* EncompaaS Standard Styles -------------------------------- */
 

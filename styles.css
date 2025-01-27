@@ -178,6 +178,12 @@ button.tertiary:hover
     border: 1px solid var(--accent);
 }
 
+.chip.primary
+{
+    --accent: var(--primary);
+    --content: var(--white);
+}
+
 .chip.darkGray
 {
     --accent: var(--bley-opaque-60);

@@ -73,6 +73,8 @@
     --text-secondary: var(--bley-800);
     --text-disabled: var(--bley-600);
 
+    --iconFill: var(--navy-900);
+
     --primary: var(--aqua-800);
     --secondary: var(--grape-600);
 

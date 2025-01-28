@@ -190,7 +190,217 @@ button.tertiary:hover
     --content: var(--white);
 }
 
+
+
+
 /* EncompaaS Standard Styles -------------------------------- */
+
+ 
+.themeItem
+{
+  display: flex;  
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--size-1);
+  padding: var(--size-2) var(--size-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  min-width: 48%;
+  position: relative;
+  border: 1px solid transparent;
+  outline: 1px solid transparent;
+  outline-offset: -2px;
+
+  .icon
+  {
+    font-size: 1.25rem;
+  }
+
+  &::before
+  {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -6px;
+    width: 3px;
+    height: 100%;
+    border-radius: var(--radius-round);
+    background: transparent;
+  }
+}
+
+
+.themeItem.disabled, .themeItem.disabled:hover
+{
+  background: var(--bley-opaque-10);
+  color: var(--text-disabled);
+  border: 1px solid transparent !important;
+  --accent: var(--text-disabled) !important;
+}
+
+
+/* Selection States -------------------------------- */
+
+.themeItem.selected
+{
+  background: var(--aqua-light-opaque-10);
+  &:hover
+  {
+    background: var(--aqua-light-opaque-10);
+  }
+} 
+
+.themeItem.primary-select, .themeItem.primary-select:hover
+{
+  background: var(--aqua-light-opaque-10);
+  border-color: transparent;
+}
+
+        .themeItem.primary-select::before
+        {
+          left: 0px;
+          background: var(--primary);
+        }
+
+
+.themeItem.secondary-select, .themeItem.secondary-select:hover
+{
+  background: var(--bley-opaque-5);
+  border: 1px solid var(--bley-opaque-10) !important;
+  &:hover
+  {
+    border-color: var(--bley-opaque-30) !important;
+  }
+}
+
+
+
+/* Focus States -------------------------------- */
+
+.themeItem:focus-visible, .themeItem.focus
+{
+  outline: 1px solid var(--primary);
+  outline-offset: -1px;
+}
+
+
+
+/* Themes -------------------------------- */
+
+.theme-white
+{
+  background: white;
+  color: var(--text-primary);
+
+  &:hover, &.hover 
+  {
+    background: var(--bley-opaque-5);
+  }
+}
+
+.theme-white-accent
+{
+  --accent: var(--primary);
+  background: white;
+
+  &:hover, &.hover 
+  {
+    background: var(--bley-opaque-5);
+  }
+  .icon
+  {
+    color: var(--accent);
+  }
+}
+
+.theme-outline
+{
+  border-color: var(--bley-opaque-10);
+
+  &:hover, &.hover
+  {
+    border-color: var(--bley-opaque-30);
+  }
+  &.item.selected, &.item.primary-select, &.item.secondary-select
+  {
+    border-color: transparent;
+  }
+}
+
+.theme-outline-accent
+{
+  --accent: var(--primary);
+  border-color: var(--bley-opaque-10);
+
+  &:hover, &.hover
+  {
+    border-color: var(--bley-opaque-30);
+  }
+  &.item.selected, &.item.primary-select, &.item.secondary-select
+  {
+    border-color: transparent;
+  }
+  .icon
+  {
+    color: var(--accent);
+  }
+}
+
+.theme-clear
+{
+  background: transparent;
+
+  &:hover, &.hover
+  {
+    background: var(--bley-opaque-5);
+  }
+}
+
+.theme-clear-accent
+{
+  --accent: var(--primary);
+  background: transparent;
+
+  &:hover, &.hover
+  {
+    background: var(--bley-opaque-5);
+  }
+  .icon
+  {
+    color: var(--accent);
+  }
+}
+
+
+
+
+/* List Item ------------------------------------- */
+
+
+
+.list-item
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--size-1);
+    padding: var(--size-2) var(--size-2);
+    border-radius: var(--radius-md);
+
+    .icon
+    {
+        color: var(--iconFill);
+        width: var(--size-2-5);
+        height: var(--size-2-5);
+        font-size: 24px;
+        line-height: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 
 
 /* Background -------------------------------- */

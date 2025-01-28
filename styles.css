@@ -250,20 +250,20 @@ button.tertiary:hover
   }
 } 
 
-.themeItem.primary-select, .themeItem.primary-select:hover
+.themeItem.primary-selected, .themeItem.primary-selected:hover
 {
   background: var(--aqua-light-opaque-10);
   border-color: transparent;
 }
 
-        .themeItem.primary-select::before
+        .themeItem.primary-selected::before
         {
           left: 0px;
           background: var(--primary);
         }
 
 
-.themeItem.secondary-select, .themeItem.secondary-select:hover
+.themeItem.secondary-selected, .themeItem.secondary-selected:hover
 {
   background: var(--bley-opaque-5);
   border: 1px solid var(--bley-opaque-10) !important;
@@ -393,7 +393,7 @@ button.tertiary:hover
         color: var(--iconFill);
         width: var(--size-2-5);
         height: var(--size-2-5);
-        font-size: 24px;
+        font-size: 22px;
         line-height: 1;
         display: flex;
         justify-content: center;

@@ -34,7 +34,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: min(90%, 1480px);
+    width: min(90%, 1200px);
     margin-inline: auto;
     margin-bottom: 4vh;
     border-radius: var(--radius-lg);
@@ -146,7 +146,7 @@
     position: relative;
     outline: 2px solid transparent;
     outline-offset: 0px;
-    animation: process-outline 1s ease-in infinite;
+    animation: process-outline 3s ease-in infinite;
   }
 
   .chip.process-fade
@@ -173,6 +173,11 @@
     --accent: rgba(255, 255, 255, 0.24);
   }
 
+  .list-item.process-fade:after
+  {
+    --accent: var(--lapis-50);
+  }
+
 
   @keyframes process-fade {
     0% { left: -100%; opacity: 1; }
@@ -183,7 +188,8 @@
 
   @keyframes process-outline {
     0% { outline-color: transparent; }
-    50% { outline-color: rgba(16, 28, 45, 0.164); }
+    33% { outline-color: rgba(16, 28, 45, 0.08); }
+    66% { outline-color: transparent; }
     100% { outline-color: transparent; }
   }
 
@@ -212,13 +218,13 @@
     height: 160%;
     border-radius: 999px;
     border-radius: 53% 47% 55% 45% / 46% 46% 54% 54% ;
-    background: linear-gradient(0deg, var(--secondary) 30%, var(--aqua-700) 130%);
+    background: linear-gradient(0deg, var(--secondary) 0%, var(--aqua-700) 133%);
   }
 
   .process-border:after
   {
-    width: 145%;
-    height: 145%;
+    width: 146%;
+    height: 146%;
     border-radius: 999px;
     border-radius: 53% 47% 55% 45% / 46% 46% 54% 54%  ;
     background: white;
@@ -244,7 +250,7 @@
   
 <body>
 
-  <h1 style="text-align: center; line-height: 4;">Item Header Responsive Examples</h1>
+  <h1 style="text-align: center; line-height: 4;">Process Animation Samples</h1>
 
 <!-- Example --> 
 
@@ -267,7 +273,7 @@
   </div>
   <div class="content-area">
     <h2>Content Area<br><br></h2>
-    <div class="list-item themeItem theme-outline">
+    <div class="list-item themeItem theme-outline process-fade">
         <div class="icon">♫</div>
         <div class="label">Example List Item</div>
     </div>

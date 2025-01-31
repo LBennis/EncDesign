@@ -17,15 +17,8 @@ body.encBG::after
   background-repeat: repeat;
   background-position: center center;
   z-index: -2;
-  opacity: 0.18;
-}
-
-@supports (mix-blend-mode: soft-light) {
-  .body.encBG::after
-  {
   mix-blend-mode: soft-light;
   opacity: 0.66;
-  }
 }
 
 .encBG .bg-icon

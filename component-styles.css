@@ -12,7 +12,7 @@ body.encBG::after
   position: absolute;
   width: 100%;
   height: 100%;
-  background: url("/assets/bg-texture.gif");
+  background: url("../assets/bg-texture.gif");
   background-size: 360px;
   background-repeat: repeat;
   background-position: center center;
@@ -37,7 +37,7 @@ body.encBG::after
   transform: translateY(-50%);
   bottom: -122%;
   right: -16%;
-  background: url("/assets/enc-bg-icon.png");
+  background: url("../assets/enc-bg-icon.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

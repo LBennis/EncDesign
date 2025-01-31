@@ -56,7 +56,7 @@ h6, .title-6 { font-size: var(--title-6); }
 .subtitle-2 { font-size: var(--size-2); }
 
 p, p.body-1 { font-size: var(--size-2); }
-p.body-2 { font-size: var(--body-2); }
+p.body-2 { font-size: 0.875rem; }
 
 .text-primary
 {
@@ -67,129 +67,6 @@ p.body-2 { font-size: var(--body-2); }
 {
     color: var(--text-secondary);
 }
-
-
-/* Buttons -------------------------------- */
-
-
-button
-{
-    border-radius: var(--radius-md);
-    background: var(--primary);
-    color: var(--white);
-    border: 1px solid transparent;
-    padding: var(--size-1) var(--size-2);
-    font-size: 14px;
-    min-height: 40px;
-    cursor: pointer;
-}
-
-button:hover
-{
-    background: var(--aqua-900);
-}
-
-button.large
-{
-    font-size: 1rem;
-    min-height: 48px;
-}
-
-button.small
-{
-    min-height: 32px;
-}
-
-button.circle
-{
-    width: 40px;
-    padding: 0px; 
-    border-radius: var(--radius-round);
-    font-size: 24px;
-}
-
-button.circle.small
-{
-    width: 32px;
-    padding: 0px; 
-    border-radius: var(--radius-round);
-}
-
-button.circle.large
-{
-    width: 48px;
-    padding: 0px; 
-    border-radius: var(--radius-round);
-}
-
-button.secondary
-{
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    background: transparent;
-}
-
-button.secondary:hover
-{
-    background: var(--aqua-opaque-10);
-}
-
-button.tertiary
-{
-    color: var(--primary);
-    background: transparent;
-}
-
-button.tertiary:hover
-{
-    background: var(--aqua-opaque-10);
-}
-
-
-
-/* Chips ------------------------------------- */
-
-.chip
-{
-    --accent: var(--bley-opaque-10);
-    --content: var(--text-primary);
-    display: inline-flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    padding-inline: var(--size-2);
-    min-height: 32px;
-    border-radius: var(--radius-round);
-    background: var(--accent);
-    color: var(--content);
-}
-
-.chip.small
-{
-    min-height: 24px;
-    padding-inline: var(--size-1);
-}
-
-.chip.outline
-{
-    --accent: var(--bley-400);
-    background: transparent !important;
-    border: 1px solid var(--accent);
-}
-
-.chip.primary
-{
-    --accent: var(--primary);
-    --content: var(--white);
-}
-
-.chip.darkGray
-{
-    --accent: var(--bley-opaque-60);
-    --content: var(--white);
-}
-
 
 
 
@@ -371,35 +248,6 @@ button.tertiary:hover
   }
 }
 
-
-
-
-/* List Item ------------------------------------- */
-
-
-
-.list-item
-{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: var(--size-1);
-    padding: var(--size-2) var(--size-2);
-    border-radius: var(--radius-md);
-
-    .icon
-    {
-        color: var(--iconFill);
-        width: var(--size-2-5);
-        height: var(--size-2-5);
-        font-size: 22px;
-        line-height: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-}
 
 
 

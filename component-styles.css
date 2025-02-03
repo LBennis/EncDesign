@@ -18,7 +18,7 @@ body.encBG::after
   background-position: center center;
   z-index: -2;
   mix-blend-mode: darken;
-  opacity: 0.4;
+  opacity: 0.04;
 }
 
 .encBG .bg-icon

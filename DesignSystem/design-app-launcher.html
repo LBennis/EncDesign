@@ -72,6 +72,7 @@
     }
   }
 
+
   .wrapper
   {
     display: flex;
@@ -98,6 +99,7 @@
     max-height: 86vh;
     padding: var(--size-12);
     margin-bottom: 12vh;
+    /* Note: A custom shadow. not using a theme definition on purpose */
     box-shadow: 0px 0px 2px var(--bley-opaque-10),
                 0px 0px 8px var(--bley-opaque-10),
                 0px 0px 16px var(--bley-opaque-5);
@@ -109,9 +111,8 @@
     grid-template-columns: repeat(4, 1fr);
     align-items: center;
     width: 100%;
-    
     gap: var(--size-2);
-    overflow-y: scroll;
+    overflow-y: auto;
 
     & .app-button
     {

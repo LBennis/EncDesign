@@ -77,6 +77,7 @@ button
     font-size: 14px;
     min-height: 40px;
     cursor: pointer;
+    z-index: 1;
 }
 
 button:hover
@@ -158,6 +159,7 @@ button.circle.large
     border-radius: var(--radius-round);
     background: var(--accent);
     color: var(--content);
+    z-index: 1;
 }
 
 .chip.small
@@ -202,6 +204,7 @@ button.circle.large
     gap: var(--size-1);
     padding: var(--size-2) var(--size-2);
     border-radius: var(--radius-md);
+    z-index: 1;
 
     .icon
     {

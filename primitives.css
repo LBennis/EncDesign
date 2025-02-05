@@ -76,6 +76,7 @@
     --iconFill: var(--navy-900);
 
     --primary: var(--aqua-800);
+    --primary-light: var(--aqua-700);
     --secondary: var(--grape-600);
 
     --bg-default: var(--white);

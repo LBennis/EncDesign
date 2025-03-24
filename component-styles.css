@@ -23,14 +23,29 @@ body.encBG::after
   opacity: 0.04;
 }
 
+body.encBG::before /* New Pseudo Element */
+{
+    content: '';
+    position: absolute;
+    top: 35%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    --size: 50rem;
+    width: var(--size);
+    height: var(--size);
+    background: radial-gradient(circle at center, var(--primary) 50%, var(--secondary) 56%, transparent 66%);
+    opacity: 0.06;
+    border-radius: 999rem;
+}
+
 .encBG .bg-icon
 {
   position: absolute;
-  --size: 145vh;
+  --size: 130vh; /* 145vh */
   width: var(--size);
   height: var(--size);
   transform: translateY(-50%);
-  bottom: -122%;
+  bottom: -90%; /* -122% */
   right: -16%;
   background: url("assets/enc-bg-icon.png");
   background-size: contain;
@@ -43,14 +58,14 @@ body.encBG::after
         @media (max-aspect-ratio: 3/2) {
           .encBG .bg-icon
           {
-            right: -30%;
+            right: -18%; /* -30% */
           }
         }
 
                 @media (max-aspect-ratio: 1/1) {
                   .encBG .bg-icon
                   {
-                    right: -100%;
+                    right: -60%; /* -100% */
                   }
                 }
                 

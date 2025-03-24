@@ -164,7 +164,7 @@ p.body-2 { font-size: 0.875rem; }
 
 /* Themes -------------------------------- */
 
-.theme-white
+.encTheme-white
 {
   background: white;
   color: var(--text-primary);
@@ -175,7 +175,7 @@ p.body-2 { font-size: 0.875rem; }
   }
 }
 
-.theme-white-accent
+.encTheme-white-accent
 {
   --accent: var(--primary);
   background: white;
@@ -190,7 +190,7 @@ p.body-2 { font-size: 0.875rem; }
   }
 }
 
-.theme-outline
+.encTheme-outline
 {
   border-color: var(--bley-opaque-10);
 
@@ -204,7 +204,7 @@ p.body-2 { font-size: 0.875rem; }
   }
 }
 
-.theme-outline-accent
+.encTheme-outline-accent
 {
   --accent: var(--primary);
   border-color: var(--bley-opaque-10);
@@ -223,7 +223,7 @@ p.body-2 { font-size: 0.875rem; }
   }
 }
 
-.theme-clear
+.encTheme-clear
 {
   background: transparent;
 
@@ -233,7 +233,7 @@ p.body-2 { font-size: 0.875rem; }
   }
 }
 
-.theme-clear-accent
+.encTheme-clear-accent
 {
   --accent: var(--primary);
   background: transparent;

@@ -63,7 +63,24 @@ body.encBG::after
   bottom: -155%;
   right: calc(50% - var(--size));
 }
-                
+        
+
+/* Dialog BG -------------------------------- */
+
+.dialog-bg
+{
+  --color-a: hsl(268deg 100% 42% / 4%); /* Color is "Primary"" */
+  --color-b: hsl(180deg 100% 26% / 8%); /* Color is "Secondary" */
+
+  --color-a: #6400d60a; /* Color is "Primary"" */
+  --color-b: #00858514; /* Color is "Secondary" */
+
+  background-color: var(--bg-light-grey);
+  background-image: radial-gradient(circle at center, transparent 30%, var(--color-a) 37%, var(--color-b) 40%, transparent 55%);
+  background-size: 166% 166%;
+  background-position: 70% 66%;
+  background-repeat: no-repeat;
+}
 
 
 /* Buttons -------------------------------- */
@@ -71,7 +88,7 @@ body.encBG::after
 
 button
 {
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     background: var(--primary);
     color: var(--white);
     border: 1px solid transparent;
@@ -118,7 +135,7 @@ button.tertiary
 
 button.tertiary:hover
 {
-    background: var(--aqua-opaque-10);
+    background: var(--aqua-opaque-5);
 }
 
 button.circle
@@ -218,5 +235,50 @@ button.circle.large
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+}
+
+
+
+/* Menu Item ------------------------------------- */
+
+.menu-item
+{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--size-1);
+    min-height: 40px;
+    padding-inline: var(--size-2);
+    cursor: pointer;
+
+    & .dense
+    {
+        min-height: 32px;
+    }
+}
+
+
+
+/* App Button ------------------------------------- */
+
+
+.button-app-list
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--size-2);
+    border-radius: var(--radius-md);
+    padding: var(--size-1) var(--size-2);
+    border-width: 1px;
+    border-style: solid;
+    cursor: pointer;
+
+    & .icon
+    {
+        width: var(--size-7);
+        height: var(--size-7);
     }
 }

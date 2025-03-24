@@ -276,3 +276,16 @@
     --bley-opaque-90: rgba(104, 113, 134, 0.90);
 
 }
+
+
+
+*
+{
+  transition: 1.2s;
+}
+
+
+html
+{
+  color: var(--text-primary);
+}

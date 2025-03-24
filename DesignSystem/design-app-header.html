@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" id="backgrounds" class="theme-a">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - App BG</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+                
+
+<style>
+
+  @import url(../primitives.css);
+  @import url(../styles.css);
+  @import url(../component-styles.css);
+
+
+  html
+  {
+    background: #F4F6FB;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  body
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-inline: var(--size-4);
+    z-index: -3;
+  }
+
+  .content-wrapper
+  {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border-radius: 16px 16px 0px 0px;
+    width: 100%;
+    height: calc(100% - var(--size-4));
+    box-shadow: 0px 0px 2px var(--bley-opaque-10),
+                0px 0px 8px var(--bley-opaque-10),
+                0px 0px 16px var(--bley-opaque-5);
+  }
+
+
+  .header-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--size-2);
+    padding: var(--size-1) var(--size-3) var(--size-1) var(--size-1);
+    border-bottom: 1px solid var(--bley-opaque-10);
+
+    & > div
+    {
+      flex-grow: 1;
+    }
+
+    .app-header
+    {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: var(--size-4);
+      width: 100%;
+      position: relative;
+    }
+
+    & .menu-wrapper
+    {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: var(--size-1);
+    }
+
+    & button.tertiary:not(.active, :hover)
+    {
+      color: var(--text-secondary);
+    }
+
+    & button.tertiary:hover,
+    & button.active
+    {
+      background: var(--aqua-light-opaque-10);
+    }
+
+    .header-right
+    {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+
+
+
+  .app-button
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: var(--size-1);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    padding: var(--size-0-5) var(--size-0-5);
+    cursor: pointer;
+
+            &:hover
+            {
+              background-color: white;
+              border-color: var(--bley-opaque-20);
+            }
+
+    & .icon
+    {
+      width: 44px;
+      height: 44px;
+    }
+
+    & .title-wrapper
+    {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      margin-top: 2px;
+      gap: var(--size-0-5);
+    }
+
+        & .wordmark
+        {
+          width: var(--size-8);
+        }
+
+        & h2
+        {
+          line-height: 1;
+        }
+
+        & .chevron
+        {
+          fill: var(--bley-600);
+          width: var(--size-3);
+          height: var(--size-3);
+          margin-inline: var(--size-1-5) var(--size-1);
+        }
+
+            &:hover .chevron
+            {
+              fill: var(--aqua-800);
+            }
+  }
+
+
+  .dropdown-wrapper
+  {
+    position: absolute;
+    left: var(--size-0-5);
+    top: var(--size-7);
+    background: white;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xlg);
+    display: flex;
+    flex-direction: row;
+    min-height: 35rem;
+    max-height: 50vh;
+    max-width: 66vw;
+    opacity: 0;
+    margin-top: var(--size-3);
+    margin-left: var(--size-3);
+    
+    & .app-list, & .options
+    {
+      padding: var(--size-5);
+    }
+
+    & .app-list
+    {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: var(--size-1);
+      flex-grow: 1;
+      min-width: 25rem;
+      overflow-y: scroll;
+    }
+
+    & .options
+    {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-size: 266% 266%;
+      background-position: 30% 45%;
+    }
+
+  }
+
+  .dropdown-wrapper .user-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    gap: var(--size-1);
+
+    & .avatar
+    {
+      border-radius: 999rem;
+      background: var(--secondary);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+    }
+
+    & .email
+    {
+      color: var(--text-disabled);
+    }
+
+        &:hover .email
+        {
+          color: var(--text-secondary);
+        }
+  }
+
+
+  .app-header.active
+  {
+  
+    & .app-button .chevron
+    {
+      fill: var(--primary);
+      transform: rotate(-180deg);
+    }
+
+    & .app-button .icon
+    {
+      animation: logo-spinner 3s linear 0s infinite forwards both;
+    }
+
+    .dropdown-wrapper
+    {
+      opacity: 1;
+      margin: 0;
+    }
+  }
+
+  .content
+  {
+    padding: var(--size-6) var(--size-2);
+  }
+
+
+  @keyframes logo-spinner {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+
+</style>
+
+
+</head>
+
+  
+<body class="encBG">
+  <div class="bg-icon"></div>
+
+
+
+  <div class="content-wrapper">
+
+    <div class="header-wrapper">
+      <div class="header-left">
+
+        <div class="app-header">
+          <div class="app-button">
+            <img src="../assets/enc-logo-icon.png" class="icon">
+            <div class="title-wrapper">
+              <img src="../assets/enc-logo-wordmark.png" class="wordmark">
+              <h2>search</h2>
+            </div>
+            <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="chevron"><path d="M16.1408 7.64582C16.3364 7.84073 16.337 8.15731 16.1421 8.35292L10.6771 13.8374C10.4622 14.0531 10.1129 14.0531 9.89791 13.8374L4.43293 8.35292C4.23801 8.15731 4.23858 7.84073 4.43419 7.64582C4.6298 7.4509 4.94638 7.45147 5.14129 7.64708L10.2875 12.8117L15.4337 7.64708C15.6286 7.45147 15.9452 7.4509 16.1408 7.64582Z" /></svg>
+          </div>
+          <div class="menu-wrapper">
+            <button class="tertiary active">Menu Item</button>
+            <button class="tertiary">Menu Item</button>
+            <button class="tertiary">Menu Item</button>
+          </div>
+
+
+          <div class="dropdown-wrapper">
+
+            <div class="app-list">
+              <div class="button-app-list encTheme-outline"><img src="../assets/app-icon-imc.png" class="icon"><p>App Name</p></div>
+              <div class="button-app-list encTheme-outline"><img src="../assets/app-icon-imc.png" class="icon"><p>App Name</p></div>
+              <div class="button-app-list encTheme-outline"><img src="../assets/app-icon-imc.png" class="icon"><p>App Name</p></div>
+              <div class="button-app-list encTheme-outline"><img src="../assets/app-icon-imc.png" class="icon"><p>App Name</p></div>
+            </div>
+
+            <div class="options dialog-bg">
+              <div class="user-wrapper">
+                <div class="avatar">TP</div>
+                <div>
+                  <h4>Tiffany Pycroft</h4>
+                  <p class="email">tiffany.pycroft@encompaas.cloud</p>
+                </div>
+                
+              </div>
+              <div>
+                <div class="menu-item encTheme-clear">Help</div>
+                <div class="menu-item encTheme-clear">Community</div>
+                <div class="menu-item encTheme-clear">Contact Us</div>
+                <div class="menu-item encTheme-clear">About</div>
+              </div>
+              <div>
+                <div class="menu-item encTheme-clear">▢ App Settings</div>
+                <p class="body-2" style="color: var(--text-disabled); padding-inline: var(--size-2);">Verison 1.0.0</p>
+                
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="header-right">
+        Right Options
+      </div>
+    </div>
+
+    <div class="content">
+      Content Area
+    </div>
+
+
+  </div>
+
+
+
+</body>
+
+<script>
+
+$(document).ready(function() {
+   
+   $(document).on('click', '.app-button', function () {
+    $(".app-header").toggleClass("active");
+   });
+        
+});
+
+</script>
+
+</html>

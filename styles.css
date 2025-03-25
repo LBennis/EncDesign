@@ -17,6 +17,24 @@
     box-sizing: border-box;
 }
 
+@media screen and (max-width: 1537px){
+
+  :root
+  { 
+    font-size: 15px;
+  }
+
+}
+
+@media screen and (max-width: 1281px){
+
+  :root
+  { 
+    font-size: 14px;
+  }
+
+}
+
 
 html, body
 {

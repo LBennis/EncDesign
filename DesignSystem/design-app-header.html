@@ -16,6 +16,7 @@
   @import url(../primitives.css);
   @import url(../styles.css);
   @import url(../component-styles.css);
+  
 
 
   html
@@ -180,8 +181,8 @@
     display: flex;
     flex-direction: row;
     min-height: 35rem;
-    max-height: 50vh;
-    max-width: 66vw;
+    max-height: 46rem;
+    max-width: calc(100vw - 72px);
     opacity: 0;
     margin-top: var(--size-3);
     margin-left: var(--size-3);
@@ -198,8 +199,8 @@
       justify-content: flex-start;
       gap: var(--size-1);
       flex-grow: 1;
-      min-width: 25rem;
-      overflow-y: scroll;
+      min-width: 28rem;
+      overflow-y: auto;
     }
 
     & .options
@@ -211,6 +212,21 @@
       background-position: 30% 45%;
     }
 
+  }
+
+  @media screen and (max-width: 1000px) {
+
+    .dropdown-wrapper
+    {
+      width: 100vw;
+    }
+
+    .options .email
+    {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    
   }
 
   .dropdown-wrapper .user-wrapper
@@ -230,6 +246,7 @@
       width: 40px;
       height: 40px;
       font-size: 20px;
+      flex-shrink: 0;
     }
 
     & .email
@@ -255,7 +272,11 @@
 
     & .app-button .icon
     {
-      animation: logo-spinner 3s linear 0s infinite forwards both;
+      animation: logo-spinner 2s;
+      animation-timing-function: cubic-bezier(.5,-0.17,.15,1.05);
+      animation-iteration-count: 1;
+      animation-direction: alternate;
+      animation-fill-mode: both;
     }
 
     .dropdown-wrapper
@@ -272,8 +293,9 @@
 
 
   @keyframes logo-spinner {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    0% { transform: rotate(0deg); }
+    50% { scale: 75%;}
+    100% { transform: rotate(360deg); }
   }
 
 

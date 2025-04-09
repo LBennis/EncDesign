@@ -56,6 +56,10 @@
     --size-29: calc(var(--size-base)*29);
     --size-30: calc(var(--size-base)*30);
 
+    --inputHeightSmall: 32px;
+    --inputHeightMedium: 40px;
+    --inputHeightLarge: 48px;
+
     --title-1: var(--size-3);
     --title-2: var(--size-2-5);
     --title-3: 1.125rem;

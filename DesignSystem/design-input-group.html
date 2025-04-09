@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" id="backgrounds" class="theme-a">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - App BG</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+                
+
+<style>
+
+  @import url(../primitives.css);
+  @import url(../styles.css);
+  @import url(../component-styles.css);
+
+  html
+  {
+    background: #F4F6FB;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  body
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-inline: var(--size-4);
+    z-index: -3;
+  }
+
+  .resize-wrapper
+  {
+    resize: horizontal; 
+    overflow: auto;
+    transition: 0s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--size-4);
+    padding: var(--size-4);
+    width: 45rem;
+  }
+
+
+  input, select
+  {
+    min-height: var(--input-size);
+    width: fit-content;
+    min-width: 16ch;
+    background: transparent;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: var(--radius-sm);
+    border-color: var(--bley-600);
+    padding-inline: var(--size-2);
+    cursor: pointer;
+    transition: 0.4s;
+    outline-style: solid;
+    outline-color: transparent;
+    outline-width: 1px;
+    outline-offset: -1px;
+
+    &:hover
+    {
+      border-color: var(--aqua-400);
+    }
+
+    &:focus-visible
+    {
+      outline-color: var(--primary);
+    }
+  }
+
+
+  .input-group
+  {
+    --input-size: var(--inputHeightMedium);
+    min-height: var(--input-size);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--size-1);
+    position: relative;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+
+    &:hover::before
+    {
+      z-index: -1;
+    }
+  }
+
+  .input-group::before
+  {
+    content: ''; position: absolute; top: 0; left: 0; 
+    width: calc(100% - 2px); 
+    height: calc(var(--input-size) - 2px);
+    border: 1px solid var(--bley-600);
+    border-radius: var(--radius-sm);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .input-group::after
+  {
+    content: ''; position: absolute; top: 0; left: 0; 
+    width: 100%; 
+    height: var(--input-size);
+    background: white;
+    border-radius: var(--radius-sm);
+    z-index: -3;
+  }
+
+  .connector-icon
+  {
+    color: var(--primary);
+  }
+
+
+  .input-group > input:not(:hover), .input-group > select:not(:hover)
+  {
+    border-color: transparent;
+  } 
+
+  .input-group .divider
+  {
+    height: calc(var(--inputHeightMedium) - var(--size-2));
+    width: 1px;
+    background: var(--bley-600);
+    flex-shrink: 0;
+  }
+
+  .input-group .primary
+  {
+    flex-grow: 1;
+  }
+
+  .input-group.size-large
+  {
+    --input-size: var(--inputHeightLarge);
+  }
+
+</style>
+
+
+</head>
+
+  
+<body class="encBG">
+  <div class="bg-icon"></div>
+
+  <div class="app-content-wrapper">
+
+    <div class="resize-wrapper">
+
+      <h4>Operator + Input</h4>
+    
+      <div class="input-group" resizeable>
+        <select>
+          <option>Option A</option>
+          <option>Option B</option>
+          <option>Option C</option>
+          <option>Option D</option>
+        </select>
+        <div class="divider"></div>
+        <input type="text" placeholder="Search" class="primary">
+        <div class="divider"></div>
+      </div>
+
+      <h4>3 Inputs</h4>
+    
+      <div class="input-group" resizeable>
+        <select>
+          <option>Option A</option>
+          <option>Option B</option>
+          <option>Option C</option>
+          <option>Option D</option>
+        </select>
+        <div class="divider"></div>
+        <input type="date" placeholder="Search" class="primary">
+        <div class="divider"></div>
+        <select>
+          <option>UTC+12 (System)</option>
+          <option>UTC+13</option>
+          <option>UTC+14</option>
+          <option>UTC+15</option>
+          <option>UTC+16</option>
+        </select>
+      </div>
+
+      <h3>Large Size</h3>
+
+    
+      <div class="input-group size-large">
+        <select>
+          <option>Option A</option>
+          <option>Option B</option>
+          <option>Option C</option>
+          <option>Option D</option>
+        </select>
+        <div class="divider"></div>
+        <input type="date" placeholder="Search" class="primary" >
+        <div class="divider"></div>
+        <select>
+          <option>UTC+12 (System)</option>
+          <option>UTC+13</option>
+          <option>UTC+14</option>
+          <option>UTC+15</option>
+          <option>UTC+16</option>
+        </select>
+      </div>
+
+      <h3>Dual Input</h3>
+
+    
+      <div class="input-group">
+        <select>
+          <option>Option A</option>
+          <option>Option B</option>
+          <option>Option C</option>
+          <option>Option D</option>
+        </select>
+        <div class="divider"></div>
+        <input type="date" placeholder="Search" class="primary" >
+        <div class="connector-icon">🡢</div>
+        <input type="date" placeholder="Search" class="primary" >
+        <div class="divider"></div>
+        <select>
+          <option>UTC+12 (System)</option>
+          <option>UTC+13</option>
+          <option>UTC+14</option>
+          <option>UTC+15</option>
+          <option>UTC+16</option>
+        </select>
+      </div>
+
+      
+
+    </div>
+
+
+</div>
+
+
+
+
+</body>
+
+</html>

@@ -94,21 +94,30 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical; 
     position: relative;
+
+    & h1
+    {
+      margin-block-end: 0;
+    }
   }
 
           .title button#copy
           {
-            position: absolute;
-            right: 8px;
-            bottom: 0;
-            opacity: 0;
             transition: 0.4s;
-            background: white;
-            box-shadow: var(--shadow-sm);
             cursor: pointer;
           }
 
-          .title:hover button#copy
+          .hasOverflow .title button#copy
+          {
+            position: absolute;
+            right: 8px;
+            bottom: 0;
+            opacity: 0.5;
+            background: white;
+            box-shadow: var(--shadow-sm);
+          }
+
+          .hasOverflow .title:hover button#copy
           {
             opacity: 1;
             right: 0;
@@ -179,7 +188,7 @@
       <div class="icon">♫</div> 
         <div class="text-wrapper">
           <div class="title-wrapper">
-            <div class="title"><h1>Example Item Title Text <button id="" class="tertiary circle small">▢</button></h1></div>
+            <div class="title"><h1>Example Item Title Text <button id="copy" class="tertiary circle small">▢</button></h1></div>
             <div class="chip-wrapper">
               <div class="chip small fill darkGray">Chip example</div>
               <div class="chip small fill">Chip example</div>
@@ -235,7 +244,7 @@
       <div class="icon">♫</div> 
         <div class="text-wrapper">
           <div class="title-wrapper">
-            <div class="title"><h1>Example Item With Many Chips <button id="" class="tertiary circle small">▢</button></h1></div>
+            <div class="title"><h1>Example Item With Many Chips <button id="copy" class="tertiary circle small">▢</button></h1></div>
             <div class="chip-wrapper">
               <div class="chip small fill darkGray">Chip example</div>
               <div class="chip small fill">Chip example label</div>
@@ -267,7 +276,7 @@
   <div class="header-wrapper">
     <div class="item-wrapper">
       <div class="icon">♫</div> 
-        <div class="text-wrapper">
+        <div class="text-wrapper hasOverflow">
           <div class="title-wrapper">
             <div class="title"><h1>Example Item With Extremely Long Label, Like very very long, To Review Responsive layout behaviour and position Example Item With Extremely Long Label, Like very very long, To Review Responsive layout behaviour and position <button id="copy" class="tertiary circle small">▢</button></h1></div>
             <div class="chip-wrapper">

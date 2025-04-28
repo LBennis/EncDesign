@@ -271,15 +271,6 @@
       transform: rotate(-180deg);
     }
 
-    & .app-button .icon
-    {
-      animation: logo-spinner 2s;
-      animation-timing-function: cubic-bezier(.5,-0.17,.15,1.05);
-      animation-iteration-count: 1;
-      animation-direction: alternate;
-      animation-fill-mode: both;
-    }
-
     .dropdown-wrapper
     {
       opacity: 1;
@@ -293,11 +284,76 @@
   }
 
 
-  @keyframes logo-spinner {
+  .app-button .icon
+  {
+    background-image: url("../assets/enc-bg-icon-b.png");
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+  }
+
+  .app-button .icon::after, .app-button .icon::before
+  {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center center;
+    background-size: cover;
+  }
+
+          .app-button .icon::after
+          {
+            background-image: url("../assets/enc-bg-icon-a.png");
+          }
+
+          .app-button .icon::before
+          {
+            background-image: url("../assets/enc-bg-icon-c.png");
+          }
+
+  .app-header.active .app-button .icon,
+  .app-header.active .app-button .icon::before,
+  .app-header.active .app-button .icon::after
+  {
+    animation-name: logo-spin;
+  }
+
+  .app-button .icon, .app-button .icon:after, .app-button .icon:before
+  {
+    animation-timing-function: cubic-bezier(.46,.27,.27,.99); 
+    animation-iteration-count: 1;
+    animation-direction: alternate;
+    animation-fill-mode: forwards;
+  }
+
+          .app-button .icon
+          {
+            animation-duration: 6s;
+          }
+
+          .app-button .icon::after
+          {
+            animation-duration: 6s;
+            animation-delay: 1s;
+          }
+
+          .app-button .icon::before
+          {
+            animation-fill-mode: backwards;
+            animation-duration: 6;
+            animation-delay: 2s;
+          }
+
+
+
+  @keyframes logo-spin {
     0% { transform: rotate(0deg); }
-    50% { scale: 80%;}
     100% { transform: rotate(360deg); }
   }
+
 
 
 </style>
@@ -318,7 +374,7 @@
 
         <div class="app-header">
           <div class="app-button">
-            <img src="../assets/enc-logo-icon.png" class="icon">
+            <div class="icon"></div>
             <div class="title-wrapper">
               <img src="../assets/enc-logo-wordmark.png" class="wordmark">
               <h2>search</h2>

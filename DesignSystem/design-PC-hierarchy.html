@@ -37,42 +37,33 @@
   {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     height: 100%;
+    min-height: 100%;
     width: 100%;
     padding-top: var(--size-3);
     padding-inline: var(--size-3);
     z-index: -3;
   }
 
-  .header
+  .tree-wrapper
   {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--size-2);
-    width: 100%;
-    padding-block: var(--size-2-5);
-
-    & div
+    
+    & li
     {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      gap: var(--size-2);
-    }
-
-    & .apps-button
-    {
-      font-size: 26px;
-      color: var(--text-primary);
-      line-height: 0.75;
-      padding: 8px;
+      width: fit-content;
+      line-height: 1;
+      margin-block: 8px;
     }
   }
 
-
+  li.active
+  {
+    padding: 2px 6px;
+    border-radius: 999px;
+    border: 1px solid rgb(162, 109, 253);
+  }
 
 
 </style>
@@ -85,7 +76,32 @@
   <div class="bg-icon"></div>
 
   <div class="app-content-wrapper">
-    Content Area
+    
+    <div class="tree-wrapper">
+      <ul>
+        <li>Finance</li>
+        <li>Services</li>
+          <ul>
+            <li>Resources</li>
+            <li>Products</li>
+              <ul>
+                <li>Product A</li>
+                <li>Product B</li>
+                  <ul>
+                    <li class="active">Self-Service</li>
+                    <li>Partial Implementation</li>
+                    <li>Full Implementation</li>
+                  </ul>
+                <li>Perspective Class Label</li>
+              </ul>
+            <li>Support</li>
+            <li class="active">Maintenance</li>
+            <li>Outsourced</li>
+          </ul>
+        <li>Human Resources</li>
+      </ul>
+    </div>
+
   </div>
 
 

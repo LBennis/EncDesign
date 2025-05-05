@@ -6,7 +6,7 @@
   <meta name="keywords" content="HTML,CSS,XML,JavaScript">
   <meta name="author" content="Luke Bennis">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Encompaas PoC - App BG</title>
+  <title>Encompaas PoC - Hierarchical Chips</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
                 
@@ -47,6 +47,18 @@
     z-index: -3;
   }
 
+  .columns
+  {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+
+    & div
+    {
+      flex-basis: 50%;
+    }
+  }
+
   .tree-wrapper
   {
     
@@ -66,6 +78,23 @@
   }
 
 
+  .collapse
+  {
+    & ul, li
+    {
+      display: inline-flex;
+    }
+    & li:not(.active)
+    {
+      display: none;
+    }
+    & li.parent
+    {
+      display: inline-flex;
+    }
+  }
+
+
 </style>
 
 
@@ -76,32 +105,68 @@
   <div class="bg-icon"></div>
 
   <div class="app-content-wrapper">
-    
-    <div class="tree-wrapper">
-      <ul>
-        <li>Finance</li>
-        <li>Services</li>
-          <ul>
-            <li>Resources</li>
-            <li>Products</li>
-              <ul>
-                <li>Product A</li>
-                <li>Product B</li>
-                  <ul>
-                    <li class="active">Self-Service</li>
-                    <li>Partial Implementation</li>
-                    <li>Full Implementation</li>
-                  </ul>
-                <li>Perspective Class Label</li>
-              </ul>
-            <li>Support</li>
-            <li class="active">Maintenance</li>
-            <li>Outsourced</li>
-          </ul>
-        <li>Human Resources</li>
-      </ul>
-    </div>
 
+
+    <div class="columns">
+      <div>
+        <h3>Full Tree</h3>
+        <div class="tree-wrapper">
+          <ul>
+            <li>Finance</li>
+            <li class="parent">Services</li>
+              <ul>
+                <li>Resources</li>
+                <li class="parent">Products</li>
+                  <ul>
+                    <li>Product A</li>
+                    <li class="parent">Product B</li>
+                      <ul>
+                        <li class="active">Self-Service</li>
+                        <li class="active">Partial Implementation</li>
+                        <li>Full Implementation</li>
+                      </ul>
+                    <li>Perspective Class Label</li>
+                  </ul>
+                <li>Support</li>
+                <li class="active">Maintenance</li>
+                <li>Outsourced</li>
+              </ul>
+            <li>Human Resources</li>
+          </ul>
+        </div>
+    
+
+      </div>
+      <div>
+      <h3>Collapsed</h3>
+      <div class="tree-wrapper collapse">
+        <ul>
+          <li>Finance</li>
+          <li class="parent">Services</li>
+            <ul>
+              <li>Resources</li>
+              <li class="parent">Products</li>
+                <ul>
+                  <li>Product A</li>
+                  <li class="parent">Product B</li>
+                    <ul>
+                      <li class="active">Self-Service</li>
+                      <li class="active">Partial Implementation</li>
+                      <li>Full Implementation</li>
+                    </ul>
+                  <li>Perspective Class Label</li>
+                </ul>
+              <li>Support</li>
+              <li class="active">Maintenance</li>
+              <li>Outsourced</li>
+            </ul>
+          <li>Human Resources</li>
+        </ul>
+      </div>
+  
+    </div>
+    
+  
   </div>
 
 

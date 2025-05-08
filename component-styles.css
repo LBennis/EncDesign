@@ -146,6 +146,11 @@ button.tertiary
 {
     color: var(--primary);
     background: transparent;
+
+    & svg
+    {
+        fill: var(--primary);
+    }
 }
 
 button.tertiary:hover
@@ -175,6 +180,54 @@ button.circle.large
     border-radius: var(--radius-round);
 }
 
+
+/* Inputs -------------------------------- */
+
+
+input
+{
+    min-height: 40px;
+    padding: var(--size-0-5) var(--size-1);
+    color: var(--text-primary);
+
+    &.small
+    {
+        min-height: 32px;
+    }
+}
+
+
+/* Tooltip -------------------------------- */
+
+.tooltip
+{
+    padding: var(--size-1);
+    border-radius: var(--radius-md);
+    color: white;
+    background: var(--navy-900);
+    position: relative;
+    font-size: 14px;
+    min-width: 250px;
+    max-width: 500px;
+
+    &:after
+    {
+        content: '';
+        position: absolute;
+        transform: translate(-50%, -50%);
+        transform-origin: 0 0;
+        width: 10px;
+        height: 10px;
+        rotate: 45deg;
+        background-color: var(--navy-900);
+    }
+}
+
+.tooltip.top:after
+{
+    bottom: calc(0% + -10px);
+    left: 50%;
+}
 
 
 /* Chips ------------------------------------- */

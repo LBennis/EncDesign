@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en" id="backgrounds" class="theme-a">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - Tab Sidebar</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+                
+
+<style>
+
+  @import url(../primitives.css);
+  @import url(../styles.css);
+  @import url(../component-styles.css);
+  
+
+
+  html
+  {
+    background: #F4F6FB;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  body
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-inline: var(--size-3);
+    z-index: -3;
+  }
+
+
+
+  .app-layout
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .sidebar-wrapper
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 30rem;
+    min-width: 30rem;
+    height: 100%;
+    position: relative;
+    transition: 1.4s;
+    transition-timing-function: cubic-bezier(.17,.84,.44,1);
+
+    & > div
+    {
+      flex-grow: 1;
+    }
+
+    & .menu-wrapper
+    {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: var(--size-1);
+    }
+
+    & button.tertiary:not(.active)
+    {
+      color: var(--text-secondary);
+    }
+
+    & button.tertiary:hover
+    {
+      background: var(--aqua-light-opaque-5);
+    }
+
+    & button.active
+    {
+      background: var(--aqua-light-opaque-10);
+    }
+
+    .header-right
+    {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+
+  .sidebar-header
+  {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid var(--bley-opaque-30);
+    padding: var(--size-1);
+  }
+
+  .tab-sidebar-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .tabs-wrapper
+  {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--bley-opaque-30);
+  }
+
+  .tabs
+  {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-1);
+    flex-grow: 1;
+    padding: var(--size-2);
+  }
+
+  .footer
+  {
+    padding: var(--size-2);
+  }
+
+  .tab-content-wrapper
+  {
+    width: 100%;
+    padding: var(--size-3);
+    transition: 0.4s;
+    transition-delay: 1s;
+    transition-timing-function: cubic-bezier(.17,.84,.44,1);
+  }
+
+  .tab-content
+  {
+    transition-delay: 0s;
+  }
+
+  .app-content
+  {
+    width: 100%;
+    height: 100%;
+    padding: var(--size-4) var(--size-4);
+  }
+
+
+  button.circle.active
+  {
+    background-color: var(--aqua-light-opaque-10);
+  }
+
+
+
+/* Collapsed ------------------------------------------------ */
+
+  .sidebar-wrapper.collapsed
+  {
+    width: 74px;
+    min-width: 74px;
+    border-right: 1px solid var(--bley-opaque-30);
+    transition-delay: 0.4s;
+    transition-timing-function: cubic-bezier(.17,.84,.44,1);
+  }
+
+  .splitter-bar.collapsed
+  {
+    visibility: hidden;
+    opacity: 0;
+    width: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .collapsed
+  {
+    .app-button
+    {
+      gap: 0;
+    }
+    .app-button .title-wrapper, .app-button svg
+    {
+      visibility: hidden;
+      opacity: 0;
+      width: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+    .tabs-wrapper
+    {
+      border-color: transparent;
+    }
+    .tab-content-wrapper
+    {
+      opacity: 0;
+      transition: 0.4s; /* fade out when collapsing */
+      transition-timing-function: cubic-bezier(.17,.84,.44,1);
+    }
+  }
+
+
+
+/* Collapsed - Hover ---------------------------------- */
+
+.sidebar-wrapper.active
+{
+  background: white;
+}
+
+.overlay-content-wrapper
+{
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 82px;
+  height: 100%;
+  width: min(50vw, 35rem);
+  z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s;
+  transition-delay: 0s;
+  transition-timing-function: cubic-bezier(.17,.84,.44,1);
+  background: white;
+  padding: var(--size-3);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  box-shadow:   4px 1px 4px 0px rgba(20,37,61,0.08), 
+                8px 4px 8px 0px rgba(20,37,61,0.08), 
+                12px 4px 12px 0px rgba(20,37,61,0.08);
+}
+
+
+#tab-active.active .overlay-content-wrapper,
+.overlay-content-wrapper:hover
+{
+  left: 74px;
+  opacity: 1;
+  visibility: visible;
+  transition: 0.6s;
+}
+
+
+
+</style>
+
+
+</head>
+
+  
+<body class="encBG">
+  <div class="bg-icon"></div>
+
+
+
+  
+
+    <div class="content-wrapper">
+
+      <div class="app-layout">
+
+      <div class="sidebar-wrapper collapsed" id="tab-active">
+
+          <div class="sidebar-header app-header">
+            <div class="app-button">
+              <div class="icon"></div>
+              <div class="title-wrapper">
+                <img src="../assets/enc-logo-wordmark.png" class="wordmark">
+                <h2>search</h2>
+              </div>
+              <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="chevron"><path d="M16.1408 7.64582C16.3364 7.84073 16.337 8.15731 16.1421 8.35292L10.6771 13.8374C10.4622 14.0531 10.1129 14.0531 9.89791 13.8374L4.43293 8.35292C4.23801 8.15731 4.23858 7.84073 4.43419 7.64582C4.6298 7.4509 4.94638 7.45147 5.14129 7.64708L10.2875 12.8117L15.4337 7.64708C15.6286 7.45147 15.9452 7.4509 16.1408 7.64582Z" /></svg>
+            </div>
+                      <div class="dropdown-wrapper">
+
+            <div class="app-list">
+              <div class="button-app-list encTheme-outline"><img src="../assets/app-icon-imc.png" class="icon"><p>App Name</p></div>
+              <div class="button-app-list encTheme-outline"><img src="../assets/app-icon-imc.png" class="icon"><p>App Name</p></div>
+              <div class="button-app-list encTheme-outline"><img src="../assets/app-icon-imc.png" class="icon"><p>App Name</p></div>
+              <div class="button-app-list encTheme-outline"><img src="../assets/app-icon-imc.png" class="icon"><p>App Name</p></div>
+            </div>
+
+            <div class="options dialog-bg">
+              <div class="user-wrapper">
+                <div class="avatar">TP</div>
+                <div>
+                  <h4>Tiffany Pycroft</h4>
+                  <p class="email">tiffany.pycroft@encompaas.cloud</p>
+                </div>
+                
+              </div>
+              <div>
+                <div class="menu-item encTheme-clear">Help</div>
+                <div class="menu-item encTheme-clear">Community</div>
+                <div class="menu-item encTheme-clear">Contact Us</div>
+                <div class="menu-item encTheme-clear">About</div>
+                <div class="menu-item encTheme-clear">Sign Out</div>
+              </div>
+              <div>
+                <div class="menu-item encTheme-clear">▢ App Settings</div>
+                <p class="body-2" style="color: var(--text-disabled); padding-inline: var(--size-2);">Verison 1.0.0</p>
+                
+              </div>
+            </div>
+          </div>
+          </div>
+
+
+
+        <div class="tab-sidebar-wrapper">
+          <div class="tabs-wrapper">
+            <div class="tabs" id="tabs">
+              <button class="circle tertiary active">☐</button>
+              <button class="circle tertiary">☐</button>
+              <button class="circle tertiary">☐</button>
+            </div>
+            <div class="footer">
+              <button id="collapse" class="circle tertiary">⬓</button>
+            </div>
+          </div>
+          <div class="tab-content-wrapper">
+            <div class="tab-content content">
+              <h1>Tab Content Title</h1>
+              <p>This is the menu content area</p>
+              <ul>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+              </ul>
+              <br><br>
+              <p>This is the menu content area</p>
+              <ul>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+              </ul>
+            </div>
+          </div>
+          <div class="overlay-content-wrapper">
+            <div class="tab-content content">
+              <h1>Tab Content Title</h1>
+              <p>This is the menu content area</p>
+              <ul>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+              </ul>
+              <br><br>
+              <p>This is the menu content area</p>
+              <ul>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="splitter-bar collapsed"></div>
+
+      <div class="app-content">
+        <h1>App Content</h1>
+        <br>
+          <div class="grid-wrapper">
+            <div class="grid-header">
+              <div class="grid-header-columns">
+                <div class="header-column">Column</div>
+                <div class="header-column">Column</div>
+                <div class="header-column">Column</div>
+                <div class="header-column">Column</div>
+              </div>
+            </div>
+            <div class="grid-cells">Grid Cells here</div>
+          </div>
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+
+</body>
+
+<script>
+
+$(document).ready(function() {
+   
+   $(document).on('click', '#collapse', function () {
+    $(".sidebar-wrapper, .splitter-bar").toggleClass("collapsed");
+   });
+        
+});
+
+$(document).ready(function() {
+   
+   $(document).on('click', '.app-button', function () {
+    $(".app-header").toggleClass("active");
+   });
+        
+});
+
+</script>
+
+    <script>
+        /**
+         * Adds a class to a target element when primary element is hovered or blurred
+         * @param {string} primarySelector - CSS selector for the primary element
+         * @param {string} targetSelector - CSS selector for the target element
+         * @param {string} className - CSS class to add/remove on target element
+         */
+        function toggleClassOnHover(primarySelector, targetSelector, className) {
+            const primaryElement = document.querySelector(primarySelector);
+            const targetElement = document.querySelector(targetSelector);
+            
+            if (!primaryElement || !targetElement) {
+                console.error('Could not find one or both elements');
+                return;
+            }
+            
+            // Add class on mouseenter (hover)
+            primaryElement.addEventListener('mouseenter', () => {
+                targetElement.classList.add(className);
+            });
+            
+            // Remove class on mouseleave
+            primaryElement.addEventListener('mouseleave', () => {
+                targetElement.classList.remove(className);
+            });
+            
+            // Add class on focus
+            primaryElement.addEventListener('focus', () => {
+                targetElement.classList.add(className);
+            });
+            
+            // Remove class on blur
+            primaryElement.addEventListener('blur', () => {
+                targetElement.classList.remove(className);
+            });
+        }
+
+        // Initialize the function when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            toggleClassOnHover('#tabs', '#tab-active', 'active');
+        });
+    </script>
+
+</html>

@@ -43,13 +43,13 @@ html, body, input
     text-align: left;
 }
 
-body, p, content
+body, p, .content
 {
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.4;
-  margin-block-end: 1.2ch;
+  color: var(--text-secondary);
 }
 
 h1, h2, h3, h4, h5, h6
@@ -57,8 +57,25 @@ h1, h2, h3, h4, h5, h6
     line-height: 1.4;
     font-weight: 400;
     text-transform: capitalize;
-    margin-block-end: 1.4ch;
+    color: var(--text-primary);
 }
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6,
+.content p
+  {
+    margin-block-end: 1.4ch;
+  }
+
+  .content p
+  {
+    margin-block-end: 1.2ch;
+  }
+
 
 h1, .title-1 { font-size: var(--title-1); }
 
@@ -82,12 +99,6 @@ p.body-2 { font-size: 0.875rem; }
 {
     color: var(--text-primary);
 }
-
-.text-secondary
-{
-    color: var(--text-secondary);
-}
-
 
 
 /* General Layout Styles -------------------------------- */

@@ -132,7 +132,6 @@
     flex-direction: column;
     gap: var(--size-1);
     flex-grow: 1;
-    padding: var(--size-2);
   }
 
   .footer
@@ -152,6 +151,11 @@
   .tab-content
   {
     transition-delay: 0s;
+
+    & li
+    {
+      margin-bottom: 1.4ch;
+    }
   }
 
   .app-content
@@ -170,6 +174,11 @@
 
 
 /* Collapsed ------------------------------------------------ */
+
+  .collapsed  .sidebar-header
+  {
+    border-color: transparent;
+  }
 
   .sidebar-wrapper.collapsed
   {
@@ -226,6 +235,11 @@
 
 .overlay-content-wrapper
 {
+  display: none;
+}
+
+.collapsed .overlay-content-wrapper
+{
   display: block;
   position: absolute;
   top: 0;
@@ -256,6 +270,57 @@
   transition: 0.6s;
 }
 
+
+.tab-group
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+
+  .tab
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    padding: var(--size-2) var(--size-1);
+    border-right: 3px solid transparent;
+    cursor: pointer;
+  }
+
+  .tab svg
+  {
+    fill: var(--text-primary);
+  }
+
+  .tab:hover
+  {
+    background: var(--bley-opaque-5);
+  }
+
+  .tab.active
+  {
+    border-color: var(--primary);
+  }
+
+  .tab.active svg
+  {
+    fill: var(--primary);
+  }
+}
+
+
+.content-a, .content-b, .content-c
+{
+  display: none;
+}
+
+.content-a.show, .content-b.show, .content-c.show
+{
+  display: block;
+}
 
 
 </style>
@@ -325,29 +390,29 @@
         <div class="tab-sidebar-wrapper">
           <div class="tabs-wrapper">
             <div class="tabs" id="tabs">
-              <button class="circle tertiary active">☐</button>
-              <button class="circle tertiary">☐</button>
-              <button class="circle tertiary">☐</button>
+              <div class="tab-group">
+                <div class="tab active" id="tab-a">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.7878 3.10263C11.283 2.09926 12.7138 2.09925 13.209 3.10263L15.567 7.88036L20.8395 8.6465C21.9468 8.8074 22.3889 10.1682 21.5877 10.9492L17.7724 14.6681L18.6731 19.9193C18.8622 21.0222 17.7047 21.8632 16.7143 21.3425L11.9984 18.8632L7.28252 21.3425C6.29213 21.8632 5.13459 21.0222 5.32374 19.9193L6.2244 14.6681L2.40916 10.9492C1.60791 10.1682 2.05005 8.8074 3.15735 8.6465L8.42988 7.88036L10.7878 3.10263ZM11.9984 4.03903L9.74008 8.61492C9.54344 9.01336 9.16332 9.28953 8.72361 9.35343L3.67382 10.0872L7.32788 13.649C7.64606 13.9592 7.79125 14.406 7.71614 14.844L6.85353 19.8734L11.3702 17.4988C11.7635 17.292 12.2333 17.292 12.6266 17.4988L17.1433 19.8734L16.2807 14.844C16.2056 14.406 16.3508 13.9592 16.6689 13.649L20.323 10.0872L15.2732 9.35343C14.8335 9.28953 14.4534 9.01336 14.2568 8.61492L11.9984 4.03903Z"/></svg>
+                </div>
+                <div class="tab"  id="tab-b">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.7878 3.10263C11.283 2.09926 12.7138 2.09925 13.209 3.10263L15.567 7.88036L20.8395 8.6465C21.9468 8.8074 22.3889 10.1682 21.5877 10.9492L17.7724 14.6681L18.6731 19.9193C18.8622 21.0222 17.7047 21.8632 16.7143 21.3425L11.9984 18.8632L7.28252 21.3425C6.29213 21.8632 5.13459 21.0222 5.32374 19.9193L6.2244 14.6681L2.40916 10.9492C1.60791 10.1682 2.05005 8.8074 3.15735 8.6465L8.42988 7.88036L10.7878 3.10263ZM11.9984 4.03903L9.74008 8.61492C9.54344 9.01336 9.16332 9.28953 8.72361 9.35343L3.67382 10.0872L7.32788 13.649C7.64606 13.9592 7.79125 14.406 7.71614 14.844L6.85353 19.8734L11.3702 17.4988C11.7635 17.292 12.2333 17.292 12.6266 17.4988L17.1433 19.8734L16.2807 14.844C16.2056 14.406 16.3508 13.9592 16.6689 13.649L20.323 10.0872L15.2732 9.35343C14.8335 9.28953 14.4534 9.01336 14.2568 8.61492L11.9984 4.03903Z"/></svg>
+                </div>
+                <div class="tab"  id="tab-c">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.7878 3.10263C11.283 2.09926 12.7138 2.09925 13.209 3.10263L15.567 7.88036L20.8395 8.6465C21.9468 8.8074 22.3889 10.1682 21.5877 10.9492L17.7724 14.6681L18.6731 19.9193C18.8622 21.0222 17.7047 21.8632 16.7143 21.3425L11.9984 18.8632L7.28252 21.3425C6.29213 21.8632 5.13459 21.0222 5.32374 19.9193L6.2244 14.6681L2.40916 10.9492C1.60791 10.1682 2.05005 8.8074 3.15735 8.6465L8.42988 7.88036L10.7878 3.10263ZM11.9984 4.03903L9.74008 8.61492C9.54344 9.01336 9.16332 9.28953 8.72361 9.35343L3.67382 10.0872L7.32788 13.649C7.64606 13.9592 7.79125 14.406 7.71614 14.844L6.85353 19.8734L11.3702 17.4988C11.7635 17.292 12.2333 17.292 12.6266 17.4988L17.1433 19.8734L16.2807 14.844C16.2056 14.406 16.3508 13.9592 16.6689 13.649L20.323 10.0872L15.2732 9.35343C14.8335 9.28953 14.4534 9.01336 14.2568 8.61492L11.9984 4.03903Z"/></svg>
+                </div>
+              </div>
             </div>
             <div class="footer">
-              <button id="collapse" class="circle tertiary">⬓</button>
+              <button id="collapse" class="circle tertiary">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.1925 14.7512C14.4696 15.059 14.9438 15.084 15.2517 14.807L17.7517 12.5575C17.9098 12.4153 18 12.2127 18 12.0001C18 11.7876 17.9098 11.585 17.7517 11.4428L15.2517 9.19331C14.9438 8.91628 14.4696 8.94123 14.1925 9.24904C13.9154 9.55686 13.9404 10.031 14.2483 10.308L15.2955 11.2503L11.75 11.2503C11.3358 11.2503 11 11.586 11 12.0001C11 12.4143 11.3358 12.75 11.75 12.75H15.2955L14.2483 13.6923C13.9404 13.9693 13.9154 14.4434 14.1925 14.7512ZM2 6.75C2 5.23122 3.23122 4 4.75 4H19.25C20.7688 4 22 5.23122 22 6.75V17.25C22 18.7688 20.7688 20 19.25 20H4.75C3.23122 20 2 18.7688 2 17.25V6.75ZM4.75 5.5C4.05964 5.5 3.5 6.05964 3.5 6.75V17.25C3.5 17.9404 4.05964 18.5 4.75 18.5H8.00427V5.5H4.75ZM9.50427 5.5V18.5H19.25C19.9404 18.5 20.5 17.9404 20.5 17.25V6.75C20.5 6.05964 19.9404 5.5 19.25 5.5H9.50427Z"/>
+                </svg>
+              </button>
             </div>
           </div>
           <div class="tab-content-wrapper">
-            <div class="tab-content content">
-              <h1>Tab Content Title</h1>
-              <p>This is the menu content area</p>
-              <ul>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-              </ul>
-              <br><br>
+
+            <div class="tab-content content content-a show">
+              <h1>Tab Content A Title</h1>
               <p>This is the menu content area</p>
               <ul>
                 <li>Some Tab Content</li>
@@ -360,22 +425,47 @@
                 <li>Some Tab Content</li>
               </ul>
             </div>
+
+            <div class="tab-content content content-b">
+              <h1>Tab Content B Title</h1>
+              <p>This is the menu content area</p>
+              <ul>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+              </ul>
+            </div>
+
+            <div class="tab-content content content-c">
+              <h1>Tab Content C Title</h1>
+              <p>This is the menu content area</p>
+              <ul>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+              </ul>
+            </div>
+
           </div>
+
           <div class="overlay-content-wrapper">
-            <div class="tab-content content">
-              <h1>Tab Content Title</h1>
-              <p>This is the menu content area</p>
-              <ul>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-                <li>Some Tab Content</li>
-              </ul>
-              <br><br>
+
+            <div class="tab-content content content-a show">
+              <h1>Tab Content A Title</h1>
               <p>This is the menu content area</p>
               <ul>
                 <li>Some Tab Content</li>
@@ -388,9 +478,42 @@
                 <li>Some Tab Content</li>
               </ul>
             </div>
+
+            <div class="tab-content content content-b">
+              <h1>Tab Content B Title</h1>
+              <p>This is the menu content area</p>
+              <ul>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+              </ul>
+            </div>
+
+            <div class="tab-content content content-c">
+              <h1>Tab Content C Title</h1>
+              <p>This is the menu content area</p>
+              <ul>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
+                <li>Some Tab Content</li>
           </div>
         </div>
 
+      </div>
       </div>
 
       <div class="splitter-bar collapsed"></div>
@@ -438,49 +561,90 @@ $(document).ready(function() {
         
 });
 
+$(document).ready(function() {
+   
+   $(document).on('click', '.tab', function () {
+    $(".tab").removeClass("active");
+    $(this).addClass("active");
+   });
+        
+});
+
+$(document).ready(function() {
+   
+   $(document).on('click', '#tab-a', function () {
+    $(".content-b, .content-c").removeClass("show");
+    $(".content-a").addClass("show");
+   });
+
+   $(document).on('click', '#tab-b', function () {
+    $(".content-a, .content-c").removeClass("show");
+    $(".content-b").addClass("show");
+   })
+
+   $(document).on('click', '#tab-c', function () {
+    $(".content-a, .content-b").removeClass("show");
+    $(".content-c").addClass("show");
+   })
+        
+});
+
 </script>
 
-    <script>
-        /**
-         * Adds a class to a target element when primary element is hovered or blurred
-         * @param {string} primarySelector - CSS selector for the primary element
-         * @param {string} targetSelector - CSS selector for the target element
-         * @param {string} className - CSS class to add/remove on target element
-         */
-        function toggleClassOnHover(primarySelector, targetSelector, className) {
-            const primaryElement = document.querySelector(primarySelector);
-            const targetElement = document.querySelector(targetSelector);
-            
-            if (!primaryElement || !targetElement) {
-                console.error('Could not find one or both elements');
-                return;
-            }
-            
-            // Add class on mouseenter (hover)
-            primaryElement.addEventListener('mouseenter', () => {
-                targetElement.classList.add(className);
-            });
-            
-            // Remove class on mouseleave
-            primaryElement.addEventListener('mouseleave', () => {
-                targetElement.classList.remove(className);
-            });
-            
-            // Add class on focus
-            primaryElement.addEventListener('focus', () => {
-                targetElement.classList.add(className);
-            });
-            
-            // Remove class on blur
-            primaryElement.addEventListener('blur', () => {
-                targetElement.classList.remove(className);
-            });
-        }
+<script>
 
-        // Initialize the function when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            toggleClassOnHover('#tabs', '#tab-active', 'active');
-        });
-    </script>
+function toggleClassOnHoverWithDelay(primarySelector, targetSelector, className, removeDelay = 500) {
+    const primaryElement = document.querySelector(primarySelector);
+    const targetElement = document.querySelector(targetSelector);
+    
+    // Variable to store the timeout for delayed removal
+    let removalTimeout;
+    
+    if (!primaryElement || !targetElement) {
+        console.error('Could not find one or both elements');
+        return;
+    }
+    
+    // Add class on mouseenter (hover)
+    primaryElement.addEventListener('mouseenter', () => {
+        // Clear any existing timeout to prevent premature removal
+        if (removalTimeout) {
+            clearTimeout(removalTimeout);
+            removalTimeout = null;
+        }
+        targetElement.classList.add(className);
+    });
+    
+    // Remove class on mouseleave with delay
+    primaryElement.addEventListener('mouseleave', () => {
+        // Set a timeout to remove the class after the specified delay
+        removalTimeout = setTimeout(() => {
+            targetElement.classList.remove(className);
+        }, removeDelay);
+    });
+    
+    // Add class on focus
+    primaryElement.addEventListener('focus', () => {
+        // Clear any existing timeout to prevent premature removal
+        if (removalTimeout) {
+            clearTimeout(removalTimeout);
+            removalTimeout = null;
+        }
+        targetElement.classList.add(className);
+    });
+    
+    // Remove class on blur with delay
+    primaryElement.addEventListener('blur', () => {
+        // Set a timeout to remove the class after the specified delay
+        removalTimeout = setTimeout(() => {
+            targetElement.classList.remove(className);
+        }, removeDelay);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleClassOnHoverWithDelay('#tabs', '#tab-active', 'active', 1000);
+});
+</script>
 
 </html>

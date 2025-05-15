@@ -511,20 +511,20 @@ input
 
         .app-button .icon
         {
-          animation-duration: 6s;
+          animation-duration: 3s;
         }
 
         .app-button .icon::after
         {
-          animation-duration: 6s;
-          animation-delay: 1s;
+          animation-duration: 3s;
+          animation-delay: 0.33s;
         }
 
         .app-button .icon::before
         {
           animation-fill-mode: backwards;
-          animation-duration: 6s;
-          animation-delay: 2s;
+          animation-duration: 3s;
+          animation-delay: 0.66s;
         }
 
 

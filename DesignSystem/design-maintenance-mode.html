@@ -111,7 +111,7 @@
   align-items: center;
   gap: var(--size-4);
   text-align: center;
-  margin-bottom: var(--size-4);
+  margin-bottom: var(--size-6);
   background: radial-gradient(white 10%, transparent 70%);
   padding: var(--size-12);
 
@@ -144,7 +144,12 @@
   }
 }
 
-
+.app-header
+{
+  position: absolute;
+  top: var(--size-2);
+  left: var(--size-2);
+}
 
 
 </style>
@@ -169,6 +174,18 @@
       <p class="body-2">Processing time will depend on the database size.</p>
     </div>
   </div>
+
+
+          <div class="app-header">
+          <div class="app-button">
+            <div class="icon"></div>
+            <div class="title-wrapper">
+              <img src="../assets/enc-logo-wordmark.png" class="wordmark">
+              <h2>search</h2>
+            </div>
+            <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="chevron"><path d="M16.1408 7.64582C16.3364 7.84073 16.337 8.15731 16.1421 8.35292L10.6771 13.8374C10.4622 14.0531 10.1129 14.0531 9.89791 13.8374L4.43293 8.35292C4.23801 8.15731 4.23858 7.84073 4.43419 7.64582C4.6298 7.4509 4.94638 7.45147 5.14129 7.64708L10.2875 12.8117L15.4337 7.64708C15.6286 7.45147 15.9452 7.4509 16.1408 7.64582Z" /></svg>
+          </div>
+        </div>
 
 
 

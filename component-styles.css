@@ -547,13 +547,14 @@ input
     justify-content: flex-start;
     align-items: center;
     gap: var(--size-2);
+    min-width: var(--size-34);
     border-radius: var(--radius-md);
     padding: var(--size-1) var(--size-2);
     border-width: 1px;
     border-style: solid;
     cursor: pointer;
 
-    & .icon
+    & .icon, & svg
     {
         width: var(--size-7);
         height: var(--size-7);

@@ -55,6 +55,16 @@
     --size-28: calc(var(--size-base)*28);
     --size-29: calc(var(--size-base)*29);
     --size-30: calc(var(--size-base)*30);
+    --size-31: calc(var(--size-base)*31);
+    --size-32: calc(var(--size-base)*32);
+    --size-33: calc(var(--size-base)*33);
+    --size-34: calc(var(--size-base)*34);
+    --size-35: calc(var(--size-base)*35);
+    --size-36: calc(var(--size-base)*36);
+    --size-37: calc(var(--size-base)*37);
+    --size-38: calc(var(--size-base)*38);
+    --size-39: calc(var(--size-base)*39);
+    --size-40: calc(var(--size-base)*40);
 
     --inputHeightSmall: 32px;
     --inputHeightMedium: 40px;

@@ -252,7 +252,6 @@
   opacity: 0;
   visibility: hidden;
   transition: 0.2s;
-  transition-delay: 0s;
   transition-timing-function: cubic-bezier(.17,.84,.44,1);
   background: white;
   padding: var(--size-3);
@@ -263,8 +262,7 @@
 }
 
 
-#tab-active.active .overlay-content-wrapper,
-.overlay-content-wrapper:hover
+#tab-active.active .overlay-content-wrapper
 {
   left: 74px;
   opacity: 1;
@@ -379,7 +377,7 @@
                 <div class="menu-item encTheme-clear">Sign Out</div>
               </div>
               <div>
-                <div class="menu-item encTheme-clear">▢ App Settings</div>
+                <div class="menu-item encTheme-clear">★ App Settings</div>
                 <p class="body-2" style="color: var(--text-disabled); padding-inline: var(--size-2);">Verison 1.0.0</p>
                 
               </div>
@@ -548,97 +546,41 @@
 <script>
 
 $(document).ready(function() {
-   
-   $(document).on('click', '#collapse', function () {
-    $(".sidebar-wrapper, .splitter-bar").toggleClass("collapsed");
-   });
+    // Handle tab clicks to toggle sidebar and content
+    $('.tab').on('click', function(e) {
+        e.stopPropagation();
+        const $sidebar = $('#tab-active');
+        const $tab = $(this);
+        const tabId = $tab.attr('id'); // Gets 'tab-a', 'tab-b', or 'tab-c'
+        const contentClass = tabId.replace('tab-', 'content-'); // Converts to 'content-a', 'content-b', or 'content-c'
         
-});
-
-$(document).ready(function() {
-   
-   $(document).on('click', '.tab', function () {
-    $(".tab").removeClass("active");
-    $(this).addClass("active");
-   });
-        
-});
-
-$(document).ready(function() {
-   
-   $(document).on('click', '#tab-a', function () {
-    $(".content-b, .content-c").removeClass("show");
-    $(".content-a").addClass("show");
-   });
-
-   $(document).on('click', '#tab-b', function () {
-    $(".content-a, .content-c").removeClass("show");
-    $(".content-b").addClass("show");
-   })
-
-   $(document).on('click', '#tab-c', function () {
-    $(".content-a, .content-b").removeClass("show");
-    $(".content-c").addClass("show");
-   })
-        
-});
-
-</script>
-
-<script>
-
-function toggleClassOnHoverWithDelay(primarySelector, targetSelector, className, removeDelay = 500) {
-    const primaryElement = document.querySelector(primarySelector);
-    const targetElement = document.querySelector(targetSelector);
-    
-    // Variable to store the timeout for delayed removal
-    let removalTimeout;
-    
-    if (!primaryElement || !targetElement) {
-        console.error('Could not find one or both elements');
-        return;
-    }
-    
-    // Add class on mouseenter (hover)
-    primaryElement.addEventListener('mouseenter', () => {
-        // Clear any existing timeout to prevent premature removal
-        if (removalTimeout) {
-            clearTimeout(removalTimeout);
-            removalTimeout = null;
+        // If clicking the active tab, toggle the sidebar
+        if ($tab.hasClass('active')) {
+            $sidebar.toggleClass('active');
+        } else {
+            // If clicking a different tab, make it active and show sidebar
+            $('.tab').removeClass('active');
+            $tab.addClass('active');
+            $sidebar.addClass('active');
+            
+            // Switch the content in both wrappers
+            $('.tab-content-wrapper .content, .overlay-content-wrapper .content').removeClass('show');
+            $(`.tab-content-wrapper .${contentClass}, .overlay-content-wrapper .${contentClass}`).addClass('show');
         }
-        targetElement.classList.add(className);
     });
-    
-    // Remove class on mouseleave with delay
-    primaryElement.addEventListener('mouseleave', () => {
-        // Set a timeout to remove the class after the specified delay
-        removalTimeout = setTimeout(() => {
-            targetElement.classList.remove(className);
-        }, removeDelay);
-    });
-    
-    // Add class on focus
-    primaryElement.addEventListener('focus', () => {
-        // Clear any existing timeout to prevent premature removal
-        if (removalTimeout) {
-            clearTimeout(removalTimeout);
-            removalTimeout = null;
-        }
-        targetElement.classList.add(className);
-    });
-    
-    // Remove class on blur with delay
-    primaryElement.addEventListener('blur', () => {
-        // Set a timeout to remove the class after the specified delay
-        removalTimeout = setTimeout(() => {
-            targetElement.classList.remove(className);
-        }, removeDelay);
-    });
-}
 
-document.addEventListener('DOMContentLoaded', () => {
-    toggleClassOnHoverWithDelay('#tabs', '#tab-active', 'active', 1000);
+    // Updated collapse button functionality
+    $(document).on('click', '#collapse', function () {
+        const $sidebar = $('#tab-active');
+        $(".sidebar-wrapper, .splitter-bar").toggleClass("collapsed");
+        // Ensure sidebar is hidden when collapsing
+        if ($(".sidebar-wrapper").hasClass("collapsed")) {
+            $sidebar.removeClass('active');
+        }
+    });
+
 });
+
 </script>
 
 </html>

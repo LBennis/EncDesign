@@ -9,6 +9,8 @@
   <title>Encompaas PoC - Search Mode</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+
+  <script type="text/javascript"  src="../scripts.js"></script>   
                 
 
 <style>
@@ -16,6 +18,11 @@
   @import url(../primitives.css);
   @import url(../styles.css);
   @import url(../component-styles.css);
+
+  *
+  {
+    transition: 0s all;
+  }
 
   html
   {
@@ -49,7 +56,7 @@
     display: flex;
     flex-direction: row;
     gap: var(--size-2);
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: var(--size-2) var(--size-3);
@@ -58,12 +65,21 @@
     & .header-left
     {
       width: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 0;
+      justify-content: flex-start;
+      align-items: center;
     }
 
     & .header-right
     {
       width: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 0;
       justify-content: flex-end;
+      align-items: center;
     }
   }
 
@@ -150,14 +166,14 @@
 
   .size-calculator 
   {
-            position: absolute;
-            top: -9999px;
-            left: -9999px;
-            white-space: pre;
-            padding: 10px 10px 10px 38px;
-            font-size: 16px;
-            font-family: Arial, sans-serif;
-        }
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      white-space: pre;
+      padding: 10px 10px 10px 38px;
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+  }
 
   .clear-button
   {
@@ -168,6 +184,91 @@
       fill: var(--text-disabled) !important;
       cursor: pointer;
       display: none;
+  }
+
+  .search-mode-wrapper
+  {
+    width: 600px;
+  }
+
+  /* Semantic Mode */ 
+
+  .mode-semantic
+  {
+    position: relative;
+  }
+
+  .mode-semantic::before
+  {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 64px);
+    background: white;
+    border: 1px solid var(--bley-opaque-10); 
+    border-radius: var(--radius-md);
+    opacity: 0;
+  }
+
+  .mode-semantic:hover::before
+  {
+    opacity: 1;
+  }
+
+  .mode-semantic .input-wrapper
+  {
+    overflow: visible;
+    border-color: transparent;
+  }
+
+  .mode-semantic .textarea-input
+  {
+    min-width: 100%;
+    min-height: 56px;
+    max-height: 104px;
+    padding-block: var(--size-1);
+    overflow: scroll;
+    border: none;
+    outline: none;
+  }
+
+  .controls-wrapper
+  {
+    position: absolute;
+    left: 0;
+    top: 120%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: var(--size-2);
+    justify-content: space-between;
+    opacity: 0;
+  }
+
+  .mode-semantic:hover .controls-wrapper
+  {
+    opacity: 1;
+  }
+
+
+
+
+  /* Mode display */
+
+  .search-mode-wrapper.semantic .mode-keyword, .mode-semantic
+  {
+    visibility: hidden;
+    pointer-events: none;
+    height: 0;
+  }
+
+  .search-mode-wrapper.semantic .mode-semantic
+  {
+    visibility: visible;
+    pointer-events: all;
+    height: auto;
   }
 
 
@@ -184,28 +285,112 @@
   <div class="app-content-wrapper">
     <div class="app-header-wrapper">
       <div class="header-left">
-        Left
+            <div class="app-button">
+              <div class="icon"></div>
+              <div class="title-wrapper">
+                <img src="../assets/enc-logo-wordmark.png" class="wordmark">
+                <h2>search</h2>
+              </div>
+              <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="chevron"><path d="M16.1408 7.64582C16.3364 7.84073 16.337 8.15731 16.1421 8.35292L10.6771 13.8374C10.4622 14.0531 10.1129 14.0531 9.89791 13.8374L4.43293 8.35292C4.23801 8.15731 4.23858 7.84073 4.43419 7.64582C4.6298 7.4509 4.94638 7.45147 5.14129 7.64708L10.2875 12.8117L15.4337 7.64708C15.6286 7.45147 15.9452 7.4509 16.1408 7.64582Z" /></svg>
+            </div>
       </div>
       <div class="header-right">
 
-        <div class="input-wrapper">
+        <div class="search-mode-wrapper semantic">
+
+          <div class="mode-keyword">
+            <div class="input-wrapper">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8.5 3C11.5376 3 14 5.46243 14 8.5C14 9.83879 13.5217 11.0659 12.7266 12.0196L16.8536 16.1464C17.0488 16.3417 17.0488 16.6583 16.8536 16.8536C16.68 17.0271 16.4106 17.0464 16.2157 16.9114L16.1464 16.8536L12.0196 12.7266C11.0659 13.5217 9.83879 14 8.5 14C5.46243 14 3 11.5376 3 8.5C3 5.46243 5.46243 3 8.5 3ZM8.5 4C6.01472 4 4 6.01472 4 8.5C4 10.9853 6.01472 13 8.5 13C10.9853 13 13 10.9853 13 8.5C13 6.01472 10.9853 4 8.5 4Z"/>
               </svg>   
-            <textarea class="search-input" placeholder="Search..."></textarea>
+            <input type="text" class="search-input small" placeholder="Search...">
+              
         </div>
+          </div>
+
+          <div class="mode-semantic">
+            <div class="input-wrapper">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 3C11.5376 3 14 5.46243 14 8.5C14 9.83879 13.5217 11.0659 12.7266 12.0196L16.8536 16.1464C17.0488 16.3417 17.0488 16.6583 16.8536 16.8536C16.68 17.0271 16.4106 17.0464 16.2157 16.9114L16.1464 16.8536L12.0196 12.7266C11.0659 13.5217 9.83879 14 8.5 14C5.46243 14 3 11.5376 3 8.5C3 5.46243 5.46243 3 8.5 3ZM8.5 4C6.01472 4 4 6.01472 4 8.5C4 10.9853 6.01472 13 8.5 13C10.9853 13 13 10.9853 13 8.5C13 6.01472 10.9853 4 8.5 4Z"/></svg>   
+              <div contenteditable class="textarea-input">Search Content OR Ideas. Example 'What contracts mention working from home.'</div>
+              <svg class="clear-button" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.08859 4.21569L4.14645 4.14645C4.32001 3.97288 4.58944 3.9536 4.78431 4.08859L4.85355 4.14645L10 9.293L15.1464 4.14645C15.32 3.97288 15.5894 3.9536 15.7843 4.08859L15.8536 4.14645C16.0271 4.32001 16.0464 4.58944 15.9114 4.78431L15.8536 4.85355L10.707 10L15.8536 15.1464C16.0271 15.32 16.0464 15.5894 15.9114 15.7843L15.8536 15.8536C15.68 16.0271 15.4106 16.0464 15.2157 15.9114L15.1464 15.8536L10 10.707L4.85355 15.8536C4.67999 16.0271 4.41056 16.0464 4.21569 15.9114L4.14645 15.8536C3.97288 15.68 3.9536 15.4106 4.08859 15.2157L4.14645 15.1464L9.293 10L4.14645 4.85355C3.97288 4.67999 3.9536 4.41056 4.08859 4.21569L4.14645 4.14645L4.08859 4.21569Z"/>
+              </svg>   
+              <div class="size-calculator"></div>
+            </div>
+              <div class="controls-wrapper">
+                <button class="tertiary small" id="mode-toggle">Similar To</button>
+                <button class="primary small">Search</button>
+              </div>
+          </div>
+
+        </div>
+
+
 
       </div>
     </div>
 
 
-
-
-
-
   </div>
+<script>
+  
+  $(document).ready(function() {
+   
+   $(document).on('click', '#mode-toggle', function () {
+    $(".search-mode-wrapper").toggleClass("semantic");
+   });
+        
+});
+</script>
 
 
+  
+  <script>
+    const searchInput = document.querySelector('.search-input');
+    const sizeCalculator = document.querySelector('.size-calculator');
+    const clearButton = document.querySelector('.clear-button');
+    const minWidth = 300;
+    const maxWidth = 999;
+
+    // Function to update input width based on text content
+    function updateInputWidth() {
+        // Set the content of the hidden div to the input value
+        sizeCalculator.textContent = searchInput.value || searchInput.placeholder;
+        
+        // Calculate the width needed
+        let contentWidth = sizeCalculator.offsetWidth;
+        let newWidth = contentWidth;
+        
+        // Constrain within min and max
+        newWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+        
+        // Set the new width
+        searchInput.style.width = newWidth + 'px';
+        
+        // Show/hide clear button based on input content
+        clearButton.style.display = searchInput.value ? 'block' : 'none';
+    }
+
+    // Clear the input when clear button is clicked
+    clearButton.addEventListener('click', function() {
+        searchInput.value = '';
+        updateInputWidth();
+        searchInput.focus();
+    });
+
+    // Update width on input
+    searchInput.addEventListener('input', updateInputWidth);
+    
+    // Initial width update
+    document.addEventListener('DOMContentLoaded', function() {
+        updateInputWidth();
+    });
+    
+    // Backup in case DOMContentLoaded already fired
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(updateInputWidth, 1);
+    }
+</script>
 
 
 </body>

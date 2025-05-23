@@ -93,7 +93,9 @@
     padding: 0 var(--size-1);
     overflow: hidden;
     position: relative;
+    width: 100%;
     max-width: 100%;
+    margin-right: 1px;
 
     /*styles*/
     background: white;
@@ -185,11 +187,20 @@
   .clear-button
   {
       position: absolute;
+      top: var(--size-1);
       right: var(--size-1-5);
       width: 20px;
       height: 20px;
       fill: var(--text-disabled) !important;
       cursor: pointer;
+      display: none;
+  }
+
+  .mode-keyword .input-wrapper .clear-button {
+      display: none;
+  }
+
+  .mode-semantic .input-wrapper .clear-button {
       display: none;
   }
 
@@ -227,9 +238,11 @@
     overflow-x: hidden;
     word-break: break-all;
     margin-block: var(--size-1);
-    overflow: scroll;
+    overflow-x: none;
+    overflow-y: auto;
     outline: none;
     cursor: text;
+    color: var(--text-primary);
   }
 
   .textarea-input[contenteditable]:empty::before 
@@ -257,15 +270,11 @@
     margin-top: -16px;
     opacity: 0;
     transition: 0.4s ease-in-out;
-  }
-
-  .mode-semantic:hover .controls-wrapper,
-  .popover-true .controls-wrapper
-  {
     opacity: 1;
     margin-top: 0;
-    transition: 0.2s ease-in-out;
   }
+
+  11111111111111
 
   .search-mode-wrapper:not(.semantic) .controls-wrapper
   {
@@ -443,6 +452,10 @@
               </div>
 
             <input type="text" class="search-input small" placeholder="Search...">
+                          <svg class="clear-button" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.08859 4.21569L4.14645 4.14645C4.32001 3.97288 4.58944 3.9536 4.78431 4.08859L4.85355 4.14645L10 9.293L15.1464 4.14645C15.32 3.97288 15.5894 3.9536 15.7843 4.08859L15.8536 4.14645C16.0271 4.32001 16.0464 4.58944 15.9114 4.78431L15.8536 4.85355L10.707 10L15.8536 15.1464C16.0271 15.32 16.0464 15.5894 15.9114 15.7843L15.8536 15.8536C15.68 16.0271 15.4106 16.0464 15.2157 15.9114L15.1464 15.8536L10 10.707L4.85355 15.8536C4.67999 16.0271 4.41056 16.0464 4.21569 15.9114L4.14645 15.8536C3.97288 15.68 3.9536 15.4106 4.08859 15.2157L4.14645 15.1464L9.293 10L4.14645 4.85355C3.97288 4.67999 3.9536 4.41056 4.08859 4.21569L4.14645 4.14645L4.08859 4.21569Z"/>
+              </svg>   
+              <div class="size-calculator"></div>
               
         </div>
       </div>
@@ -458,7 +471,7 @@
 </svg>
 
               </div>  
-              <div contenteditable role="textbox" class="textarea-input"></div>
+              <div contenteditable role="textbox" class="textarea-input" tabindex="0"></div>
               <svg class="clear-button" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4.08859 4.21569L4.14645 4.14645C4.32001 3.97288 4.58944 3.9536 4.78431 4.08859L4.85355 4.14645L10 9.293L15.1464 4.14645C15.32 3.97288 15.5894 3.9536 15.7843 4.08859L15.8536 4.14645C16.0271 4.32001 16.0464 4.58944 15.9114 4.78431L15.8536 4.85355L10.707 10L15.8536 15.1464C16.0271 15.32 16.0464 15.5894 15.9114 15.7843L15.8536 15.8536C15.68 16.0271 15.4106 16.0464 15.2157 15.9114L15.1464 15.8536L10 10.707L4.85355 15.8536C4.67999 16.0271 4.41056 16.0464 4.21569 15.9114L4.14645 15.8536C3.97288 15.68 3.9536 15.4106 4.08859 15.2157L4.14645 15.1464L9.293 10L4.14645 4.85355C3.97288 4.67999 3.9536 4.41056 4.08859 4.21569L4.14645 4.14645L4.08859 4.21569Z"/>
               </svg>   
@@ -492,8 +505,8 @@
               </div>
             </div>
             <div class="inline-help">
-              <p class="body-2"><strong>Keyword:</strong> Matches exact words in item meta data</p>
-              <p class="body-2"><strong>Cognition:</strong> Searches for general meaning or similar ideas in item content.</p>
+              <p class="body-2"><strong>Keyword:</strong> Matches exact words in item meta data.</p>
+              <p class="body-2"><strong>Cognitive:</strong> Searches for general meaning or similar ideas in item content.</p>
             </div>
             <hr>
             <div class="help-footer">
@@ -508,23 +521,38 @@
 
   </div>
 <script>
-  
-  $(document).ready(function() {
 
+$(document).ready(function() {
+    // Clickaway handler for popover
+    $(document).on('click', function(e) {
+        var $popover = $('.popover-wrapper');
+        var $searchModeWrapper = $('.search-mode-wrapper');
+        var $modeButton = $('.mode-button');
+        
+        // Check if click is outside both the popover and the mode button
+        if (!$popover.is(e.target) && 
+            $popover.has(e.target).length === 0 && 
+            !$modeButton.is(e.target) && 
+            $modeButton.has(e.target).length === 0) {
+            $searchModeWrapper.removeClass("popover-true");
+        }
+    });
 
-    $(document).on('click', '.mode-button', function () {
-      $(".search-mode-wrapper").toggleClass("popover-true");
-      $(this).toggleClass("active");
+    // Mode button click handler
+    $(document).on('click', '.mode-button', function (e) {
+        e.stopPropagation(); // Prevent click from bubbling to document
+        $(".search-mode-wrapper").toggleClass("popover-true");
+        $(this).toggleClass("active");
     });
    
+    // Mode toggle click handler
     $(document).on('click', '.mode-toggle', function () {
-     $(".search-mode-wrapper").toggleClass("semantic").removeClass("popover-true");
-     $(".toggle-button-wrapper button").removeClass("active");
-     $(".mode-button").removeClass("active");
-     $(this).addClass("active");
+        $(".search-mode-wrapper").toggleClass("semantic").removeClass("popover-true");
+        $(".toggle-button-wrapper button").removeClass("active");
+        $(".mode-button").removeClass("active");
+        $(this).addClass("active");
     });
-        
-  });
+});
 
 </script>
 
@@ -532,9 +560,10 @@
   
   <script>
     const searchInput = document.querySelector('.search-input');
+    const textareaInput = document.querySelector('.textarea-input');
     const sizeCalculator = document.querySelector('.size-calculator');
-    const clearButton = document.querySelector('.clear-button');
-    const minWidth = 300;
+    const clearButtons = document.querySelectorAll('.clear-button');
+    const minWidth = 400;
     const maxWidth = 999;
 
     // Function to update input width based on text content
@@ -551,29 +580,60 @@
         
         // Set the new width
         searchInput.style.width = newWidth + 'px';
+    }
+
+    // Function to handle clear button visibility
+    function updateClearButtons() {
+        const isKeywordMode = !document.querySelector('.search-mode-wrapper').classList.contains('semantic');
+        const keywordContent = searchInput.value.length > 0;
+        const semanticContent = textareaInput.textContent.trim().length > 0;
         
-        // Show/hide clear button based on input content
-        clearButton.style.display = searchInput.value ? 'block' : 'none';
+        clearButtons.forEach(button => {
+            const isKeywordButton = button.closest('.mode-keyword') !== null;
+            if (isKeywordButton) {
+                button.style.display = keywordContent ? 'block' : 'none';
+            } else {
+                button.style.display = semanticContent ? 'block' : 'none';
+            }
+        });
     }
 
     // Clear the input when clear button is clicked
-    clearButton.addEventListener('click', function() {
-        searchInput.value = '';
-        updateInputWidth();
-        searchInput.focus();
+    clearButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const isKeywordButton = this.closest('.mode-keyword') !== null;
+            if (isKeywordButton) {
+                searchInput.value = '';
+                searchInput.focus();
+            } else {
+                textareaInput.textContent = '';
+                textareaInput.focus();
+            }
+            updateClearButtons();
+        });
     });
 
-    // Update width on input
-    searchInput.addEventListener('input', updateInputWidth);
+    // Update width and clear button visibility on input
+    searchInput.addEventListener('input', function() {
+        updateInputWidth();
+        updateClearButtons();
+    });
+
+    // Update clear button visibility on textarea content change
+    textareaInput.addEventListener('input', updateClearButtons);
     
-    // Initial width update
+    // Initial setup
     document.addEventListener('DOMContentLoaded', function() {
         updateInputWidth();
+        updateClearButtons();
     });
     
     // Backup in case DOMContentLoaded already fired
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        setTimeout(updateInputWidth, 1);
+        setTimeout(function() {
+            updateInputWidth();
+            updateClearButtons();
+        }, 1);
     }
 </script>
 

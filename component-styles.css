@@ -187,6 +187,12 @@ button
     z-index: 1;
 }
 
+button:focus
+{
+  outline-color: var(--primary);
+  outline-offset: 0px;
+}
+
 button:hover
 {
     background: var(--aqua-900);

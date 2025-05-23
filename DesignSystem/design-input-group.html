@@ -83,69 +83,6 @@
   }
 
 
-  .input-group
-  {
-    --input-size: var(--inputHeightMedium);
-    min-height: var(--input-size);
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: var(--size-1);
-    position: relative;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-
-    &:hover::before
-    {
-      z-index: -1;
-    }
-  }
-
-  .input-group::before
-  {
-    content: ''; position: absolute; top: 0; left: 0; 
-    width: calc(100% - 2px); 
-    height: calc(var(--input-size) - 2px);
-    border: 1px solid var(--bley-600);
-    border-radius: var(--radius-sm);
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  .input-group::after
-  {
-    content: ''; position: absolute; top: 0; left: 0; 
-    width: 100%; 
-    height: var(--input-size);
-    background: white;
-    border-radius: var(--radius-sm);
-    z-index: -3;
-  }
-
-  .connector-icon
-  {
-    color: var(--primary);
-  }
-
-
-  .input-group > input:not(:hover), .input-group > select:not(:hover)
-  {
-    border-color: transparent;
-  } 
-
-  .input-group .divider
-  {
-    height: calc(var(--inputHeightMedium) - var(--size-2));
-    width: 1px;
-    background: var(--bley-600);
-    flex-shrink: 0;
-  }
-
-  .input-group .primary
-  {
-    flex-grow: 1;
-  }
 
   .input-group.size-large
   {

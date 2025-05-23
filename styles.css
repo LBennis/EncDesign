@@ -45,11 +45,27 @@ html, body, input, textarea
 
 body, p, .content
 {
-  font-size: 1rem;
+  font-size: var(--size-2);
   font-style: normal;
   font-weight: 400;
   line-height: 1.4;
   color: var(--text-secondary);
+}
+
+a
+{
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover
+{
+  text-decoration: underline;
+}
+
+hr
+{
+  border-color: var(--bley-opaque-10);
 }
 
 h1, h2, h3, h4, h5, h6

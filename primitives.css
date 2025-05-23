@@ -321,13 +321,6 @@
 }
 
 
-
-*
-{
-  transition: 0.6s;
-}
-
-
 html
 {
   color: var(--text-primary);

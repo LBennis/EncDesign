@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" id="backgrounds" class="theme-a">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - Grid Column Sizes</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+
+  <script type="text/javascript"  src="../scripts.js"></script>   
+                
+
+<style>
+
+  @import url(../primitives.css);
+  @import url(../styles.css);
+  @import url(../component-styles.css);
+  
+
+
+  html
+  {
+    background: #F4F6FB;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  body
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-inline: var(--size-3);
+    z-index: -3;
+  }
+
+  .app-layout
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .app-header
+  {
+    display: flex;
+    flex-direction: row;
+    padding: var(--size-5);
+    border-bottom: 1px solid var(--bley-opaque-20);
+  }
+
+  .app-content
+  {
+    padding: var(--size-5);
+  }
+
+  .grid-wrapper
+  {
+    height: 5px;
+    resize: horizontal;
+    transition: 0s;
+  }
+
+
+</style>
+
+
+</head>
+
+  
+<body class="encBG">
+  <div class="bg-icon"></div>
+
+    <div class="content-wrapper">
+
+      <div class="app-layout">
+
+        <div class="app-header">
+          App Header
+        </div>
+
+      <div class="app-content">
+
+        <h3>Col Filling Space<br><br></h3>
+
+          <div class="grid-wrapper">
+            <div class="grid-row">
+              <div class="grid-cell col-small">987654321</div>
+              <div class="grid-cell"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is much longer grid cell content to show how a large cell will behave, based on it's max width value</p></div>
+              <div class="grid-cell"><p>This is a grid cell string</p></div>
+              <div class="grid-cell"><p>This is a grid cell string</p></div>
+            </div>
+            <div class="grid-row">
+              <div class="grid-cell col-small">987654321</div>
+              <div class="grid-cell"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is much longer grid cell content to show how a large cell will behave, based on it's max width value</p></div>
+              <div class="grid-cell"><p>This is a grid cell string</p></div>
+              <div class="grid-cell"><p>This is a grid cell string</p></div>
+            </div>
+          </div>
+
+          <h3><br>Single Col<br><br></h3>
+
+          <div class="grid-wrapper">
+            <div class="grid-row">
+              <div class="grid-cell"><p>This is a grid cell string</p></div>
+            </div>
+            <div class="grid-row">
+              <div class="grid-cell"><p>This is a grid cell string</p></div>
+            </div>
+          </div>
+
+          <h3><br>Large Cols Overflowing<br><br></h3>
+
+          <div class="grid-wrapper">
+            <div class="grid-row">
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-small">987654321</div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-small">987654321</div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+            </div>
+            <div class="grid-row">
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-small">987654321</div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-small">987654321</div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+              <div class="grid-cell col-large"><p>This is a grid cell string</p></div>
+            </div>
+          </div>
+          
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+
+</body>
+
+<script>
+
+$(document).ready(function() {
+   
+   $(document).on('click', '#collapse', function () {
+    $(".sidebar-wrapper, .splitter-bar").toggleClass("collapsed");
+   });
+        
+});
+
+$(document).ready(function() {
+   
+   $(document).on('click', '.tab', function () {
+    $(".tab").removeClass("active");
+    $(this).addClass("active");
+   });
+        
+});
+
+$(document).ready(function() {
+   
+   $(document).on('click', '#tab-a', function () {
+    $(".content-b, .content-c").removeClass("show");
+    $(".content-a").addClass("show");
+   });
+
+   $(document).on('click', '#tab-b', function () {
+    $(".content-a, .content-c").removeClass("show");
+    $(".content-b").addClass("show");
+   })
+
+   $(document).on('click', '#tab-c', function () {
+    $(".content-a, .content-b").removeClass("show");
+    $(".content-c").addClass("show");
+   })
+        
+});
+
+</script>
+
+<script>
+
+function toggleClassOnHoverWithDelay(primarySelector, targetSelector, className, removeDelay = 500) {
+    const primaryElement = document.querySelector(primarySelector);
+    const targetElement = document.querySelector(targetSelector);
+    
+    // Variable to store the timeout for delayed removal
+    let removalTimeout;
+    
+    if (!primaryElement || !targetElement) {
+        console.error('Could not find one or both elements');
+        return;
+    }
+    
+    // Add class on mouseenter (hover)
+    primaryElement.addEventListener('mouseenter', () => {
+        // Clear any existing timeout to prevent premature removal
+        if (removalTimeout) {
+            clearTimeout(removalTimeout);
+            removalTimeout = null;
+        }
+        targetElement.classList.add(className);
+    });
+    
+    // Remove class on mouseleave with delay
+    primaryElement.addEventListener('mouseleave', () => {
+        // Set a timeout to remove the class after the specified delay
+        removalTimeout = setTimeout(() => {
+            targetElement.classList.remove(className);
+        }, removeDelay);
+    });
+    
+    // Add class on focus
+    primaryElement.addEventListener('focus', () => {
+        // Clear any existing timeout to prevent premature removal
+        if (removalTimeout) {
+            clearTimeout(removalTimeout);
+            removalTimeout = null;
+        }
+        targetElement.classList.add(className);
+    });
+    
+    // Remove class on blur with delay
+    primaryElement.addEventListener('blur', () => {
+        // Set a timeout to remove the class after the specified delay
+        removalTimeout = setTimeout(() => {
+            targetElement.classList.remove(className);
+        }, removeDelay);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleClassOnHoverWithDelay('#tabs', '#tab-active', 'active', 1000);
+});
+</script>
+
+</html>

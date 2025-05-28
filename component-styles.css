@@ -574,12 +574,18 @@ input
 
   .grid-wrapper
   {
+    --minSmall: var(--size-14);
+    --maxSmall: var(--size-20);
+    --minMedium: var(--size-18);
+    --minLarge: var(--size-36);
+
     display: flex;
     flex-direction: column;
     width: 100%;
     border: 1px solid var(--bley-opaque-30);
     min-height: 100%;
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    border-radius: var(--radius-md);
+    overflow-x: scroll;
   }
 
   .grid-header
@@ -588,7 +594,6 @@ input
     flex-direction: column;
     width: 100%;
     background: var(--bley-opaque-5);
-    
   }
 
   .grid-toolbar
@@ -628,8 +633,9 @@ input
 
   .header-column
   {
-    width: 100%;
+    flex-grow: 1;
     padding: var(--size-1);
+    white-space: nowrap;
 
     &:hover
     {
@@ -637,19 +643,48 @@ input
     }
   }
 
-  .grid-cells
+  .grid-row
   {
-    min-height: 100%;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    min-width: 100%;
+    min-height: var(--size-6);
+    border-bottom: 1px solid var(--bley-opaque-20);
+  }
+
+  .grid-cell
+  {
+    display: flex;
+    align-items: center;
     flex-grow: 1;
-    background: white;
-    padding: 2vw;
+    min-width: var(--minMedium); 
+    height: 100%;
+    padding: var(--size-1);
+    overflow: hidden;
+
+    & p
+    {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+  }
+
+  .col-small
+  {
+    min-width: var(--minSmall);
+    max-width: var(--maxSmall);
+  }
+
+  .col-large
+  {
+    min-width: var(--minLarge);
   }
 
 
 
 /* App Header ------------------------- */
-
-
 
   .header-wrapper
   {

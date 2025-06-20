@@ -176,6 +176,7 @@ button
     gap: var(--size-0-5);
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
     border-radius: var(--radius-md);
     background: var(--primary);
     color: var(--white);
@@ -894,6 +895,12 @@ input
     border-radius: var(--radius-sm);
     z-index: 1;
     pointer-events: none;
+    transition: 0.4s;
+  }
+
+  .input-group:focus-within::before
+  {
+    border-color: var(--primary);
   }
 
   .input-group::after
@@ -904,6 +911,7 @@ input
     background: white;
     border-radius: var(--radius-sm);
     z-index: -3;
+    transition: 0.4s;
   }
 
   .input-group .connector-icon

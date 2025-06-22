@@ -171,6 +171,11 @@
     position: relative;
   }
 
+  button.mode-button
+  {
+    min-width: var(--size-15);
+  }
+
   .mode-button svg
   {
     transform: rotateX(180deg);
@@ -193,14 +198,17 @@
     pointer-events: none;
     height: 0;
     opacity: 0;
+    transition: 0.1s;
   }
 
-  .search-mode-wrapper.semantic .mode-semantic
+  .search-mode-wrapper.semantic .mode-semantic, 
+  .mode-keyword
   {
     visibility: visible;
     pointer-events: all;
     height: auto;
     opacity: 1;
+    transition: 0.1s;
   }
 
   /* Popover styles ------------------------------------ */
@@ -267,6 +275,15 @@
   .popover-wrapper .toggle-button-wrapper
   {
     margin-top: var(--size-1);
+  }
+
+  .content-area
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
   }
 
 
@@ -376,9 +393,11 @@
 
       </div>
     </div>
-
+    <div class="content-area">Search UI Here.</div>
 
   </div>
+
+  
 
   <script>
 

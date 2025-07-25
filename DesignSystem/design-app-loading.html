@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" id="backgrounds" class="theme-a">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - App Loading View</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   
+
+  <script type="text/javascript"  src="../scripts.js"></script>   
+                
+
+<style>
+
+  @import url(../primitives.css);
+  @import url(../styles.css);
+  @import url(../component-styles.css);
+
+
+  *
+  {
+    color: #0A0B33;
+    transition: 1.2s;
+  }
+
+  html
+  {
+    background: #F4F6FB;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  body
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-top: var(--size-3);
+    padding-inline: var(--size-3);
+    z-index: -3;
+  }
+
+  body::before,
+  .bg-icon
+  {
+    display: none;
+  }
+
+  .bg-graphic
+  {
+    content: '';
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    --size: 105vw;
+    z-index: -1;
+    width: var(--size);
+    height: var(--size); 
+    background-image: url('../assets/enc-bg-icon-blur.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5;
+    animation: image-spin 6s linear 0s infinite both,
+               image-load 3s ease-out 0s forwards;
+    transform-origin: 0 0;
+  }
+
+  @keyframes image-spin {
+    0% { rotate: 0deg; }
+    100% { rotate: 360deg;}
+  }
+
+  @keyframes image-load {
+    0% { scale: 0.6; }
+    100% { scale: 1; }
+  }
+
+
+.message-wrapper
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--size-4);
+  text-align: center;
+  margin-bottom: var(--size-6);
+  background: radial-gradient(white 10%, transparent 70%);
+  padding: var(--size-12);
+
+  & .app-name
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  & .app-name .icon
+  {
+    width: var(--size-14);
+    height: var(--size-14);
+  }
+
+  & .app-label
+  {
+    font-size: var(--size-4);
+  }
+
+  & .message-content
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--size-2);
+    max-width: 45ch;
+  }
+}
+
+
+</style>
+
+
+</head>
+
+  
+<body class="encBG">
+  <div class="bg-icon"></div>
+
+  <div class="bg-graphic"></div>
+
+  <div class="message-wrapper">
+    <div class="app-name">
+      <img src="../assets/enc-app-icon-search.svg" class="icon">
+      <div class="app-label">Search</div>
+    </div>
+    <div class="message-content">
+      <p>Loading Resources And Access Details...</p>
+    </div>
+  </div>
+
+
+
+</body>
+
+
+</html>

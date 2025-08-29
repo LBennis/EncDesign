@@ -36,7 +36,7 @@
 }
 
 
-html, body, input, textarea
+html, body, input, textarea, button, select
 {
     font-family: 'Avenir', sans-serif;
     color: var(--text-primary);

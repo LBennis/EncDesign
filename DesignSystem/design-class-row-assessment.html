@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" id="backgrounds" class="theme-a">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - Class Row Assessment</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  
+  <script src="https://unpkg.com/feather-icons"></script>
+                
+
+<style>
+
+  @import url(../primitives.css);
+  @import url(../styles.css);
+  @import url(../component-styles.css);
+
+  html
+  {
+    background: #F4F6FB;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  body
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-inline: var(--size-4);
+    z-index: -3;
+  }
+
+  .candidate-wrapper
+  {
+    display: flex;
+    gap: var(--size-0-5);
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    /* mockup only */
+    max-width: 500px;
+  }
+
+
+  .assess-row
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--size-2);
+    background: transparent;
+    outline: transparent solid 4px;
+    border-radius: var(--radius-round);
+    padding: var(--size-0-5);
+    outline: transparent solid 2px;
+    outline-offset: 0px;
+
+  }
+
+    .assess-row:hover, .assess-row:focus-within
+    {
+      background: var(--aqua-light-opaque-5);
+      outline-color: var(--aqua-light-opaque-5);
+    }
+
+  .assess-wrapper
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    --assessWidth: var(--size-8);
+    min-width: var(--assessWidth);
+    max-width: var(--assessWidth);
+    position: relative;
+  }
+
+  button.accept,
+  button.reject
+  {
+    --width: var(--size-4);
+    width: var(--width);
+    height: var(--width);
+    font-size: var(--size-2);
+    border-radius: var(--radius-round);
+    padding: 0 !important;
+    min-height: unset !important;
+    transition: 0.2s;
+
+    & svg
+    {
+      --size: var(--size-2-5);
+      width: var(--size);
+      height: var(--size);
+    }
+  }
+
+  button.accept
+  {
+    background: transparent;
+    color: var(--primary);
+  }
+        button.accept:hover,
+        button.accept.active
+        {
+          background: var(--aqua-light-opaque-20);
+          color: var(--primary);
+        }
+
+        button.accept.active:hover
+        {
+          background: var(--aqua-light-opaque-30);
+        }
+
+  button.reject
+  {
+    background: transparent;
+    color: var(--error);
+  }
+
+        button.reject:hover,  
+        button.reject.active
+        {
+          background: var(--burnt-pink-opaque-20);
+          color: var(--error);
+        }
+
+    button.accept.active,
+    button.reject.active
+    {
+      width: 100%;
+    }
+
+
+  .assess-wrapper.active button:not(.active)
+  {
+    display: none;
+  }
+
+
+  .chip
+  {
+    & svg
+    {
+        fill: none !important;
+    }
+  }
+
+
+
+
+</style>
+
+
+</head>
+
+  
+<body class="encBG">
+  <div class="bg-icon"></div>
+
+  <div class="app-content-wrapper">
+
+    <h2>Class Row Assessment</h2><br><br>
+
+    <div class="candidate-wrapper">
+
+    <div class="assess-row">
+      <div class="chip outline secondary"><i data-feather="star"></i> Class Label</div>
+      <div class="assess-wrapper">
+        <button class="accept"><i data-feather="check"></i></button>
+        <button class="reject"><i data-feather="x"></i></button>
+      </div>
+    </div>
+
+    <div class="assess-row">
+      <div class="chip outline ai"><i data-feather="star"></i> Class Label AI Generated</div>
+      <div class="assess-wrapper">
+        <button class="accept"><i data-feather="check"></i></button>
+        <button class="reject"><i data-feather="x"></i></button>
+      </div>
+    </div>
+
+    <div class="assess-row">
+      <div class="chip outline secondary"><i data-feather="star"></i> Class Label</div>
+      <div class="assess-wrapper">
+        <button class="accept"><i data-feather="check"></i></button>
+        <button class="reject"><i data-feather="x"></i></button>
+      </div>
+    </div>
+
+    <div class="assess-row">
+      <div class="chip outline secondary"><i data-feather="star"></i> Class Label that is very long to show how it will behave and overflow</div>
+      <div class="assess-wrapper">
+        <button class="accept"><i data-feather="check"></i></button>
+        <button class="reject"><i data-feather="x"></i></button>
+      </div>
+    </div>
+
+    <div class="assess-row">
+      <div class="chip outline secondary"><i data-feather="star"></i> Class Medium Label</div>
+      <div class="assess-wrapper">
+        <button class="accept"><i data-feather="check"></i></button>
+        <button class="reject"><i data-feather="x"></i></button>
+      </div>
+    </div>
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+    <script>
+      feather.replace();
+
+      // Handle assess button clicks
+      document.querySelectorAll('.assess-wrapper button').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Toggle active class on clicked button
+          this.classList.toggle('active');
+          
+          // Get the parent assess-wrapper
+          const wrapper = this.closest('.assess-wrapper');
+          
+          // Update wrapper active state if any button is active
+          if (wrapper.querySelector('button.active')) {
+            wrapper.classList.add('active');
+          } else {
+            wrapper.classList.remove('active');
+          }
+        });
+      });
+    </script>
+
+</body>
+
+</html>

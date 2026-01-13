@@ -316,20 +316,34 @@ input
 
 .chip
 {
-    --accent: var(--bley-opaque-10);
-    --content: var(--text-primary);
-    display: inline-flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: var(--size-1);
-    font-size: 0.875rem;
-    padding-inline: var(--size-1);
-    min-height: 32px;
-    border-radius: var(--radius-round);
-    background: var(--accent);
-    color: var(--content);
-    z-index: 1;
+  --accent: var(--bley-opaque-10);
+  --content: var(--text-primary);
+  display: inline-block;
+  font-size: 0.875rem;
+  padding-inline: var(--size-1);
+  padding-block: var(--size-0-5);
+  min-height: var(--size-4);
+  max-height: var(--size-4);
+  line-height: 1;
+  border-radius: var(--radius-round);
+  background: var(--accent);
+  color: var(--content);
+  z-index: 1;
+  text-transform: capitalize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  & svg
+  {
+      fill: var(--content);
+      stroke: var(--accent);
+      --size: var(--size-2-5);
+      width: var(--size);
+      height: var(--size);
+      margin-right: var(--size-0-5);
+      vertical-align: text-bottom;
+  }
 }
 
 .chip.small
@@ -341,13 +355,16 @@ input
 .chip.outline
 {
     --accent: var(--bley-400);
-    background: transparent !important;
+    background: white !important;
     border: 1px solid var(--accent);
     color: var(--text-primary);
 
-    & .icon
+    & .icon, svg
     {
         fill: var(--accent);
+        --size: var(--size-2-5);
+        width: var(--size);
+        height: var(--size);
     }
 }
 
@@ -374,7 +391,19 @@ input
     --content: var(--white);
 }
 
+.chip.ai,
+.chip.outline.ai
+{
+    --accent: var(--aiAccent);
+    background: var(--aiGradientConical) !important;
+    border: var(--aiBorder);
 
+    & .icon, svg
+    {
+        fill: var(--aiAccent);
+        stroke: var(--aiAccent);
+    }
+}
 
 
 

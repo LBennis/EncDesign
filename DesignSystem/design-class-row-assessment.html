@@ -6,7 +6,7 @@
   <meta name="keywords" content="HTML,CSS,XML,JavaScript">
   <meta name="author" content="Luke Bennis">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Encompaas PoC - Class Row Assessment</title>
+  <title>Encompaas PoC - Class Assessment Row</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   
@@ -83,7 +83,8 @@
     --assessWidth: var(--size-8);
     min-width: var(--assessWidth);
     max-width: var(--assessWidth);
-    position: relative;
+    border-radius: var(--radius-round);
+    overflow: hidden;
   }
 
   button.accept,
@@ -136,6 +137,11 @@
           color: var(--error);
         }
 
+        button.reject.active:hover
+        {
+          background: var(--burnt-pink-opaque-30);
+        }
+
     button.accept.active,
     button.reject.active
     {
@@ -157,6 +163,20 @@
     }
   }
 
+  button.accept.loading svg
+  ,button.reject.loading svg
+  {
+    animation: assess-loader 0.6s linear 0s 1 both;
+  }
+
+
+  @keyframes assess-loader {
+
+    0%, 99%{ border-radius: 999px; border: 2px solid rgba(0, 0, 0, 0.3); border-right-color: transparent; stroke: transparent; rotate: 0deg;}
+    95%{ rotate: 240deg;}
+    100% {}
+    
+  }
 
 
 
@@ -176,7 +196,7 @@
     <div class="candidate-wrapper">
 
     <div class="assess-row">
-      <div class="chip outline secondary"><i data-feather="star"></i> Class Label</div>
+      <div class="chip outline secondary"><i data-feather="star"></i> Class Label Example</div>
       <div class="assess-wrapper">
         <button class="accept"><i data-feather="check"></i></button>
         <button class="reject"><i data-feather="x"></i></button>
@@ -192,7 +212,7 @@
     </div>
 
     <div class="assess-row">
-      <div class="chip outline secondary"><i data-feather="star"></i> Class Label</div>
+      <div class="chip outline secondary"><i data-feather="star"></i> Class Label Example</div>
       <div class="assess-wrapper">
         <button class="accept"><i data-feather="check"></i></button>
         <button class="reject"><i data-feather="x"></i></button>
@@ -208,7 +228,7 @@
     </div>
 
     <div class="assess-row">
-      <div class="chip outline secondary"><i data-feather="star"></i> Class Medium Label</div>
+      <div class="chip outline secondary"><i data-feather="star"></i> Class Label Longer Example</div>
       <div class="assess-wrapper">
         <button class="accept"><i data-feather="check"></i></button>
         <button class="reject"><i data-feather="x"></i></button>
@@ -224,6 +244,8 @@
 
 
 
+
+
     <script>
       feather.replace();
 
@@ -232,21 +254,42 @@
         button.addEventListener('click', function(e) {
           e.preventDefault();
           
-          // Toggle active class on clicked button
-          this.classList.toggle('active');
+          const wasActive = this.classList.contains('active');
+          this.classList.add('loading');
           
-          // Get the parent assess-wrapper
-          const wrapper = this.closest('.assess-wrapper');
-          
-          // Update wrapper active state if any button is active
-          if (wrapper.querySelector('button.active')) {
-            wrapper.classList.add('active');
+          if (wasActive) {
+            // Removing active: keep active during animation, then toggle and update wrapper
+            setTimeout(() => {
+              this.classList.toggle('active');
+              this.classList.remove('loading');
+              
+              const wrapper = this.closest('.assess-wrapper');
+              if (wrapper.querySelector('button.active')) {
+                wrapper.classList.add('active');
+              } else {
+                wrapper.classList.remove('active');
+              }
+            }, 600);
           } else {
-            wrapper.classList.remove('active');
+            // Adding active: toggle immediately and update wrapper
+            this.classList.toggle('active');
+            
+            const wrapper = this.closest('.assess-wrapper');
+            if (wrapper.querySelector('button.active')) {
+              wrapper.classList.add('active');
+            } else {
+              wrapper.classList.remove('active');
+            }
+            
+            // Remove loading after animation
+            setTimeout(() => {
+              this.classList.remove('loading');
+            }, 600);
           }
         });
       });
     </script>
+
 
 </body>
 

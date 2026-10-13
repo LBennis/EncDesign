@@ -383,14 +383,13 @@
   </div>
 
   <div class="tree-demo">
-    <div class="demo-title"><h3>Version A</h3><small>Checkbox replaces the node icon</small></div>
 
     <div class="selection-bar">
       <span class="count-pill">0</span>
       <span class="sel-label">No nodes selected</span>
     </div>
 
-    <div class="tree" id="tree">
+    <div class="tree check-right" id="tree">
     <ul>
 
           <li class="tree-node collapsed" data-id="finance">
@@ -683,17 +682,6 @@
     </div>
   </div>
 
-  <div class="tree-demo">
-    <div class="demo-title"><h3>Version B</h3><small>Checkbox on the right, before the ⋮ menu</small></div>
-
-    <div class="selection-bar">
-      <span class="count-pill">0</span>
-      <span class="sel-label">No nodes selected</span>
-    </div>
-
-    <div id="demo-b"></div>
-  </div>
-
 
 <script>
 
@@ -722,20 +710,14 @@
   });
 
 
-  // ---- Build Version B by cloning Version A ----------------------------
-  // Same tree, but the checkbox is relocated into the actions area so it
-  // reveals on the right-hand side, just before the ⋮ menu button.
-  const treeA = document.getElementById('tree');
-  const treeB = treeA.cloneNode(true);
-  treeB.id = 'tree2';
-  treeB.classList.add('check-right');
-  treeB.querySelectorAll('.tree-node > .node-row').forEach(row => {
+  // ---- Move each checkbox into the actions area (right of the row) -----
+  // The checkbox reveals on the right-hand side, just before the ⋮ menu.
+  document.querySelectorAll('#tree .tree-node > .node-row').forEach(row => {
     const check = row.querySelector(':scope > .node-lead > .node-check');
     const actions = row.querySelector(':scope > .node-actions');
     const menu = actions.querySelector('.node-menu');
     actions.insertBefore(check, menu);
   });
-  document.getElementById('demo-b').appendChild(treeB);
 
 
   // ---- Selection behaviour (per tree) ----------------------------------

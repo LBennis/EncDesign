@@ -269,31 +269,38 @@
     opacity: 1;
   }
 
-  /* Selected parent whose children are all selected: check with a + badge. */
+  /* Selected parent whose children are all selected: double tick. */
   .tree-node.all-checked > .node-row .node-check .box
   {
     position: relative;
-    overflow: visible;
+  }
+
+  .tree-node.all-checked > .node-row .node-check .box svg
+  {
+    opacity: 0;
+  }
+
+  .tree-node.all-checked > .node-row .node-check .box::before,
+  .tree-node.all-checked > .node-row .node-check .box::after
+  {
+    content: '';
+    position: absolute;
+    top: 45%;
+    width: 4px;
+    height: 9px;
+    border: solid var(--white);
+    border-width: 0 2px 2px 0;
+    transform: translateY(-55%) rotate(45deg);
+  }
+
+  .tree-node.all-checked > .node-row .node-check .box::before
+  {
+    left: 3px;
   }
 
   .tree-node.all-checked > .node-row .node-check .box::after
   {
-    content: '+';
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 12px;
-    height: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--primary);
-    background: var(--white);
-    border-radius: var(--radius-round);
-    box-shadow: 0 0 0 1.5px var(--primary);
+    left: 7px;
   }
 
   /* Indeterminate appearance (a descendant is selected) */
@@ -314,18 +321,51 @@
     background: var(--white);
   }
 
+  /* Selected parent with only some children selected: primary dash. */
+  .tree-node.checked-partial > .node-row .node-check .box
+  {
+    background: var(--primary);
+    border-color: var(--primary);
+    position: relative;
+  }
+
+  .tree-node.checked-partial > .node-row .node-check .box svg
+  {
+    opacity: 0;
+  }
+
+  .tree-node.checked-partial > .node-row .node-check .box::before
+  {
+    content: '';
+    position: absolute;
+    width: var(--size-1-5);
+    height: 2px;
+    border-radius: 1px;
+    background: var(--white);
+  }
+
 
   /* When to reveal the checkbox (toggle the icon out) ------------- */
 
-  /* The selected node always shows its checkbox (empty = single, checked = multi). */
-  .tree .tree-node.selected > .node-row .node-check,
+  /* Selected node shows its checkbox persistently only in multi-select. */
+  .tree.multi-active .tree-node.selected > .node-row .node-check,
   /* A parent with a selected descendant shows an indeterminate checkbox. */
   .tree .tree-node.indeterminate > .node-row .node-check,
-  /* Hovering or focusing any node offers a checkbox. */
-  .tree .tree-node:not(.selected) > .node-row:hover .node-check,
-  .tree .tree-node:not(.selected) > .node-row:focus-visible .node-check
+  /* With a selection active, hovering or focusing another row offers a checkbox. */
+  .tree.has-selection .tree-node:not(.selected) > .node-row:hover .node-check,
+  .tree .tree-node:not(.selected) > .node-row:focus-visible .node-check,
+  /* Otherwise only reveal when the checkbox itself is hovered:
+     any node when nothing is selected, or the selected node in single-select. */
+  .tree:not(.has-selection) .tree-node:not(.selected) > .node-row .node-check:hover,
+  .tree:not(.multi-active) .tree-node.selected > .node-row .node-check:hover
   {
     opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Keep the checkbox hoverable as a target while its row is hovered. */
+  .node-row:hover .node-check
+  {
     pointer-events: auto;
   }
 
@@ -783,6 +823,8 @@
         n.classList.toggle('checked', multiMode && selectedHere);
         // A selected parent with every child selected gets a + badge.
         n.classList.toggle('all-checked', multiMode && selectedHere && allChildren);
+        // A selected parent with only some descendants selected shows a primary dash.
+        n.classList.toggle('checked-partial', multiMode && selectedHere && hasSelectedChild && !allChildren);
         // A parent with any selected descendant shows the indeterminate box.
         n.classList.toggle('indeterminate', multiMode && !selectedHere && hasSelectedChild);
         n.querySelector(':scope > .node-row').setAttribute('aria-selected', String(selectedHere));
@@ -811,11 +853,13 @@
     function checkboxToggle(node) {
       if (!multiMode) {
         multiMode = true;
+        // Start a fresh multi-selection from this checkbox only.
+        selectedNodes().forEach(n => n.classList.remove('selected'));
         setBranchSelected(node, true);
       } else {
         setBranchSelected(node, !node.classList.contains('selected'));
-        // Dropping back to a single node returns to single-select.
-        if (selectedNodes().length <= 1) multiMode = false;
+        // Exit multi-select only when nothing is selected; the last node stays checked.
+        if (selectedNodes().length === 0) multiMode = false;
       }
       refresh();
     }

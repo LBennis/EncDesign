@@ -153,6 +153,12 @@
     background: var(--aqua-light-opaque-10);
   }
 
+  .node-row:focus-visible
+  {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+  }
+
 
   /* Caret -------------------------------- */
 
@@ -281,15 +287,29 @@
     background: var(--white);
   }
 
+  /* All children selected: gray box with a check. */
+  .tree-node.all-selected > .node-row .node-check .box
+  {
+    background: var(--bley-600);
+    border-color: var(--bley-600);
+  }
+
+  .tree-node.all-selected > .node-row .node-check .box svg
+  {
+    opacity: 1;
+  }
+
 
   /* When to reveal the checkbox (toggle the icon out) ------------- */
 
   /* A selected node that is part of a multi-selection shows its checkbox. */
   .tree.multi-active .tree-node.selected > .node-row .node-check,
-  /* A parent with a selected descendant shows an indeterminate checkbox. */
+  /* A parent with a selected descendant shows an indeterminate or all-selected checkbox. */
   .tree .tree-node.indeterminate > .node-row .node-check,
-  /* While a selection exists, hovering any other node offers a checkbox. */
-  .tree.has-selection .tree-node:not(.selected) > .node-row:hover .node-check
+  .tree .tree-node.all-selected > .node-row .node-check,
+  /* While a selection exists, hovering or focusing another node offers a checkbox. */
+  .tree.has-selection .tree-node:not(.selected) > .node-row:hover .node-check,
+  .tree.has-selection .tree-node:not(.selected) > .node-row:focus-visible .node-check
   {
     opacity: 1;
     pointer-events: auto;
@@ -343,8 +363,10 @@
   }
 
   .node-row:hover .node-actions,
+  .node-row:focus-visible .node-actions,
   .tree-node.selected > .node-row .node-actions,
-  .tree-node.indeterminate > .node-row .node-actions
+  .tree-node.indeterminate > .node-row .node-actions,
+  .tree-node.all-selected > .node-row .node-actions
   {
     opacity: 1;
   }
@@ -741,9 +763,14 @@
       tree.querySelectorAll('.tree-node').forEach(n => {
         const selectedHere = n.classList.contains('selected');
         const hasSelectedChild = !!n.querySelector('.tree-node.selected');
+        const childNodes = Array.from(n.querySelectorAll(':scope > .node-children > .tree-node'));
+        const allChildren = childNodes.length > 0 && childNodes.every(c => c.classList.contains('selected'));
         n.classList.toggle('checked', count >= 2 && selectedHere);
-        // Parents show the indeterminate state only during an active multi-select.
-        n.classList.toggle('indeterminate', count >= 2 && hasSelectedChild && !selectedHere);
+        // A parent with every child selected shows a gray checkmark box.
+        n.classList.toggle('all-selected', count >= 2 && !selectedHere && allChildren);
+        // A parent with only some descendants selected shows the indeterminate box.
+        n.classList.toggle('indeterminate', count >= 2 && !selectedHere && hasSelectedChild && !allChildren);
+        n.querySelector(':scope > .node-row').setAttribute('aria-selected', String(selectedHere));
       });
 
       // Summary bar.
@@ -763,12 +790,107 @@
       refresh();
     }
 
+    // ---- Accessibility + keyboard roving focus -----------------------
+    tree.setAttribute('role', 'tree');
+    tree.setAttribute('aria-multiselectable', 'true');
+
+    const allRows = () => Array.from(tree.querySelectorAll('.node-row'));
+
+    // A row is visible when none of its ancestor nodes are collapsed.
+    const isVisible = (node) => {
+      let p = node.parentElement.closest('.tree-node');
+      while (p) {
+        if (p.classList.contains('collapsed')) return false;
+        p = p.parentElement.closest('.tree-node');
+      }
+      return true;
+    };
+
+    const visibleRows = () => allRows().filter(r => isVisible(r.closest('.tree-node')));
+
+    function setRovingTarget(row) {
+      allRows().forEach(r => r.setAttribute('tabindex', '-1'));
+      if (row) row.setAttribute('tabindex', '0');
+    }
+
+    function focusRow(row) {
+      if (!row) return;
+      setRovingTarget(row);
+      row.focus();
+    }
+
+    function setExpanded(node, open) {
+      if (node.classList.contains('leaf')) return;
+      node.classList.toggle('collapsed', !open);
+      node.querySelector(':scope > .node-row').setAttribute('aria-expanded', String(open));
+    }
+
+    allRows().forEach(row => {
+      const node = row.closest('.tree-node');
+      row.setAttribute('role', 'treeitem');
+      row.setAttribute('tabindex', '-1');
+      if (!node.classList.contains('leaf'))
+        row.setAttribute('aria-expanded', String(!node.classList.contains('collapsed')));
+    });
+    setRovingTarget(visibleRows()[0]);
+
+    tree.addEventListener('keydown', (e) => {
+      const row = e.target.closest('.node-row');
+      if (!row) return;
+      const node = row.closest('.tree-node');
+      const vis = visibleRows();
+      const i = vis.indexOf(row);
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          focusRow(vis[Math.min(i + 1, vis.length - 1)]);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          focusRow(vis[Math.max(i - 1, 0)]);
+          break;
+        case 'Home':
+          e.preventDefault();
+          focusRow(vis[0]);
+          break;
+        case 'End':
+          e.preventDefault();
+          focusRow(vis[vis.length - 1]);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          if (node.classList.contains('leaf')) break;
+          if (node.classList.contains('collapsed')) setExpanded(node, true);
+          else focusRow(node.querySelector(':scope > .node-children > .tree-node > .node-row'));
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          if (!node.classList.contains('leaf') && !node.classList.contains('collapsed')) {
+            setExpanded(node, false);
+          } else {
+            const parent = node.parentElement.closest('.tree-node');
+            if (parent) focusRow(parent.querySelector(':scope > .node-row'));
+          }
+          break;
+        case 'Enter':
+          e.preventDefault();
+          singleSelect(node);
+          break;
+        case ' ':
+        case 'Spacebar':
+          e.preventDefault();
+          toggleInSelection(node);
+          break;
+      }
+    });
+
     tree.addEventListener('click', (e) => {
       // Expand / collapse via caret.
       const caret = e.target.closest('.node-caret');
       if (caret) {
         const node = caret.closest('.tree-node');
-        if (!node.classList.contains('leaf')) node.classList.toggle('collapsed');
+        if (!node.classList.contains('leaf')) setExpanded(node, node.classList.contains('collapsed'));
         return;
       }
 
@@ -777,6 +899,7 @@
 
       const node = e.target.closest('.tree-node');
       if (!node) return;
+      focusRow(node.querySelector(':scope > .node-row'));
 
       // Clicking the checkbox toggles this node in/out of the multi-selection.
       if (e.target.closest('.node-check')) {

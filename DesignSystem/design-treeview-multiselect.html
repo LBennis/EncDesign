@@ -269,6 +269,33 @@
     opacity: 1;
   }
 
+  /* Selected parent whose children are all selected: check with a + badge. */
+  .tree-node.all-checked > .node-row .node-check .box
+  {
+    position: relative;
+    overflow: visible;
+  }
+
+  .tree-node.all-checked > .node-row .node-check .box::after
+  {
+    content: '+';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--primary);
+    background: var(--white);
+    border-radius: var(--radius-round);
+    box-shadow: 0 0 0 1.5px var(--primary);
+  }
+
   /* Indeterminate appearance (a descendant is selected) */
   .tree-node.indeterminate > .node-row .node-check .box
   {
@@ -287,29 +314,16 @@
     background: var(--white);
   }
 
-  /* All children selected: gray box with a check. */
-  .tree-node.all-selected > .node-row .node-check .box
-  {
-    background: var(--bley-600);
-    border-color: var(--bley-600);
-  }
-
-  .tree-node.all-selected > .node-row .node-check .box svg
-  {
-    opacity: 1;
-  }
-
 
   /* When to reveal the checkbox (toggle the icon out) ------------- */
 
-  /* A selected node that is part of a multi-selection shows its checkbox. */
-  .tree.multi-active .tree-node.selected > .node-row .node-check,
-  /* A parent with a selected descendant shows an indeterminate or all-selected checkbox. */
+  /* The selected node always shows its checkbox (empty = single, checked = multi). */
+  .tree .tree-node.selected > .node-row .node-check,
+  /* A parent with a selected descendant shows an indeterminate checkbox. */
   .tree .tree-node.indeterminate > .node-row .node-check,
-  .tree .tree-node.all-selected > .node-row .node-check,
-  /* While a selection exists, hovering or focusing another node offers a checkbox. */
-  .tree.has-selection .tree-node:not(.selected) > .node-row:hover .node-check,
-  .tree.has-selection .tree-node:not(.selected) > .node-row:focus-visible .node-check
+  /* Hovering or focusing any node offers a checkbox. */
+  .tree .tree-node:not(.selected) > .node-row:hover .node-check,
+  .tree .tree-node:not(.selected) > .node-row:focus-visible .node-check
   {
     opacity: 1;
     pointer-events: auto;
@@ -365,8 +379,7 @@
   .node-row:hover .node-actions,
   .node-row:focus-visible .node-actions,
   .tree-node.selected > .node-row .node-actions,
-  .tree-node.indeterminate > .node-row .node-actions,
-  .tree-node.all-selected > .node-row .node-actions
+  .tree-node.indeterminate > .node-row .node-actions
   {
     opacity: 1;
   }
@@ -749,6 +762,8 @@
     const selLabel = section.querySelector('.sel-label');
 
     const selectedNodes = () => Array.from(tree.querySelectorAll('.tree-node.selected'));
+    // Multi-select mode is entered via a checkbox and exited when it drops to one node.
+    let multiMode = false;
 
     function refresh() {
       const selected = selectedNodes();
@@ -756,20 +771,20 @@
 
       // has-selection drives the hover-to-reveal checkbox on other nodes.
       tree.classList.toggle('has-selection', count >= 1);
-      // multi-active drives the persistent checked box on selected nodes.
-      tree.classList.toggle('multi-active', count >= 2);
+      // multi-active drives the persistent checked boxes.
+      tree.classList.toggle('multi-active', multiMode);
 
-      // A node is "checked" only while a multi-selection is active.
+      // Checked / parent states only apply while multi-select is active.
       tree.querySelectorAll('.tree-node').forEach(n => {
         const selectedHere = n.classList.contains('selected');
         const hasSelectedChild = !!n.querySelector('.tree-node.selected');
         const childNodes = Array.from(n.querySelectorAll(':scope > .node-children > .tree-node'));
         const allChildren = childNodes.length > 0 && childNodes.every(c => c.classList.contains('selected'));
-        n.classList.toggle('checked', count >= 2 && selectedHere);
-        // A parent with every child selected shows a gray checkmark box.
-        n.classList.toggle('all-selected', count >= 2 && !selectedHere && allChildren);
-        // A parent with only some descendants selected shows the indeterminate box.
-        n.classList.toggle('indeterminate', count >= 2 && !selectedHere && hasSelectedChild && !allChildren);
+        n.classList.toggle('checked', multiMode && selectedHere);
+        // A selected parent with every child selected gets a + badge.
+        n.classList.toggle('all-checked', multiMode && selectedHere && allChildren);
+        // A parent with any selected descendant shows the indeterminate box.
+        n.classList.toggle('indeterminate', multiMode && !selectedHere && hasSelectedChild);
         n.querySelector(':scope > .node-row').setAttribute('aria-selected', String(selectedHere));
       });
 
@@ -782,11 +797,20 @@
     function singleSelect(node) {
       selectedNodes().forEach(n => n.classList.remove('selected'));
       node.classList.add('selected');
+      multiMode = false;
       refresh();
     }
 
-    function toggleInSelection(node) {
-      node.classList.toggle('selected');
+    // Checkbox click: starts multi-select, or toggles membership while active.
+    function checkboxToggle(node) {
+      if (!multiMode) {
+        multiMode = true;
+        node.classList.add('selected');
+      } else {
+        node.classList.toggle('selected');
+        // Dropping back to a single node returns to single-select.
+        if (selectedNodes().length <= 1) multiMode = false;
+      }
       refresh();
     }
 
@@ -880,7 +904,7 @@
         case ' ':
         case 'Spacebar':
           e.preventDefault();
-          toggleInSelection(node);
+          checkboxToggle(node);
           break;
       }
     });
@@ -901,9 +925,9 @@
       if (!node) return;
       focusRow(node.querySelector(':scope > .node-row'));
 
-      // Clicking the checkbox toggles this node in/out of the multi-selection.
+      // Clicking the checkbox starts multi-select or toggles membership.
       if (e.target.closest('.node-check')) {
-        toggleInSelection(node);
+        checkboxToggle(node);
         return;
       }
 

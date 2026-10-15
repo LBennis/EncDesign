@@ -802,10 +802,10 @@
     }
 
     // Checkbox click: starts multi-select, or toggles membership while active.
-    // Toggling a parent cascades to all of its descendants.
+    // Checking a parent cascades to its descendants; unchecking leaves them intact.
     function setBranchSelected(node, on) {
       node.classList.toggle('selected', on);
-      node.querySelectorAll('.tree-node').forEach(d => d.classList.toggle('selected', on));
+      if (on) node.querySelectorAll('.tree-node').forEach(d => d.classList.add('selected'));
     }
 
     function checkboxToggle(node) {

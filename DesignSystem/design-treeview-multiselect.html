@@ -844,20 +844,14 @@
     }
 
     // Checkbox click: starts multi-select, or toggles membership while active.
-    // Checking a parent cascades to its descendants; unchecking leaves them intact.
-    function setBranchSelected(node, on) {
-      node.classList.toggle('selected', on);
-      if (on) node.querySelectorAll('.tree-node').forEach(d => d.classList.add('selected'));
-    }
-
     function checkboxToggle(node) {
       if (!multiMode) {
         multiMode = true;
         // Start a fresh multi-selection from this checkbox only.
         selectedNodes().forEach(n => n.classList.remove('selected'));
-        setBranchSelected(node, true);
+        node.classList.add('selected');
       } else {
-        setBranchSelected(node, !node.classList.contains('selected'));
+        node.classList.toggle('selected');
         // Exit multi-select only when nothing is selected; the last node stays checked.
         if (selectedNodes().length === 0) multiMode = false;
       }

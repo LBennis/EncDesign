@@ -27,12 +27,12 @@ rendered component.
 
 ## 3. Checkbox visibility rules
 
-- **AC3.1** When nothing is selected, a non-selected row reveals its checkbox only while the pointer is over the checkbox itself (not when hovering elsewhere on the row).
-- **AC3.2** Once at least one node is selected (single-select), every other non-selected row reveals its checkbox when the pointer hovers anywhere on that row.
-- **AC3.3** In single-select, the selected node reveals its own checkbox only while the pointer is over the checkbox itself.
-- **AC3.4** While multi-select is active, selected nodes persistently display their checked box without requiring hover, and non-selected rows reveal a checkbox on full-row hover.
-- **AC3.5** The checkbox sits on the right-hand side of the row, immediately before the `⋮` menu button.
-- **AC3.6** The empty (unchecked) checkbox has a transparent fill with a visible border; it is never shown with a solid background unless checked or indeterminate.
+- **AC3.1** In single-select, hovering (or keyboard-focusing) any row reveals that row's checkbox.
+- **AC3.2** A single-selected node shows its own checkbox persistently (without needing hover).
+- **AC3.3** While multi-select is active, **every** node shows its checkbox at all times (selected nodes checked, others unchecked) — no hover is required to reveal them.
+- **AC3.4** The checkbox sits on the right-hand side of the row, immediately before the `⋮` menu button.
+- **AC3.5** The empty (unchecked) checkbox has a transparent fill with a visible border; it is never shown with a solid background unless checked or indeterminate.
+- **AC3.6** The `⋮` overflow menu button only appears while the row is hovered or keyboard-focused — including while multi-select is active and the checkbox is permanently visible.
 
 ## 4. Entering multi-select
 
@@ -59,11 +59,10 @@ rendered component.
 
 ## 8. Parent derived states (only while multi-select is active)
 
-- **AC8.1** A parent that is **not** selected but has at least one selected descendant shows a grey box with a dash (indeterminate).
-- **AC8.2** A parent that **is** selected and has some — but not all — of its direct children selected shows a green (primary) box with a dash.
-- **AC8.3** A parent that **is** selected and has **all** of its direct children selected shows a green box with a double tick (two stacked check marks).
-- **AC8.4** A parent that **is** selected with no selected children shows a green box with a single tick.
-- **AC8.5** None of these parent derived states appear during single-select; they are only shown while multi-select is active.
+- **AC8.1** A parent that is **not** selected and has any of its children selected shows a grey box with a dash (indeterminate) — this applies whether some **or all** of its children are selected.
+- **AC8.2** A parent that **is** selected and has some (but not all) of its children selected shows the regular green checked box (the normal tick only — not the all-children icon).
+- **AC8.3** A parent that **is** selected and has **all** of its children selected shows a distinct "all-children-selected" icon in the checkbox (a check-with-list glyph) in place of the normal green tick.
+- **AC8.4** None of the parent derived states appear during single-select; they are only shown while multi-select is active.
 
 ## 9. Expand / collapse
 

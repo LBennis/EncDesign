@@ -244,6 +244,7 @@
     border-radius: var(--radius-sm);
     border: 2px solid var(--bley-600);
     background: transparent;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -257,6 +258,16 @@
     opacity: 0;
   }
 
+  /* Custom icon shown only when a parent is selected and all its children are selected. */
+  .node-check .box .box-all
+  {
+    position: absolute;
+    inset: -2px;
+    width: auto;
+    height: auto;
+    opacity: 0;
+  }
+
   /* Checked appearance */
   .tree-node.checked > .node-row .node-check .box
   {
@@ -264,43 +275,20 @@
     border-color: var(--primary);
   }
 
-  .tree-node.checked > .node-row .node-check .box svg
+  .tree-node.checked > .node-row .node-check .box svg:not(.box-all)
   {
     opacity: 1;
   }
 
-  /* Selected parent whose children are all selected: double tick. */
-  .tree-node.all-checked > .node-row .node-check .box
-  {
-    position: relative;
-  }
 
-  .tree-node.all-checked > .node-row .node-check .box svg
+  .tree-node.all-checked > .node-row .node-check .box svg:not(.box-all)
   {
     opacity: 0;
   }
 
-  .tree-node.all-checked > .node-row .node-check .box::before,
-  .tree-node.all-checked > .node-row .node-check .box::after
+  .tree-node.all-checked > .node-row .node-check .box .box-all
   {
-    content: '';
-    position: absolute;
-    top: 45%;
-    width: 4px;
-    height: 9px;
-    border: solid var(--white);
-    border-width: 0 2px 2px 0;
-    transform: translateY(-55%) rotate(45deg);
-  }
-
-  .tree-node.all-checked > .node-row .node-check .box::before
-  {
-    left: 3px;
-  }
-
-  .tree-node.all-checked > .node-row .node-check .box::after
-  {
-    left: 7px;
+    opacity: 1;
   }
 
   /* Indeterminate appearance (a descendant is selected) */
@@ -321,51 +309,25 @@
     background: var(--white);
   }
 
-  /* Selected parent with only some children selected: primary dash. */
-  .tree-node.checked-partial > .node-row .node-check .box
-  {
-    background: var(--primary);
-    border-color: var(--primary);
-    position: relative;
-  }
-
-  .tree-node.checked-partial > .node-row .node-check .box svg
-  {
-    opacity: 0;
-  }
-
-  .tree-node.checked-partial > .node-row .node-check .box::before
-  {
-    content: '';
-    position: absolute;
-    width: var(--size-1-5);
-    height: 2px;
-    border-radius: 1px;
-    background: var(--white);
-  }
-
 
   /* When to reveal the checkbox (toggle the icon out) ------------- */
 
-  /* Selected node shows its checkbox persistently only in multi-select. */
-  .tree.multi-active .tree-node.selected > .node-row .node-check,
+  /* The selected node always shows its checkbox. */
+  .tree .tree-node.selected > .node-row .node-check,
   /* A parent with a selected descendant shows an indeterminate checkbox. */
   .tree .tree-node.indeterminate > .node-row .node-check,
-  /* With a selection active, hovering or focusing another row offers a checkbox. */
-  .tree.has-selection .tree-node:not(.selected) > .node-row:hover .node-check,
-  .tree .tree-node:not(.selected) > .node-row:focus-visible .node-check,
-  /* Otherwise only reveal when the checkbox itself is hovered:
-     any node when nothing is selected, or the selected node in single-select. */
-  .tree:not(.has-selection) .tree-node:not(.selected) > .node-row .node-check:hover,
-  .tree:not(.multi-active) .tree-node.selected > .node-row .node-check:hover
+  /* Hovering or focusing any row reveals its checkbox. */
+  .tree .tree-node > .node-row:hover .node-check,
+  .tree .tree-node > .node-row:focus-visible .node-check
   {
     opacity: 1;
     pointer-events: auto;
   }
 
-  /* Keep the checkbox hoverable as a target while its row is hovered. */
-  .node-row:hover .node-check
+  /* In multi-select, every node shows its checkbox at all times. */
+  .tree.multi-active .tree-node > .node-row .node-check
   {
+    opacity: 1;
     pointer-events: auto;
   }
 
@@ -412,16 +374,6 @@
     display: flex;
     align-items: center;
     gap: var(--size-0-5);
-    opacity: 0;
-    transition: opacity var(--transition);
-  }
-
-  .node-row:hover .node-actions,
-  .node-row:focus-visible .node-actions,
-  .tree-node.selected > .node-row .node-actions,
-  .tree-node.indeterminate > .node-row .node-actions
-  {
-    opacity: 1;
   }
 
   .node-menu
@@ -434,6 +386,15 @@
     border-radius: var(--radius-round);
     background: transparent;
     color: var(--text-secondary);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  /* The overflow menu only appears while the row is hovered or focused. */
+  .node-row:hover .node-menu,
+  .node-row:focus-visible .node-menu
+  {
+    opacity: 1;
   }
 
   .node-menu:hover
@@ -784,6 +745,13 @@
     if (SVG[key]) el.innerHTML = SVG[key];
   });
 
+  // Add the custom all-children-selected icon to every checkbox (shown only in that state).
+  const ALL_ICON = '<svg class="box-all" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12.6465C16.7761 12.6465 17 12.8704 17 13.1465C17 13.4226 16.7761 13.6465 16.5 13.6465H9.5C9.22388 13.6465 9.00003 13.4226 9 13.1465C9 12.8703 9.22386 12.6465 9.5 12.6465H16.5ZM11.5 5.14648C11.6953 4.95122 12.0118 4.95122 12.207 5.14648C12.4023 5.34175 12.4023 5.65826 12.207 5.85352L6.5 11.5C6.30474 11.6953 5.98725 11.6953 5.79199 11.5L3.14648 8.85352C2.95123 8.65826 2.95124 8.34175 3.14648 8.14648C3.34175 7.95122 3.65825 7.95122 3.85352 8.14648L6.14648 10.4395L11.5 5.14648ZM16.5 8.64648C16.7761 8.64651 17 8.87036 17 9.14648C17 9.42259 16.7761 9.64646 16.5 9.64648H12.5C12.2239 9.64648 12 9.4226 12 9.14648C12 8.87034 12.2239 8.64648 12.5 8.64648H16.5Z"/></svg>';
+  document.querySelectorAll('.node-check .box').forEach(box => box.insertAdjacentHTML('beforeend', ALL_ICON));
+
+
+
+
 
   // ---- Move each checkbox into the actions area (right of the row) -----
   // The checkbox reveals on the right-hand side, just before the ⋮ menu.
@@ -821,11 +789,9 @@
         const childNodes = Array.from(n.querySelectorAll(':scope > .node-children > .tree-node'));
         const allChildren = childNodes.length > 0 && childNodes.every(c => c.classList.contains('selected'));
         n.classList.toggle('checked', multiMode && selectedHere);
-        // A selected parent with every child selected gets a + badge.
+        // A selected parent with every child selected shows the custom stacked icon.
         n.classList.toggle('all-checked', multiMode && selectedHere && allChildren);
-        // A selected parent with only some descendants selected shows a primary dash.
-        n.classList.toggle('checked-partial', multiMode && selectedHere && hasSelectedChild && !allChildren);
-        // A parent with any selected descendant shows the indeterminate box.
+        // A parent (not selected) with any children selected shows the dash.
         n.classList.toggle('indeterminate', multiMode && !selectedHere && hasSelectedChild);
         n.querySelector(':scope > .node-row').setAttribute('aria-selected', String(selectedHere));
       });

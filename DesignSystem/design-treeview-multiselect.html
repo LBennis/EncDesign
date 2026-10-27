@@ -147,8 +147,9 @@
     background: var(--bley-opaque-5);
   }
 
-  .tree-node.selected > .node-row,
-  .tree-node.selected > .node-row:hover
+  /* Rows covered by a descendant selector stay unhighlighted; their checkbox shows the state. */
+  .tree-node.selected:not(.cascaded) > .node-row,
+  .tree-node.selected:not(.cascaded) > .node-row:hover
   {
     background: var(--aqua-light-opaque-10);
   }
@@ -235,6 +236,7 @@
     opacity: 0;
     pointer-events: none;
     border-radius: var(--radius-sm);
+    height: 100%;
   }
 
   .node-check .box
@@ -248,6 +250,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
   }
 
   .node-check .box svg
@@ -258,37 +261,186 @@
     opacity: 0;
   }
 
-  /* Custom icon shown only when a parent is selected and all its children are selected. */
-  .node-check .box .box-all
-  {
-    position: absolute;
-    inset: -2px;
-    width: auto;
-    height: auto;
-    opacity: 0;
-  }
-
   /* Checked appearance */
   .tree-node.checked > .node-row .node-check .box
   {
     background: var(--primary);
     border-color: var(--primary);
+    height: 100%;
   }
 
-  .tree-node.checked > .node-row .node-check .box svg:not(.box-all)
+  .tree-node.checked > .node-row .node-check .box svg
   {
     opacity: 1;
   }
 
-
-  .tree-node.all-checked > .node-row .node-check .box svg:not(.box-all)
+  /* Held by a descendant selector (the parent itself or anything beneath it):
+     checked, but rounded, light bley with no border and a primary check. */
+  .tree-node.cascade-on > .node-row .node-check .box,
+  .tree-node.cascaded > .node-row .node-check .box
   {
+    border-radius: var(--radius-round);
+    background: var(--aqua-light-opaque-20);
+    border-color: transparent;
+  }
+
+  .tree-node.cascade-on > .node-row .node-check .box svg,
+  .tree-node.cascaded > .node-row .node-check .box svg
+  {
+    fill: var(--primary);
+  }
+
+
+  /* Descendant selector (parent nodes only) -------------------------------- */
+
+  /* On parents the descendant selector and checkbox join into one split control:
+     all-descendants on the left, the parent's own checkbox on the right.
+     Each half owns its border so the two can be styled independently. */
+  .node-dual
+  {
+    display: flex;
+    align-items: stretch;
+    height: var(--size-3);
+    margin-right: var(--size-0-5);
     opacity: 0;
+    transition: opacity var(--transition);
+    overflow: hidden;
   }
 
-  .tree-node.all-checked > .node-row .node-check .box .box-all
+  .tree.check-right .node-dual .node-check
   {
-    opacity: 1;
+    margin-right: 0;
+    overflow: hidden;
+  }
+
+  /* Both halves are equal segments; their inner edges meet to form the divider. */
+  .node-dual .node-descend,
+  .tree .node-dual .node-check
+  {
+    position: static;
+    box-sizing: border-box;
+    width: calc(var(--size-3) + 2px);
+    height: auto;
+    border: 2px solid var(--bley-600);
+    cursor: pointer;
+    transition: opacity var(--transition), background var(--transition), border-color var(--transition);
+    overflow: hidden;
+  }
+
+  .node-dual .node-descend
+  {
+    border-right-width: 1px;
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  }
+
+  .tree .node-dual .node-check
+  {
+    height: 100%;
+    overflow: hidden;
+    border-left-width: 1px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .tree .tree-node > .node-row .node-dual .box
+  {
+    width: 100%;
+    height: 100%;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  .node-descend
+  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+  }
+
+  .node-descend .box
+  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+  }
+
+  /* Each half lights up on its own while hovered, signalling two separate actions. */
+  .node-dual .node-descend:hover,
+  .node-dual .node-check:hover
+  {
+    background: var(--bley-opaque-10);
+  }
+
+  .node-descend .box svg
+  {
+    width: var(--size-2);
+    height: var(--size-2);
+    fill: var(--bley-600);
+  }
+
+  /* Left half on: filled primary with a primary border. Both halves round off to
+     match the held checks beneath it. */
+  .tree-node.cascade-on > .node-row .node-dual .node-descend
+  {
+    border-color: var(--primary);
+    border-radius: var(--radius-round) 0 0 var(--radius-round);
+    background: var(--primary);
+  }
+
+  .tree-node.cascade-on > .node-row .node-descend .box svg
+  {
+    fill: var(--white);
+  }
+
+  /* Right half held by the selector: same as the held checks, light bley with no border. */
+  .tree .tree-node.cascade-on > .node-row .node-dual .node-check
+  {
+    border-color: transparent;
+    border-radius: 0 var(--radius-round) var(--radius-round) 0;
+    border-width: 0;
+  }
+
+  /* Right half checked on its own: both halves' borders turn primary to match the fill. */
+  .tree-node.checked:not(.cascade-on):not(.cascaded) > .node-row .node-dual .node-descend,
+  .tree .tree-node.checked:not(.cascade-on):not(.cascaded) > .node-row .node-dual .node-check
+  {
+    border-color: var(--primary);
+  }
+
+  /* A nested parent covered by an ancestor's selector keeps its split control, styled
+     like the other held checks: borderless, rounded, with a primary icon and tick. */
+  .tree .tree-node.cascaded > .node-row .node-dual .node-descend,
+  .tree .tree-node.cascaded > .node-row .node-dual .node-check
+  {
+    border-color: transparent;
+    border-width: 0;
+  }
+
+  .tree .tree-node.cascaded > .node-row .node-dual .node-descend
+  {
+    border-radius: var(--radius-round) 0 0 var(--radius-round);
+    background: var(--aqua-light-opaque-20);
+    cursor: default;
+  }
+
+  .tree .tree-node.cascaded > .node-row .node-dual .node-check
+  {
+    border-radius: 0 var(--radius-round) var(--radius-round) 0;
+  }
+
+  .tree-node.cascaded > .node-row .node-descend .box svg
+  {
+    fill: var(--primary);
+  }
+
+  /* Controls held by a descendant selector are locked until it is turned off. */
+  .tree .tree-node.cascaded > .node-row .node-check,
+  .tree .tree-node.cascade-on > .node-row .node-check
+  {
+    cursor: default;
   }
 
   /* Indeterminate appearance (a descendant is selected) */
@@ -314,18 +466,28 @@
 
   /* The selected node always shows its checkbox. */
   .tree .tree-node.selected > .node-row .node-check,
+  .tree .tree-node.selected > .node-row .node-descend,
+  .tree .tree-node.selected > .node-row .node-dual,
   /* A parent with a selected descendant shows an indeterminate checkbox. */
   .tree .tree-node.indeterminate > .node-row .node-check,
+  .tree .tree-node.indeterminate > .node-row .node-descend,
+  .tree .tree-node.indeterminate > .node-row .node-dual,
   /* Hovering or focusing any row reveals its checkbox. */
   .tree .tree-node > .node-row:hover .node-check,
-  .tree .tree-node > .node-row:focus-visible .node-check
+  .tree .tree-node > .node-row:hover .node-descend,
+  .tree .tree-node > .node-row:hover .node-dual,
+  .tree .tree-node > .node-row:focus-visible .node-check,
+  .tree .tree-node > .node-row:focus-visible .node-descend,
+  .tree .tree-node > .node-row:focus-visible .node-dual
   {
     opacity: 1;
     pointer-events: auto;
   }
 
   /* In multi-select, every node shows its checkbox at all times. */
-  .tree.multi-active .tree-node > .node-row .node-check
+  .tree.multi-active .tree-node > .node-row .node-check,
+  .tree.multi-active .tree-node > .node-row .node-descend,
+  .tree.multi-active .tree-node > .node-row .node-dual
   {
     opacity: 1;
     pointer-events: auto;
@@ -350,6 +512,7 @@
     height: var(--size-2-5);
     margin-right: var(--size-0-5);
     transition: opacity var(--transition);
+    height: 100%;
   }
 
 
@@ -403,6 +566,91 @@
     color: var(--text-primary);
   }
 
+
+  /* State reference map -------------------------------- */
+
+  .state-section
+  {
+    width: 100%;
+  }
+
+  .state-group-title
+  {
+    font-size: var(--title-6);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-block: var(--size-3) var(--size-1-5);
+  }
+
+  /* Reuse the tree's scoped state styling without the card chrome. */
+  .tree.state-map-tree
+  {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .state-map
+  {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--size-2);
+  }
+
+  .state-card
+  {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-1);
+    padding: var(--size-3);
+    border: 1px solid var(--bley-opaque-10);
+    border-radius: var(--radius-md);
+    background: var(--white);
+  }
+
+  .state-card .tree-node
+  {
+    width: 100%;
+    margin-bottom: var(--size-2);
+  }
+
+  /* Show the checkbox in every reference row regardless of hover. */
+  .state-card .node-check,
+  .state-card .node-descend,
+  .state-card .node-dual
+  {
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  /* The resting (unselected) card keeps its checkbox hidden. */
+  .state-card.resting .node-check,
+  .state-card.resting .node-descend,
+  .state-card.resting .node-dual
+  {
+    opacity: 0;
+  }
+
+  .state-caption
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .state-caption b
+  {
+    font-size: var(--body-2);
+    color: var(--text-primary);
+  }
+
+  .state-caption span
+  {
+    font-size: var(--body-2);
+    color: var(--text-disabled);
+  }
+
 </style>
 
 </head>
@@ -416,6 +664,9 @@
       other node to reveal a checkbox and add it to a multi-selection. Both selected
       nodes then show a checked box. Remove nodes until one remains and it drops its
       checkbox, staying in the single selected state.</p>
+    <p>Parent nodes also have a second control, the descendant selector. Turning it on
+      selects the parent and every descendant (shown with rounded checks). Turning it off
+      restores whatever multi-selection was underneath.</p>
   </div>
 
   <div class="tree-demo">
@@ -503,7 +754,7 @@
                       <span class="node-actions"><button class="node-menu">⋮</button></span>
                     </div>
                   </li>
-                  <li class="tree-node leaf" data-id="hr-payroll">
+                  <li class="tree-node collapsed" data-id="hr-payroll">
                     <div class="node-row">
                       <span class="node-caret">%%CARET%%</span>
                       <span class="node-lead">
@@ -514,6 +765,56 @@
                       <span class="node-count">(0)</span>
                       <span class="node-actions"><button class="node-menu">⋮</button></span>
                     </div>
+                    <ul class="node-children">
+                      <li class="tree-node leaf" data-id="payroll-timesheets">
+                        <div class="node-row">
+                          <span class="node-caret">%%CARET%%</span>
+                          <span class="node-lead">
+                            <span class="node-icon grape">%%ICON_LIST%%</span>
+                            <span class="node-check">%%CHECK%%</span>
+                          </span>
+                          <span class="node-label">Timesheets</span>
+                          <span class="node-count">(0)</span>
+                          <span class="node-actions"><button class="node-menu">⋮</button></span>
+                        </div>
+                      </li>
+                      <li class="tree-node leaf" data-id="payroll-tax">
+                        <div class="node-row">
+                          <span class="node-caret">%%CARET%%</span>
+                          <span class="node-lead">
+                            <span class="node-icon grape">%%ICON_FINANCE%%</span>
+                            <span class="node-check">%%CHECK%%</span>
+                          </span>
+                          <span class="node-label">Tax &amp; Deductions</span>
+                          <span class="node-count">(0)</span>
+                          <span class="node-actions"><button class="node-menu">⋮</button></span>
+                        </div>
+                      </li>
+                      <li class="tree-node leaf" data-id="payroll-superannuation">
+                        <div class="node-row">
+                          <span class="node-caret">%%CARET%%</span>
+                          <span class="node-lead">
+                            <span class="node-icon grape">%%ICON_BADGE%%</span>
+                            <span class="node-check">%%CHECK%%</span>
+                          </span>
+                          <span class="node-label">Superannuation</span>
+                          <span class="node-count">(0)</span>
+                          <span class="node-actions"><button class="node-menu">⋮</button></span>
+                        </div>
+                      </li>
+                      <li class="tree-node leaf" data-id="payroll-payslips">
+                        <div class="node-row">
+                          <span class="node-caret">%%CARET%%</span>
+                          <span class="node-lead">
+                            <span class="node-icon grape">%%ICON_GRID%%</span>
+                            <span class="node-check">%%CHECK%%</span>
+                          </span>
+                          <span class="node-label">Payslips</span>
+                          <span class="node-count">(0)</span>
+                          <span class="node-actions"><button class="node-menu">⋮</button></span>
+                        </div>
+                      </li>
+                    </ul>
                   </li>
                   <li class="tree-node leaf" data-id="hr-benefits">
                     <div class="node-row">
@@ -719,6 +1020,176 @@
   </div>
 
 
+  <div class="state-section content">
+    
+    <h2><br><br><br>Selection state reference</h2>
+    <p>A static map of every checkbox / selection state for the development team. These rows
+      are illustrative only (non-interactive).</p>
+
+    <div class="tree check-right state-map-tree static">
+
+      <p class="state-group-title">Single node (leaf)</p>
+      <div class="state-map">
+
+        <div class="state-card resting">
+          <div class="tree-node leaf">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_HOME%%</span></span>
+              <span class="node-label">Employees</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-check">%%CHECK%%</span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>1 · Unselected</b><span>Resting state; checkbox hidden.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node leaf selected">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_HOME%%</span></span>
+              <span class="node-label">Employees</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-check">%%CHECK%%</span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>2 · Single-selected</b><span>Row highlighted; empty checkbox shown.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node leaf selected checked">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_HOME%%</span></span>
+              <span class="node-label">Employees</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-check">%%CHECK%%</span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>3 · Selected + checked</b><span>Node is checked.</span></span>
+        </div>
+
+      </div>
+
+      <p class="state-group-title">Parent node</p>
+      <div class="state-map">
+
+        <div class="state-card resting">
+          <div class="tree-node">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>1 · Unselected</b><span>Resting state; checkbox hidden.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node selected">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>2 · Single-selected</b><span>Row highlighted; empty checkbox shown.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node selected checked">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>3 · Selected + checked</b><span>Parent only is checked.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node indeterminate">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>Indeterminate</b><span>A descendant is selected; parent is not.</span></span>
+        </div>
+
+      </div>
+
+      <p class="state-group-title">Descendant selector (parent nodes only)</p>
+      <div class="state-map">
+
+        <div class="state-card">
+          <div class="tree-node selected checked">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>Off</b><span>Left-hand control; independent of the parent's own checkbox.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node selected checked cascade-on">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>On</b><span>Parent and every descendant selected. Turning it off restores the prior multi-selection.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node leaf selected checked cascaded">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_HOME%%</span></span>
+              <span class="node-label">Employees</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-check">%%CHECK%%</span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>Descendant (covered)</b><span>Rounded light bley check with no border and a primary tick, no row highlight: selected by an ancestor's descendant selector; locked until it is turned off.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node selected checked cascaded">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_GROUP%%</span></span>
+              <span class="node-label">HR</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>Nested parent (covered)</b><span>Its own descendant selector stays visible but is held and locked, styled like the other held checks, while an ancestor's selector is on.</span></span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
 <script>
 
   // ---- Inline SVG assets injected into placeholders --------------------
@@ -738,28 +1209,38 @@
     ICON_BIN:    '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 4h6l1 2h4v2H4V6h4l1-2ZM6 9h12l-1 11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 9Z"/></svg>'
   };
 
+  // Descendant selector: a box holding the custom all-children icon.
+  SVG.DESCEND = '<span class="box"><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12.6465C16.7761 12.6465 17 12.8704 17 13.1465C17 13.4226 16.7761 13.6465 16.5 13.6465H9.5C9.22388 13.6465 9.00003 13.4226 9 13.1465C9 12.8703 9.22386 12.6465 9.5 12.6465H16.5ZM11.5 5.14648C11.6953 4.95122 12.0118 4.95122 12.207 5.14648C12.4023 5.34175 12.4023 5.65826 12.207 5.85352L6.5 11.5C6.30474 11.6953 5.98725 11.6953 5.79199 11.5L3.14648 8.85352C2.95123 8.65826 2.95124 8.34175 3.14648 8.14648C3.34175 7.95122 3.65825 7.95122 3.85352 8.14648L6.14648 10.4395L11.5 5.14648ZM16.5 8.64648C16.7761 8.64651 17 8.87036 17 9.14648C17 9.42259 16.7761 9.64646 16.5 9.64648H12.5C12.2239 9.64648 12 9.4226 12 9.14648C12 8.87034 12.2239 8.64648 12.5 8.64648H16.5Z"/></svg></span>';
+
   // Inject SVG markup into placeholders.
-  document.querySelectorAll('.node-caret, .node-check, .node-icon').forEach(el => {
+  document.querySelectorAll('.node-caret, .node-check, .node-descend, .node-icon').forEach(el => {
     const raw = el.textContent.trim();
     const key = raw.replace(/%/g, '');
     if (SVG[key]) el.innerHTML = SVG[key];
   });
 
-  // Add the custom all-children-selected icon to every checkbox (shown only in that state).
-  const ALL_ICON = '<svg class="box-all" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12.6465C16.7761 12.6465 17 12.8704 17 13.1465C17 13.4226 16.7761 13.6465 16.5 13.6465H9.5C9.22388 13.6465 9.00003 13.4226 9 13.1465C9 12.8703 9.22386 12.6465 9.5 12.6465H16.5ZM11.5 5.14648C11.6953 4.95122 12.0118 4.95122 12.207 5.14648C12.4023 5.34175 12.4023 5.65826 12.207 5.85352L6.5 11.5C6.30474 11.6953 5.98725 11.6953 5.79199 11.5L3.14648 8.85352C2.95123 8.65826 2.95124 8.34175 3.14648 8.14648C3.34175 7.95122 3.65825 7.95122 3.85352 8.14648L6.14648 10.4395L11.5 5.14648ZM16.5 8.64648C16.7761 8.64651 17 8.87036 17 9.14648C17 9.42259 16.7761 9.64646 16.5 9.64648H12.5C12.2239 9.64648 12 9.4226 12 9.14648C12 8.87034 12.2239 8.64648 12.5 8.64648H16.5Z"/></svg>';
-  document.querySelectorAll('.node-check .box').forEach(box => box.insertAdjacentHTML('beforeend', ALL_ICON));
-
-
-
-
 
   // ---- Move each checkbox into the actions area (right of the row) -----
   // The checkbox reveals on the right-hand side, just before the ⋮ menu.
+  // Parent nodes also get the descendant selector, joined to the checkbox as a split control.
   document.querySelectorAll('#tree .tree-node > .node-row').forEach(row => {
     const check = row.querySelector(':scope > .node-lead > .node-check');
     const actions = row.querySelector(':scope > .node-actions');
     const menu = actions.querySelector('.node-menu');
     actions.insertBefore(check, menu);
+
+    if (!row.parentElement.classList.contains('leaf')) {
+      const descend = document.createElement('span');
+      descend.className = 'node-descend';
+      descend.setAttribute('role', 'checkbox');
+      descend.setAttribute('aria-label', 'Select all descendants');
+      descend.title = 'Select all descendants';
+      descend.innerHTML = SVG.DESCEND;
+      const dual = document.createElement('span');
+      dual.className = 'node-dual';
+      actions.insertBefore(dual, check);
+      dual.append(descend, check);
+    }
   });
 
 
@@ -769,11 +1250,38 @@
     const selCount = section.querySelector('.count-pill');
     const selLabel = section.querySelector('.sel-label');
 
-    const selectedNodes = () => Array.from(tree.querySelectorAll('.tree-node.selected'));
-    // Multi-select mode is entered via a checkbox and exited when it drops to one node.
+    // Selection is two layers:
+    //   picked   – nodes chosen directly (row click or regular checkbox).
+    //   cascades – parents whose descendant selector is on.
+    // A node is selected if it is picked, is a cascade parent, or sits under one.
+    // Turning a cascade off only removes that layer, so the picked state underneath returns.
+    const picked = new Set();
+    const cascades = new Set();
+    // Multi-select mode is entered via a checkbox and exited when nothing is selected.
     let multiMode = false;
 
+    const selectedNodes = () => Array.from(tree.querySelectorAll('.tree-node.selected'));
+    // Nearest ancestor whose descendant selector is on (null if none).
+    const coveringCascade = (node) => {
+      let p = node.parentElement.closest('.tree-node');
+      while (p) {
+        if (cascades.has(p)) return p;
+        p = p.parentElement.closest('.tree-node');
+      }
+      return null;
+    };
+
     function refresh() {
+      const nodes = Array.from(tree.querySelectorAll('.tree-node'));
+
+      // Resolve the effective selection first so the parent states below can read it.
+      nodes.forEach(n => {
+        const covered = !!coveringCascade(n);
+        n.classList.toggle('selected', picked.has(n) || cascades.has(n) || covered);
+        n.classList.toggle('cascaded', covered);
+        n.classList.toggle('cascade-on', cascades.has(n));
+      });
+
       const selected = selectedNodes();
       const count = selected.length;
 
@@ -783,17 +1291,19 @@
       tree.classList.toggle('multi-active', multiMode);
 
       // Checked / parent states only apply while multi-select is active.
-      tree.querySelectorAll('.tree-node').forEach(n => {
+      nodes.forEach(n => {
         const selectedHere = n.classList.contains('selected');
         const hasSelectedChild = !!n.querySelector('.tree-node.selected');
-        const childNodes = Array.from(n.querySelectorAll(':scope > .node-children > .tree-node'));
-        const allChildren = childNodes.length > 0 && childNodes.every(c => c.classList.contains('selected'));
         n.classList.toggle('checked', multiMode && selectedHere);
-        // A selected parent with every child selected shows the custom stacked icon.
-        n.classList.toggle('all-checked', multiMode && selectedHere && allChildren);
         // A parent (not selected) with any children selected shows the dash.
         n.classList.toggle('indeterminate', multiMode && !selectedHere && hasSelectedChild);
         n.querySelector(':scope > .node-row').setAttribute('aria-selected', String(selectedHere));
+        const descend = n.querySelector(':scope > .node-row .node-descend');
+        if (descend) {
+          // A covered parent's selector reads as on (everything beneath is held) but is locked.
+          descend.setAttribute('aria-checked', String(cascades.has(n) || n.classList.contains('cascaded')));
+          descend.setAttribute('aria-disabled', String(n.classList.contains('cascaded')));
+        }
       });
 
       // Summary bar.
@@ -803,25 +1313,54 @@
     }
 
     function singleSelect(node) {
-      selectedNodes().forEach(n => n.classList.remove('selected'));
-      node.classList.add('selected');
+      picked.clear();
+      cascades.clear();
+      picked.add(node);
       multiMode = false;
       refresh();
     }
 
-    // Checkbox click: starts multi-select, or toggles membership while active.
+    // Start a fresh multi-selection (used by the first checkbox / descendant click).
+    function enterMultiMode() {
+      multiMode = true;
+      picked.clear();
+      cascades.clear();
+    }
+
+    // Exit multi-select only when nothing is selected; the last node stays checked.
+    function settle() {
+      refresh();
+      if (multiMode && selectedNodes().length === 0) {
+        multiMode = false;
+        refresh();
+      }
+    }
+
+    // Checkbox click: starts multi-select, or toggles this node only while active.
+    // Nodes held by a descendant selector (the parent itself or anything beneath it)
+    // are locked until that selector is turned off.
     function checkboxToggle(node) {
       if (!multiMode) {
-        multiMode = true;
-        // Start a fresh multi-selection from this checkbox only.
-        selectedNodes().forEach(n => n.classList.remove('selected'));
-        node.classList.add('selected');
+        enterMultiMode();
+        picked.add(node);
+      } else if (cascades.has(node) || coveringCascade(node)) {
+        return;
+      } else if (picked.has(node)) {
+        picked.delete(node);
       } else {
-        node.classList.toggle('selected');
-        // Exit multi-select only when nothing is selected; the last node stays checked.
-        if (selectedNodes().length === 0) multiMode = false;
+        picked.add(node);
       }
-      refresh();
+      settle();
+    }
+
+    // Descendant selector click (parents only): on selects the parent and every
+    // descendant; off restores the picked state underneath.
+    function descendantToggle(node) {
+      if (coveringCascade(node)) return;
+      if (!multiMode) enterMultiMode();
+      if (cascades.has(node)) cascades.delete(node);
+      else cascades.add(node);
+      settle();
     }
 
     // ---- Accessibility + keyboard roving focus -----------------------
@@ -914,7 +1453,9 @@
         case ' ':
         case 'Spacebar':
           e.preventDefault();
-          checkboxToggle(node);
+          // Shift+Space drives the descendant selector on parent nodes.
+          if (e.shiftKey && !node.classList.contains('leaf')) descendantToggle(node);
+          else checkboxToggle(node);
           break;
       }
     });
@@ -935,6 +1476,12 @@
       if (!node) return;
       focusRow(node.querySelector(':scope > .node-row'));
 
+      // Clicking the descendant selector toggles the parent + all descendants.
+      if (e.target.closest('.node-descend')) {
+        descendantToggle(node);
+        return;
+      }
+
       // Clicking the checkbox starts multi-select or toggles membership.
       if (e.target.closest('.node-check')) {
         checkboxToggle(node);
@@ -948,7 +1495,7 @@
     refresh();
   }
 
-  document.querySelectorAll('.tree').forEach(initTree);
+  document.querySelectorAll('.tree:not(.static)').forEach(initTree);
 
 </script>
 

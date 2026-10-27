@@ -1,0 +1,151 @@
+export const sizeScale = {
+  size: {
+    size_0: '0rem',
+    size_0_5: '0.25rem',
+    size_1: '0.5rem', /* 8px Base */
+    size_1_5: '0.75rem', 
+    size_2: '1.0rem', 
+    size_2_5: '1.25rem', 
+    size_3: '1.5rem', 
+    size_4: '2.0rem',
+    size_5: '2.5rem',
+    size_6: '3.0rem',
+    size_7: '3.5rem', 
+    size_8: '4.0rem', 
+    size_9: '4.5rem', 
+    size_10: '5.0rem', 
+    size_11: '5.5rem', 
+    size_12: '6.0rem', 
+    size_13: '6.5rem', 
+    size_14: '7.0rem', 
+    size_15: '7.5rem', 
+    size_16: '8.0rem', 
+    size_17: '8.5rem', 
+    size_18: '9.0rem', 
+    size_19: '9.5rem', 
+    size_20: '10.0rem', 
+    size_21: '10.5rem', 
+    size_22: '11.0rem', 
+    size_23: '11.5rem', 
+    size_24: '12.0rem', 
+    size_25: '12.5rem', 
+    size_26: '13.0rem', 
+    size_27: '13.5rem', 
+    size_28: '14.0rem', 
+    size_29: '14.5rem', 
+    size_30: '15.0rem', 
+  },
+};
+
+const getSpacing = (abs: number) => `${0.5 * abs}rem`;
+
+export const sizes = {
+  dimension: {
+    small: getSpacing(4),
+    medium: getSpacing(5),
+    large: getSpacing(6),
+    xlarge: getSpacing(8),
+  },
+  rounddimension: {
+    small: getSpacing(4),
+    medium: getSpacing(5),
+    large: getSpacing(6),
+    xlarge: getSpacing(8),
+  },
+  appButtonHeight: {
+    smallHorizontal: getSpacing(7),
+    small: getSpacing(12),
+    medium: getSpacing(14),
+    large: getSpacing(23),
+  },
+  appButtonWidth: {
+    smallHorizontal: '100%',
+    small: getSpacing(10),
+    medium: getSpacing(12),
+    large: getSpacing(23),
+  },
+  appButtonIconMinHeight: {
+    smallHorizontal: getSpacing(5),
+    small: getSpacing(7),
+    medium: getSpacing(8),
+    large: getSpacing(8),
+  },
+  appButtonIconHeight: {
+    small: getSpacing(5),
+    medium: getSpacing(6),
+    large: getSpacing(6),
+  },
+  appButtonIconWidth: {
+    small: getSpacing(4),
+    large: getSpacing(6),
+  },
+  icon: {
+    small: getSpacing(2),
+    normal: getSpacing(2.5),
+    medium: getSpacing(3),
+    large: getSpacing(4),
+    xlarge: getSpacing(5),
+    xxlarge: getSpacing(6),
+    xxxlarge: getSpacing(7),
+    xxxxlarge: getSpacing(8),
+  },
+  padding: {
+    none: 0,
+    small: `${getSpacing(0.5)} ${getSpacing(1)}`,
+    medium: `${getSpacing(1)} ${getSpacing(2)}`,
+    large: `${getSpacing(1)} ${getSpacing(2)}`,
+    xlarge: `${getSpacing(1)} ${getSpacing(4)}`,
+    smallCircle: getSpacing(0.5),
+    mediumCircle: getSpacing(1),
+    largeCircle: getSpacing(1),
+    xlargeCircle: getSpacing(2),
+    smallHorizontalApp: `${getSpacing(1)} ${getSpacing(1.5)}`,
+    smallApp: getSpacing(0.5),
+    mediumApp: `${getSpacing(1)} ${getSpacing(0.5)} ${getSpacing(0.5)}`,
+    largeApp: `${getSpacing(4)} ${getSpacing(6)}`,
+  },
+  font: {
+    small: getSpacing(1.5),
+    medium: getSpacing(1.75), 
+    large: getSpacing(2), 
+    xlarge: getSpacing(2.5),
+  },
+  borderRadius: {
+    small: getSpacing(0.5), 
+    medium: getSpacing(1),
+    large: getSpacing(2),
+    circle: getSpacing(12),
+    square: getSpacing(2)
+  },
+  radioButtonIcon: {
+    small: getSpacing(3),
+    medium: getSpacing(3),
+    large: getSpacing(4),
+  },
+  radioButtonPadding: {
+    small: getSpacing(0.5),
+    medium: getSpacing(1),
+    large: getSpacing(1),
+  },
+  appButtonRightMargin: {
+    smallHorizontal: getSpacing(1),
+    small: getSpacing(0),
+    medium: getSpacing(0),
+    large: getSpacing(0),
+    xlarge: getSpacing(0),
+  },
+  inputHeightSize: {
+    xsmall: getSpacing(3),
+    small: getSpacing(4),
+    medium: getSpacing(5),
+    large: getSpacing(6),
+    xlarge: getSpacing(8)
+  },
+  inputPadding: {
+    xsmall: getSpacing(0.5),
+    small: getSpacing(0.5),
+    medium: getSpacing(1),
+    large: getSpacing(1),
+    xlarge: getSpacing(1)
+  }
+};

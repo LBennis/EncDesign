@@ -1,0 +1,257 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Title Shrink-Wrap</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: controls bar, then two matching columns (default vs shrink-wrapped) sharing one width */
+  :root {
+    --bg: #f5f8f8;
+    --surface: #ffffff;
+    --fg: #14211f;
+    --muted: #5a6b69;
+    --line: #d6e0df;
+    --accent: #008486;
+    --accent-soft: #e0f1f1;
+    --gap-mark: rgba(214, 90, 60, 0.16);
+    --gap-line: #c9573a;
+    --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1716; --surface: #16211f; --fg: #e3ecea; --muted: #93a6a3;
+      --line: #2a3a38; --accent: #3cc2c3; --accent-soft: #163a3a;
+      --gap-mark: rgba(240, 130, 100, 0.18); --gap-line: #ef8a6c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1716; --surface: #16211f; --fg: #e3ecea; --muted: #93a6a3;
+    --line: #2a3a38; --accent: #3cc2c3; --accent-soft: #163a3a;
+    --gap-mark: rgba(240, 130, 100, 0.18); --gap-line: #ef8a6c;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-block: 32px 56px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 24px;
+  }
+  header h3 { font-size: 26px; font-weight: 600; margin: 0 0 6px; text-wrap: balance; }
+  header p { margin: 0; color: var(--muted); max-width: 65ch; }
+
+  /* Controls */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .control { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+  .control label { color: var(--muted); }
+  .control output { font-family: var(--font-mono); font-size: 13px; min-width: 5ch; font-variant-numeric: tabular-nums; }
+  input[type="range"] { accent-color: var(--accent); width: 220px; max-width: 50vw; }
+  input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16px; }
+  input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Columns */
+  .columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 24px; }
+  .col { min-width: 0; display: grid; gap: 12px; align-content: start; }
+  .col-head { display: flex; align-items: baseline; gap: 10px; }
+  .col-head h2 { font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin: 0; }
+  .col-head span { font-size: 13px; color: var(--muted); }
+
+  .stage {
+    width: var(--demo-width, 420px);
+    max-width: 100%;
+    display: grid;
+    gap: 10px;
+  }
+  .example {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px 10px;
+    display: grid;
+    gap: 8px;
+  }
+  .meta { font-family: var(--font-mono); font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .meta b { font-weight: 500; color: var(--fg); }
+
+  /* ---- The component (your structure) ---- */
+  .typography.actionPrimary {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    position: relative;
+  }
+  .typography.actionPrimary h3 {
+    margin: 0;
+    min-width: 0;
+    font-size: 20px;
+    line-height: 140%;
+    font-weight: 600;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    text-wrap: pretty;
+  }
+  .button.circle.small.tertiary {
+    flex: none;
+    width: 30px; height: 30px;
+    display: grid; place-items: center;
+    border: 0; border-radius: 50%;
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+  }
+  .button.circle.small.tertiary:hover { background: var(--accent-soft); }
+  .button.circle.small.tertiary:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  /* Bounds overlay: outline the h3 box, hatch the dead space to its right */
+  .show-bounds .typography.actionPrimary h3 { outline: 1px dashed var(--accent); outline-offset: 0; }
+  .show-bounds .typography.actionPrimary h3 { background-image: linear-gradient(var(--gap-mark), var(--gap-mark)); background-repeat: no-repeat; background-position: right top; background-size: var(--dead, 0px) 100%; }
+
+  footer { color: var(--muted); font-size: 13px; max-width: 70ch; }
+  code { font-family: var(--font-mono); font-size: 0.92em; background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; }
+</style>
+
+<div class="page">
+  <header>
+    <h3>Title shrink-wrap</h3>
+    <p>Each title is clamped to 3 lines with an action beside it. On the left the <code>h3</code> keeps its full width when it wraps. On the right, JS measures the widest visible line and sets the <code>h3</code> to that width, so the action sits next to the text. Drag the width slider to watch it reflow.</p>
+  </header>
+
+  <div class="controls">
+    <div class="control">
+      <label for="width">Container width</label>
+      <input id="width" type="range" min="220" max="560" value="420" step="1">
+      <output id="widthOut" for="width">420px</output>
+    </div>
+    <div class="control">
+      <input id="bounds" type="checkbox" checked>
+      <label for="bounds">Show h3 box and dead space</label>
+    </div>
+  </div>
+
+  <div class="columns show-bounds" id="columns">
+    <section class="col">
+      <div class="col-head"><h2>Default</h2><span>full-width box</span></div>
+      <div class="stage" id="stageDefault"></div>
+    </section>
+    <section class="col">
+      <div class="col-head"><h2>Shrink-wrapped</h2><span>width = widest line</span></div>
+      <div class="stage" id="stageWrapped"></div>
+    </section>
+  </div>
+
+  <footer>Dead space (hatched) is the gap between the end of the longest line and the edge of the <code>h3</code> box. The fix measures line boxes with <code>Range.getClientRects()</code>, ignores lines hidden by the clamp, and re-runs through a <code>ResizeObserver</code> on the wrapper.</footer>
+</div>
+
+<template id="tpl">
+  <div class="example">
+    <div class="typography actionPrimary">
+      <h3></h3>
+      <button class="button circle small tertiary" type="button" aria-label="Open">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M6 4C4.89543 4 4 4.89543 4 6V14C4 15.1046 4.89543 16 6 16H14C15.1046 16 16 15.1046 16 14V11.5C16 11.2239 16.2239 11 16.5 11C16.7761 11 17 11.2239 17 11.5V14C17 15.6569 15.6569 17 14 17H6C4.34315 17 3 15.6569 3 14V6C3 4.34315 4.34315 3 6 3H8.5C8.77614 3 9 3.22386 9 3.5C9 3.77614 8.77614 4 8.5 4H6ZM11 3.5C11 3.22386 11.2239 3 11.5 3H16.5C16.7761 3 17 3.22386 17 3.5V8.5C17 8.77614 16.7761 9 16.5 9C16.2239 9 16 8.77614 16 8.5V4.70711L11.8536 8.85355C11.6583 9.04882 11.3417 9.04882 11.1464 8.85355C10.9512 8.65829 10.9512 8.34171 11.1464 8.14645L15.2929 4H11.5C11.2239 4 11 3.77614 11 3.5Z"/></svg>
+      </button>
+    </div>
+    <div class="meta"><span class="kind"></span><span class="m"></span></div>
+  </div>
+</template>
+
+<script>
+  const titles = [
+    { kind: "Short", text: "Quarterly Audit" },
+    { kind: "One line", text: "Records Retention Schedule 2026" },
+    { kind: "Long word wraps", text: "Customer Correspondence Classification" },
+    { kind: "Two lines", text: "Board Meeting Minutes And Supporting Documentation Archive" },
+    { kind: "Three lines", text: "Example Title With A Primary Action That Wraps Across Several Lines Comfortably" },
+    { kind: "Clamped", text: "Example Title With A Primary Action But It's Very Very Long, So It Overflows And Therefore The Layout Changes To Accommodate The Action Button." },
+    { kind: "Unbroken token", text: "Invoice INV-2026-000184-AUS-REGIONAL-SUPPLEMENTARY Review" }
+  ];
+
+  const tpl = document.getElementById("tpl");
+  function build(stage) {
+    for (const t of titles) {
+      const node = tpl.content.cloneNode(true);
+      node.querySelector("h3").textContent = t.text;
+      node.querySelector("h3").title = t.text;
+      node.querySelector(".kind").textContent = t.kind;
+      stage.appendChild(node);
+    }
+  }
+  const stageDefault = document.getElementById("stageDefault");
+  const stageWrapped = document.getElementById("stageWrapped");
+  build(stageDefault);
+  build(stageWrapped);
+
+  /* Widest visible line, measured from the h3's left edge */
+  function widestLine(h3) {
+    const box = h3.getBoundingClientRect();
+    const range = document.createRange();
+    range.selectNodeContents(h3);
+    let widest = 0;
+    for (const rect of range.getClientRects()) {
+      if (rect.top >= box.bottom - 1) break;          // lines hidden by the clamp
+      widest = Math.max(widest, rect.right - box.left);
+    }
+    return { widest: Math.ceil(widest), boxWidth: box.width };
+  }
+
+  /* ---- The fix ---- */
+  function shrinkWrapTitle(h3) {
+    h3.style.width = "";                               // reset so it re-wraps at full width
+    const { widest, boxWidth } = widestLine(h3);
+    if (widest && widest < boxWidth) h3.style.width = widest + "px";
+  }
+
+  function report(example) {
+    const h3 = example.querySelector("h3");
+    const { widest, boxWidth } = widestLine(h3);
+    const dead = Math.max(0, Math.round(boxWidth - widest));
+    h3.style.setProperty("--dead", dead + "px");
+    example.querySelector(".m").innerHTML = `box <b>${Math.round(boxWidth)}px</b> · gap <b>${dead}px</b>`;
+  }
+
+  function refresh() {
+    stageWrapped.querySelectorAll(".typography.actionPrimary h3").forEach(shrinkWrapTitle);
+    document.querySelectorAll(".example").forEach(report);
+  }
+
+  /* Observe the wrappers, not the h3, so setting the width doesn't loop */
+  const ro = new ResizeObserver(() => refresh());
+  document.querySelectorAll(".typography.actionPrimary").forEach(el => ro.observe(el));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+
+  /* Controls */
+  const width = document.getElementById("width");
+  const widthOut = document.getElementById("widthOut");
+  const columns = document.getElementById("columns");
+  function setWidth() {
+    columns.style.setProperty("--demo-width", width.value + "px");
+    widthOut.textContent = width.value + "px";
+  }
+  width.addEventListener("input", setWidth);
+  setWidth();
+  document.getElementById("bounds").addEventListener("change", e => {
+    columns.classList.toggle("show-bounds", e.target.checked);
+  });
+  refresh();
+</script>
+
+</body></html>

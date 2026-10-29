@@ -1,1 +1,0 @@
-export { sizeScale, sizes } from "./sizes";

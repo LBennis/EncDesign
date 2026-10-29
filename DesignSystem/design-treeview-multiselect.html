@@ -323,12 +323,22 @@
     height: auto;
     border: 2px solid var(--bley-600);
     cursor: pointer;
-    transition: opacity var(--transition), background var(--transition), border-color var(--transition);
+    transition: opacity var(--transition), background var(--transition), border-color var(--transition),
+      width var(--dual-swap), height var(--dual-swap), border-width var(--dual-swap), border-radius var(--dual-swap);
     overflow: hidden;
   }
 
+  /* Duration of the checkbox <-> circle changeover when the selector turns on / off. */
+  .node-dual
+  {
+    --dual-swap: 0.35s ease;
+  }
+
+  /* Explicit height (not stretch) so the selector can animate down to the circle. */
   .node-dual .node-descend
   {
+    align-self: center;
+    height: var(--size-3);
     border-right-width: 1px;
     border-radius: var(--radius-sm) 0 0 var(--radius-sm);
   }
@@ -381,12 +391,28 @@
     fill: var(--bley-600);
   }
 
-  /* Left half on: filled primary with a primary border. Both halves round off to
-     match the held checks beneath it. */
+  /* Tooltip above the descendant selector: the design-system tooltip, placed by script. */
+  .descend-tip
+  {
+    position: fixed;
+    z-index: 10;
+    transform: translate(-50%, calc(-100% - 10px));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  /* Short delay before showing so it does not flash up while passing over; hides at once. */
+  .descend-tip.show
+  {
+    opacity: 1;
+    transition-delay: 0.3s;
+  }
+
+  /* Selector on: filled primary with a primary border. */
   .tree-node.cascade-on > .node-row .node-dual .node-descend
   {
     border-color: var(--primary);
-    border-radius: var(--radius-round) 0 0 var(--radius-round);
     background: var(--primary);
   }
 
@@ -395,12 +421,32 @@
     fill: var(--white);
   }
 
-  /* Right half held by the selector: same as the held checks, light bley with no border. */
-  .tree .tree-node.cascade-on > .node-row .node-dual .node-check
+  /* While on, the parent's own checkbox collapses away and the selector slides across
+     into its place as a circle, lined up with the held checks of the descendants
+     beneath it. Nested parents held by it do the same. Turning it off reverses the slide. */
+  .tree .tree-node.cascade-on > .node-row .node-dual .node-check,
+  .tree .tree-node.cascaded > .node-row .node-dual .node-check
   {
-    border-color: transparent;
-    border-radius: 0 var(--radius-round) var(--radius-round) 0;
+    width: 0;
     border-width: 0;
+    pointer-events: none;
+  }
+
+  /* Scoped tightly enough to beat the check-right transition (opacity only), so the
+     checkbox's width eases to 0 and the selector visibly slides across. */
+  .tree .tree-node > .node-row .node-dual .node-check
+  {
+    transition: opacity var(--transition), background var(--transition), border-color var(--transition),
+      width var(--dual-swap), border-width var(--dual-swap), border-radius var(--dual-swap);
+  }
+
+  .tree .tree-node.cascade-on > .node-row .node-dual .node-descend,
+  .tree .tree-node.cascaded > .node-row .node-dual .node-descend
+  {
+    width: var(--size-2-5);
+    height: var(--size-2-5);
+    border-width: 2px;
+    border-radius: 50%; /* % rather than the round token so the radius eases smoothly */
   }
 
   /* Right half checked on its own: both halves' borders turn primary to match the fill. */
@@ -410,8 +456,8 @@
     border-color: var(--primary);
   }
 
-  /* A nested parent covered by an ancestor's selector keeps its split control, styled
-     like the other held checks: borderless, rounded, with a primary icon and tick. */
+  /* A nested parent covered by an ancestor's selector shows only its selector, styled
+     like the other held checks: a borderless light aqua circle with a primary icon. */
   .tree .tree-node.cascaded > .node-row .node-dual .node-descend,
   .tree .tree-node.cascaded > .node-row .node-dual .node-check
   {
@@ -421,14 +467,8 @@
 
   .tree .tree-node.cascaded > .node-row .node-dual .node-descend
   {
-    border-radius: var(--radius-round) 0 0 var(--radius-round);
     background: var(--aqua-light-opaque-20);
     cursor: default;
-  }
-
-  .tree .tree-node.cascaded > .node-row .node-dual .node-check
-  {
-    border-radius: 0 var(--radius-round) var(--radius-round) 0;
   }
 
   .tree-node.cascaded > .node-row .node-descend .box svg
@@ -1155,7 +1195,7 @@
               <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
             </div>
           </div>
-          <span class="state-caption"><b>On</b><span>Parent and every descendant selected. Turning it off restores the prior multi-selection.</span></span>
+          <span class="state-caption"><b>On</b><span>Parent and every descendant selected. The parent's own checkbox is removed, leaving the selector as a circle. Turning it off brings the checkbox back and restores the prior multi-selection.</span></span>
         </div>
 
         <div class="state-card">
@@ -1181,7 +1221,7 @@
               <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
             </div>
           </div>
-          <span class="state-caption"><b>Nested parent (covered)</b><span>Its own descendant selector stays visible but is held and locked, styled like the other held checks, while an ancestor's selector is on.</span></span>
+          <span class="state-caption"><b>Nested parent (covered)</b><span>Its checkbox is removed, leaving only its descendant selector as a held, locked circle, styled like the other held checks, while an ancestor's selector is on.</span></span>
         </div>
 
       </div>
@@ -1233,8 +1273,7 @@
       const descend = document.createElement('span');
       descend.className = 'node-descend';
       descend.setAttribute('role', 'checkbox');
-      descend.setAttribute('aria-label', 'Select all descendants');
-      descend.title = 'Select all descendants';
+      descend.setAttribute('aria-label', 'Select all descendant child classes');
       descend.innerHTML = SVG.DESCEND;
       const dual = document.createElement('span');
       dual.className = 'node-dual';
@@ -1242,6 +1281,31 @@
       dual.append(descend, check);
     }
   });
+
+
+  // ---- Descendant selector tooltip ------------------------------------
+  // One shared tooltip, shown above whichever selector is hovered. It lives on <body>
+  // so the split control's overflow clipping can't cut it off.
+  const descendTip = document.createElement('div');
+  descendTip.className = 'tooltip top descend-tip';
+  descendTip.setAttribute('role', 'tooltip');
+  descendTip.textContent = 'Select all descendant child classes';
+  document.body.append(descendTip);
+
+  const hideDescendTip = () => descendTip.classList.remove('show');
+
+  document.querySelectorAll('#tree .node-descend').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      // A selector held by an ancestor's selector is locked, so it gets no prompt.
+      if (el.getAttribute('aria-disabled') === 'true') return;
+      const r = el.getBoundingClientRect();
+      descendTip.style.left = `${r.left + r.width / 2}px`;
+      descendTip.style.top = `${r.top}px`;
+      descendTip.classList.add('show');
+    });
+    el.addEventListener('mouseleave', hideDescendTip);
+  });
+  window.addEventListener('scroll', hideDescendTip, true);
 
 
   // ---- Selection behaviour (per tree) ----------------------------------

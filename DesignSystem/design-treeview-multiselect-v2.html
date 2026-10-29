@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en" id="backgrounds" class="theme-a">
+<head>
+  <meta charset="UTF-8">
+  <meta name="Encompaas PoC" content="">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="author" content="Luke Bennis">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encompaas PoC - TreeView with MultiSelect V2</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<style>
+
+  @import url(../primitives.css);
+  @import url(../styles.css);
+  @import url(../component-styles.css);
+
+
+  html
+  {
+    background: var(--bley-100);
+    height: 100%;
+    width: 100%;
+  }
+
+  body
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--size-4);
+    width: min(90%, 760px);
+    margin-inline: auto;
+    padding-block: 8vh;
+  }
+
+  .intro
+  {
+    width: 100%;
+  }
+
+  .intro p
+  {
+    max-width: 60ch;
+  }
+
+  .tree-demo
+  {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-2);
+    width: 100%;
+  }
+
+  .demo-title
+  {
+    display: flex;
+    align-items: baseline;
+    gap: var(--size-1-5);
+  }
+
+  .demo-title small
+  {
+    font-size: var(--body-2);
+    color: var(--text-secondary);
+  }
+
+  /* Selection summary -------------------------------- */
+
+  .selection-bar
+  {
+    display: flex;
+    align-items: center;
+    gap: var(--size-2);
+    width: 100%;
+    min-height: var(--size-6);
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--radius-md);
+    background: var(--bg-light-grey);
+    border: 1px solid var(--bley-opaque-10);
+    font-size: var(--body-2);
+    color: var(--text-secondary);
+  }
+
+  .selection-bar .count-pill
+  {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--size-3);
+    height: var(--size-3);
+    padding-inline: var(--size-1);
+    border-radius: var(--radius-round);
+    background: var(--aqua-light-opaque-20);
+    color: var(--aqua-900);
+    font-size: var(--title-6);
+  }
+
+
+  /* Tree -------------------------------- */
+
+  .tree
+  {
+    width: 100%;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--size-2);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tree ul
+  {
+    list-style: none;
+    padding-left: var(--size-4);
+  }
+
+  .tree > ul
+  {
+    padding-left: 0;
+  }
+
+  .tree-node.leaf > .node-children,
+  .tree-node.collapsed > .node-children
+  {
+    display: none;
+  }
+
+
+  /* Node row -------------------------------- */
+
+  .node-row
+  {
+    display: flex;
+    align-items: center;
+    gap: var(--size-1);
+    padding: var(--size-1) var(--size-1-5);
+    border-radius: var(--size-1);
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+  }
+
+  .node-row:hover
+  {
+    background: var(--bley-opaque-5);
+  }
+
+  /* Rows covered by a descendant selector stay unhighlighted; their checkbox shows the state. */
+  .tree-node.selected:not(.cascaded) > .node-row,
+  .tree-node.selected:not(.cascaded) > .node-row:hover
+  {
+    background: var(--aqua-light-opaque-10);
+  }
+
+  .node-row:focus-visible
+  {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+  }
+
+
+  /* Caret -------------------------------- */
+
+  .node-caret
+  {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-3);
+    height: var(--size-3);
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+  }
+
+  .node-caret:hover
+  {
+    background: var(--bley-opaque-10);
+  }
+
+  .node-caret svg
+  {
+    width: var(--size-2-5);
+    height: var(--size-2-5);
+    fill: var(--text-secondary);
+    transition: transform var(--transition);
+  }
+
+  .tree-node.collapsed > .node-row .node-caret svg
+  {
+    transform: rotate(-90deg);
+  }
+
+  .tree-node.leaf > .node-row .node-caret
+  {
+    visibility: hidden;
+  }
+
+
+  /* Lead slot: icon <-> checkbox -------------------------------- */
+
+  .node-lead
+  {
+    position: relative;
+    width: var(--size-3);
+    height: var(--size-3);
+    flex-shrink: 0;
+  }
+
+  .node-icon,
+  .node-check
+  {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--transition);
+  }
+
+  .node-icon svg
+  {
+    width: var(--size-3);
+    height: var(--size-3);
+  }
+
+  .node-icon.navy  svg { fill: var(--secondary); }
+  .node-icon.grape svg { fill: var(--secondary); }
+  .node-icon.aqua  svg { fill: var(--secondary); }
+
+  /* Checkbox is hidden by default, shown by selection logic */
+  .node-check
+  {
+    opacity: 0;
+    pointer-events: none;
+    border-radius: var(--radius-sm);
+    height: 100%;
+  }
+
+  .node-check .box
+  {
+    width: var(--size-2-5);
+    height: var(--size-2-5);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bley-600);
+    background: transparent;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .node-check .box svg
+  {
+    width: var(--size-2);
+    height: var(--size-2);
+    fill: var(--white);
+    opacity: 0;
+  }
+
+  /* Checked appearance */
+  .tree-node.checked > .node-row .node-check .box
+  {
+    background: var(--primary);
+    border-color: var(--primary);
+    height: 100%;
+  }
+
+  .tree-node.checked > .node-row .node-check .box svg
+  {
+    opacity: 1;
+  }
+
+  /* Held by a descendant selector (the parent itself or anything beneath it):
+     checked, but rounded, light bley with no border and a primary check. */
+  .tree-node.cascade-on > .node-row .node-check .box,
+  .tree-node.cascaded > .node-row .node-check .box
+  {
+    border-radius: var(--radius-round);
+    background: var(--aqua-light-opaque-20);
+    border-color: transparent;
+  }
+
+  .tree-node.cascade-on > .node-row .node-check .box svg,
+  .tree-node.cascaded > .node-row .node-check .box svg
+  {
+    fill: var(--primary);
+  }
+
+
+  /* Descendant selector (parent nodes only) -------------------------------- */
+
+  /* On parents the descendant selector and checkbox join into one split control:
+     all-descendants on the left, the parent's own checkbox on the right.
+     Each half owns its border so the two can be styled independently. */
+  .node-dual
+  {
+    display: flex;
+    align-items: stretch;
+    height: var(--size-3);
+    margin-right: var(--size-0-5);
+    opacity: 0;
+    transition: opacity var(--transition);
+    overflow: hidden;
+  }
+
+  .tree.check-right .node-dual .node-check
+  {
+    margin-right: 0;
+    overflow: hidden;
+  }
+
+  /* Both halves are equal segments; their inner edges meet to form the divider. */
+  .node-dual .node-descend,
+  .tree .node-dual .node-check
+  {
+    position: static;
+    box-sizing: border-box;
+    width: calc(var(--size-3) + 2px);
+    height: auto;
+    border: 2px solid var(--bley-600);
+    cursor: pointer;
+    transition: opacity var(--transition), background var(--transition), border-color var(--transition),
+      width var(--dual-swap), height var(--dual-swap), border-width var(--dual-swap), border-radius var(--dual-swap);
+    overflow: hidden;
+  }
+
+  /* Duration of the checkbox <-> circle changeover when the selector turns on / off. */
+  .node-dual
+  {
+    --dual-swap: 0.35s ease;
+  }
+
+  /* Explicit height (not stretch) so the selector can animate down to the circle. */
+  .node-dual .node-descend
+  {
+    align-self: center;
+    height: var(--size-3);
+    border-right-width: 1px;
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  }
+
+  .tree .node-dual .node-check
+  {
+    height: 100%;
+    overflow: hidden;
+    border-left-width: 1px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .tree .tree-node > .node-row .node-dual .box
+  {
+    width: 100%;
+    height: 100%;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  .node-descend
+  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+  }
+
+  .node-descend .box
+  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+  }
+
+  /* Each half lights up on its own while hovered, signalling two separate actions. */
+  .node-dual .node-descend:hover,
+  .node-dual .node-check:hover
+  {
+    background: var(--bley-opaque-10);
+  }
+
+  .node-descend .box svg
+  {
+    width: var(--size-2);
+    height: var(--size-2);
+    fill: var(--bley-600);
+  }
+
+  /* Tooltip above the descendant selector: the design-system tooltip, placed by script. */
+  .descend-tip
+  {
+    position: fixed;
+    z-index: 10;
+    transform: translate(-50%, calc(-100% - 10px));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  /* Short delay before showing so it does not flash up while passing over; hides at once. */
+  .descend-tip.show
+  {
+    opacity: 1;
+    transition-delay: 0.3s;
+  }
+
+  /* Selector on: filled primary with a primary border. */
+  .tree-node.cascade-on > .node-row .node-dual .node-descend
+  {
+    border-color: var(--primary);
+    background: var(--primary);
+  }
+
+  .tree-node.cascade-on > .node-row .node-descend .box svg
+  {
+    fill: var(--white);
+  }
+
+  /* While on, the split control keeps its exact width: the checkbox's tick fades out,
+     an "All" label fades in in its place, and the two halves merge into one rounded
+     pill with no divider. Nested parents held by it do the same in the lighter held
+     style. Turning it off reverses the change. */
+
+  /* Scoped tightly enough to beat the check-right transition (opacity only). */
+  .tree .tree-node > .node-row .node-dual .node-check
+  {
+    position: relative;
+    transition: opacity var(--transition), background var(--transition), border-color var(--transition),
+      border-radius var(--dual-swap);
+  }
+
+  .tree .tree-node > .node-row .node-dual .node-check .box
+  {
+    transition: opacity var(--dual-swap);
+  }
+
+  .tree .tree-node > .node-row .node-dual .node-check::after
+  {
+    content: 'All';
+    position: absolute;
+    inset: 0px 4px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    opacity: 0;
+    transition: opacity var(--dual-swap);
+  }
+
+  .tree .tree-node.cascade-on > .node-row .node-dual .node-check .box,
+  .tree .tree-node.cascaded > .node-row .node-dual .node-check .box
+  {
+    opacity: 0;
+  }
+
+  .tree .tree-node.cascade-on > .node-row .node-dual .node-check::after,
+  .tree .tree-node.cascaded > .node-row .node-dual .node-check::after
+  {
+    opacity: 1;
+  }
+
+  /* Pill ends: half the control height rather than the round token, so the radius eases smoothly. */
+  .tree .tree-node.cascade-on > .node-row .node-dual .node-descend,
+  .tree .tree-node.cascaded > .node-row .node-dual .node-descend
+  {
+    border-radius: calc(var(--size-3) / 2) 0 0 calc(var(--size-3) / 2);
+  }
+
+  .tree .tree-node.cascade-on > .node-row .node-dual .node-check,
+  .tree .tree-node.cascaded > .node-row .node-dual .node-check
+  {
+    border-radius: 0 calc(var(--size-3) / 2) calc(var(--size-3) / 2) 0;
+    pointer-events: none;
+  }
+
+  /* Selector on: the whole pill is primary, with a white icon and label. */
+  .tree .tree-node.cascade-on > .node-row .node-dual .node-check
+  {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--white);
+  }
+
+  /* Right half checked on its own: both halves' borders turn primary to match the fill. */
+  .tree-node.checked:not(.cascade-on):not(.cascaded) > .node-row .node-dual .node-descend,
+  .tree .tree-node.checked:not(.cascade-on):not(.cascaded) > .node-row .node-dual .node-check
+  {
+    border-color: var(--primary);
+  }
+
+  /* A nested parent covered by an ancestor's selector: the same pill in the lighter
+     held style (light aqua, no visible border, primary icon and label). */
+  .tree .tree-node.cascaded > .node-row .node-dual .node-descend,
+  .tree .tree-node.cascaded > .node-row .node-dual .node-check
+  {
+    border-color: transparent;
+    background: var(--aqua-light-opaque-20);
+    color: var(--primary);
+    cursor: default;
+  }
+
+  .tree-node.cascaded > .node-row .node-descend .box svg
+  {
+    fill: var(--primary);
+  }
+
+  /* Controls held by a descendant selector are locked until it is turned off. */
+  .tree .tree-node.cascaded > .node-row .node-check,
+  .tree .tree-node.cascade-on > .node-row .node-check
+  {
+    cursor: default;
+  }
+
+  /* Indeterminate appearance (a descendant is selected) */
+  .tree-node.indeterminate > .node-row .node-check .box
+  {
+    background: var(--bley-600);
+    border-color: var(--bley-600);
+    position: relative;
+  }
+
+  .tree-node.indeterminate > .node-row .node-check .box::before
+  {
+    content: '';
+    position: absolute;
+    width: var(--size-1-5);
+    height: 2px;
+    border-radius: 1px;
+    background: var(--white);
+  }
+
+
+  /* When to reveal the checkbox (toggle the icon out) ------------- */
+
+  /* The selected node always shows its checkbox. */
+  .tree .tree-node.selected > .node-row .node-check,
+  .tree .tree-node.selected > .node-row .node-descend,
+  .tree .tree-node.selected > .node-row .node-dual,
+  /* A parent with a selected descendant shows an indeterminate checkbox. */
+  .tree .tree-node.indeterminate > .node-row .node-check,
+  .tree .tree-node.indeterminate > .node-row .node-descend,
+  .tree .tree-node.indeterminate > .node-row .node-dual,
+  /* Hovering or focusing any row reveals its checkbox. */
+  .tree .tree-node > .node-row:hover .node-check,
+  .tree .tree-node > .node-row:hover .node-descend,
+  .tree .tree-node > .node-row:hover .node-dual,
+  .tree .tree-node > .node-row:focus-visible .node-check,
+  .tree .tree-node > .node-row:focus-visible .node-descend,
+  .tree .tree-node > .node-row:focus-visible .node-dual
+  {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* In multi-select, every node shows its checkbox at all times. */
+  .tree.multi-active .tree-node > .node-row .node-check,
+  .tree.multi-active .tree-node > .node-row .node-descend,
+  .tree.multi-active .tree-node > .node-row .node-dual
+  {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Version A only: the checkbox swaps in where the icon sits. */
+  .tree:not(.check-right).multi-active .tree-node.selected > .node-row .node-icon,
+  .tree:not(.check-right) .tree-node.indeterminate > .node-row .node-icon,
+  .tree:not(.check-right).has-selection .tree-node:not(.selected) > .node-row:hover .node-icon
+  {
+    opacity: 0;
+  }
+
+
+  /* Version B: checkbox lives on the right, before the ⋮ menu ------ */
+
+  .tree.check-right .node-check
+  {
+    position: static;
+    inset: auto;
+    width: var(--size-2-5);
+    height: var(--size-2-5);
+    margin-right: var(--size-0-5);
+    transition: opacity var(--transition);
+    height: 100%;
+  }
+
+
+  /* Label + count + actions -------------------------------- */
+
+  .node-label
+  {
+    font-size: var(--body-size);
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .node-count
+  {
+    font-size: var(--body-2);
+    color: var(--text-disabled);
+  }
+
+  .node-actions
+  {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--size-0-5);
+  }
+
+  .node-menu
+  {
+    min-height: var(--size-3);
+    width: var(--size-3);
+    padding: 0;
+    font-size: 18px;
+    line-height: 1;
+    border-radius: var(--radius-round);
+    background: transparent;
+    color: var(--text-secondary);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  /* The overflow menu only appears while the row is hovered or focused. */
+  .node-row:hover .node-menu,
+  .node-row:focus-visible .node-menu
+  {
+    opacity: 1;
+  }
+
+  .node-menu:hover
+  {
+    background: var(--bley-opaque-10);
+    color: var(--text-primary);
+  }
+
+
+  /* State reference map -------------------------------- */
+
+  .state-section
+  {
+    width: 100%;
+  }
+
+  .state-group-title
+  {
+    font-size: var(--title-6);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-block: var(--size-3) var(--size-1-5);
+  }
+
+  /* Reuse the tree's scoped state styling without the card chrome. */
+  .tree.state-map-tree
+  {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .state-map
+  {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--size-2);
+  }
+
+  .state-card
+  {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-1);
+    padding: var(--size-3);
+    border: 1px solid var(--bley-opaque-10);
+    border-radius: var(--radius-md);
+    background: var(--white);
+  }
+
+  .state-card .tree-node
+  {
+    width: 100%;
+    margin-bottom: var(--size-2);
+  }
+
+  /* Show the checkbox in every reference row regardless of hover. */
+  .state-card .node-check,
+  .state-card .node-descend,
+  .state-card .node-dual
+  {
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  /* The resting (unselected) card keeps its checkbox hidden. */
+  .state-card.resting .node-check,
+  .state-card.resting .node-descend,
+  .state-card.resting .node-dual
+  {
+    opacity: 0;
+  }
+
+  .state-caption
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .state-caption b
+  {
+    font-size: var(--body-2);
+    color: var(--text-primary);
+  }
+
+  .state-caption span
+  {
+    font-size: var(--body-2);
+    color: var(--text-disabled);
+  }
+
+</style>
+
+</head>
+
+
+<body>
+
+  <div class="intro content">
+    <h1>TreeView with MultiSelect V2</h1>
+    <p>Click a node to select it (single select). Once one node is selected, hover any
+      other node to reveal a checkbox and add it to a multi-selection. Both selected
+      nodes then show a checked box. Remove nodes until one remains and it drops its
+      checkbox, staying in the single selected state.</p>
+    <p>Parent nodes also have a second control, the descendant selector. Turning it on
+      selects the parent and every descendant (shown with rounded checks); the control becomes a rounded pill labelled "All" in place of the checkbox. Turning it off
+      restores whatever multi-selection was underneath.</p>
+  </div>
+
+  <div class="tree-demo">
+
+    <div class="selection-bar">
+      <span class="count-pill">0</span>
+      <span class="sel-label">No nodes selected</span>
+    </div>
+
+    <div class="tree check-right" id="tree">
+    <ul>
+
+          <li class="tree-node collapsed" data-id="finance">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead">
+                <span class="node-icon navy">%%ICON_FINANCE%%</span>
+                <span class="node-check">%%CHECK%%</span>
+              </span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><button class="node-menu">⋮</button></span>
+            </div>
+
+            <ul class="node-children">
+              <li class="tree-node leaf" data-id="contractors">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon grape">%%ICON_HOME%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Contractors</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+
+              <li class="tree-node leaf" data-id="employees">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon grape">%%ICON_HOME%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Employees</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+
+              <li class="tree-node collapsed" data-id="hr">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon grape">%%ICON_GROUP%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">HR</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+                <ul class="node-children">
+                  <li class="tree-node leaf" data-id="hr-recruitment">
+                    <div class="node-row">
+                      <span class="node-caret">%%CARET%%</span>
+                      <span class="node-lead">
+                        <span class="node-icon grape">%%ICON_GROUP%%</span>
+                        <span class="node-check">%%CHECK%%</span>
+                      </span>
+                      <span class="node-label">Recruitment</span>
+                      <span class="node-count">(0)</span>
+                      <span class="node-actions"><button class="node-menu">⋮</button></span>
+                    </div>
+                  </li>
+                  <li class="tree-node leaf" data-id="hr-onboarding">
+                    <div class="node-row">
+                      <span class="node-caret">%%CARET%%</span>
+                      <span class="node-lead">
+                        <span class="node-icon grape">%%ICON_HOME%%</span>
+                        <span class="node-check">%%CHECK%%</span>
+                      </span>
+                      <span class="node-label">Onboarding</span>
+                      <span class="node-count">(0)</span>
+                      <span class="node-actions"><button class="node-menu">⋮</button></span>
+                    </div>
+                  </li>
+                  <li class="tree-node collapsed" data-id="hr-payroll">
+                    <div class="node-row">
+                      <span class="node-caret">%%CARET%%</span>
+                      <span class="node-lead">
+                        <span class="node-icon grape">%%ICON_FINANCE%%</span>
+                        <span class="node-check">%%CHECK%%</span>
+                      </span>
+                      <span class="node-label">Payroll</span>
+                      <span class="node-count">(0)</span>
+                      <span class="node-actions"><button class="node-menu">⋮</button></span>
+                    </div>
+                    <ul class="node-children">
+                      <li class="tree-node leaf" data-id="payroll-timesheets">
+                        <div class="node-row">
+                          <span class="node-caret">%%CARET%%</span>
+                          <span class="node-lead">
+                            <span class="node-icon grape">%%ICON_LIST%%</span>
+                            <span class="node-check">%%CHECK%%</span>
+                          </span>
+                          <span class="node-label">Timesheets</span>
+                          <span class="node-count">(0)</span>
+                          <span class="node-actions"><button class="node-menu">⋮</button></span>
+                        </div>
+                      </li>
+                      <li class="tree-node leaf" data-id="payroll-tax">
+                        <div class="node-row">
+                          <span class="node-caret">%%CARET%%</span>
+                          <span class="node-lead">
+                            <span class="node-icon grape">%%ICON_FINANCE%%</span>
+                            <span class="node-check">%%CHECK%%</span>
+                          </span>
+                          <span class="node-label">Tax &amp; Deductions</span>
+                          <span class="node-count">(0)</span>
+                          <span class="node-actions"><button class="node-menu">⋮</button></span>
+                        </div>
+                      </li>
+                      <li class="tree-node leaf" data-id="payroll-superannuation">
+                        <div class="node-row">
+                          <span class="node-caret">%%CARET%%</span>
+                          <span class="node-lead">
+                            <span class="node-icon grape">%%ICON_BADGE%%</span>
+                            <span class="node-check">%%CHECK%%</span>
+                          </span>
+                          <span class="node-label">Superannuation</span>
+                          <span class="node-count">(0)</span>
+                          <span class="node-actions"><button class="node-menu">⋮</button></span>
+                        </div>
+                      </li>
+                      <li class="tree-node leaf" data-id="payroll-payslips">
+                        <div class="node-row">
+                          <span class="node-caret">%%CARET%%</span>
+                          <span class="node-lead">
+                            <span class="node-icon grape">%%ICON_GRID%%</span>
+                            <span class="node-check">%%CHECK%%</span>
+                          </span>
+                          <span class="node-label">Payslips</span>
+                          <span class="node-count">(0)</span>
+                          <span class="node-actions"><button class="node-menu">⋮</button></span>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="tree-node leaf" data-id="hr-benefits">
+                    <div class="node-row">
+                      <span class="node-caret">%%CARET%%</span>
+                      <span class="node-lead">
+                        <span class="node-icon grape">%%ICON_HELP%%</span>
+                        <span class="node-check">%%CHECK%%</span>
+                      </span>
+                      <span class="node-label">Benefits</span>
+                      <span class="node-count">(0)</span>
+                      <span class="node-actions"><button class="node-menu">⋮</button></span>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="tree-node leaf" data-id="marketing">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon grape">%%ICON_SIGNAL%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Marketing</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+
+              <li class="tree-node leaf" data-id="record-keeping">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon grape">%%ICON_SIGNAL%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Record Keeping</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+
+              <li class="tree-node leaf" data-id="services">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon grape">%%ICON_HELP%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Services</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <li class="tree-node leaf" data-id="content-type">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead">
+                <span class="node-icon grape">%%ICON_GRID%%</span>
+                <span class="node-check">%%CHECK%%</span>
+              </span>
+              <span class="node-label">Content Type</span>
+              <span class="node-count">(0 total)</span>
+              <span class="node-actions"><button class="node-menu">⋮</button></span>
+            </div>
+          </li>
+
+          <li class="tree-node collapsed" data-id="government-function">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead">
+                <span class="node-icon navy">%%ICON_LIST%%</span>
+                <span class="node-check">%%CHECK%%</span>
+              </span>
+              <span class="node-label">Government Function</span>
+              <span class="node-count">(0 total)</span>
+              <span class="node-actions"><button class="node-menu">⋮</button></span>
+            </div>
+            <ul class="node-children">
+              <li class="tree-node leaf" data-id="gov-licensing">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon navy">%%ICON_LIST%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Licensing</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+              <li class="tree-node leaf" data-id="gov-compliance">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon navy">%%ICON_LIST%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Compliance</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <li class="tree-node leaf" data-id="pii">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead">
+                <span class="node-icon grape">%%ICON_FINGER%%</span>
+                <span class="node-check">%%CHECK%%</span>
+              </span>
+              <span class="node-label">PII</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><button class="node-menu">⋮</button></span>
+            </div>
+          </li>
+
+          <li class="tree-node collapsed" data-id="positions">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead">
+                <span class="node-icon aqua">%%ICON_BADGE%%</span>
+                <span class="node-check">%%CHECK%%</span>
+              </span>
+              <span class="node-label">Positions</span>
+              <span class="node-count">(0 total)</span>
+              <span class="node-actions"><button class="node-menu">⋮</button></span>
+            </div>
+            <ul class="node-children">
+              <li class="tree-node leaf" data-id="pos-manager">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon aqua">%%ICON_BADGE%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Manager</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+              <li class="tree-node leaf" data-id="pos-analyst">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon aqua">%%ICON_BADGE%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Analyst</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <li class="tree-node collapsed" data-id="rot">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead">
+                <span class="node-icon navy">%%ICON_BIN%%</span>
+                <span class="node-check">%%CHECK%%</span>
+              </span>
+              <span class="node-label">ROT</span>
+              <span class="node-count">(0 total)</span>
+              <span class="node-actions"><button class="node-menu">⋮</button></span>
+            </div>
+            <ul class="node-children">
+              <li class="tree-node leaf" data-id="rot-redundant">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon navy">%%ICON_BIN%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Redundant</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+              <li class="tree-node leaf" data-id="rot-obsolete">
+                <div class="node-row">
+                  <span class="node-caret">%%CARET%%</span>
+                  <span class="node-lead">
+                    <span class="node-icon navy">%%ICON_BIN%%</span>
+                    <span class="node-check">%%CHECK%%</span>
+                  </span>
+                  <span class="node-label">Obsolete</span>
+                  <span class="node-count">(0)</span>
+                  <span class="node-actions"><button class="node-menu">⋮</button></span>
+                </div>
+              </li>
+            </ul>
+          </li>
+
+    </ul>
+    </div>
+  </div>
+
+
+  <div class="state-section content">
+    
+    <h2><br><br><br>Selection state reference</h2>
+    <p>A static map of every checkbox / selection state for the development team. These rows
+      are illustrative only (non-interactive).</p>
+
+    <div class="tree check-right state-map-tree static">
+
+      <p class="state-group-title">Single node (leaf)</p>
+      <div class="state-map">
+
+        <div class="state-card resting">
+          <div class="tree-node leaf">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_HOME%%</span></span>
+              <span class="node-label">Employees</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-check">%%CHECK%%</span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>1 · Unselected</b><span>Resting state; checkbox hidden.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node leaf selected">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_HOME%%</span></span>
+              <span class="node-label">Employees</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-check">%%CHECK%%</span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>2 · Single-selected</b><span>Row highlighted; empty checkbox shown.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node leaf selected checked">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_HOME%%</span></span>
+              <span class="node-label">Employees</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-check">%%CHECK%%</span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>3 · Selected + checked</b><span>Node is checked.</span></span>
+        </div>
+
+      </div>
+
+      <p class="state-group-title">Parent node</p>
+      <div class="state-map">
+
+        <div class="state-card resting">
+          <div class="tree-node">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>1 · Unselected</b><span>Resting state; checkbox hidden.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node selected">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>2 · Single-selected</b><span>Row highlighted; empty checkbox shown.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node selected checked">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>3 · Selected + checked</b><span>Parent only is checked.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node indeterminate">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>Indeterminate</b><span>A descendant is selected; parent is not.</span></span>
+        </div>
+
+      </div>
+
+      <p class="state-group-title">Descendant selector (parent nodes only)</p>
+      <div class="state-map">
+
+        <div class="state-card">
+          <div class="tree-node selected checked">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>Off</b><span>Left-hand control; independent of the parent's own checkbox.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node selected checked cascade-on">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon navy">%%ICON_FINANCE%%</span></span>
+              <span class="node-label">Finance</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>On</b><span>Parent and every descendant selected. The control keeps its width and becomes a primary pill: the checkbox is replaced by an "All" label. Turning it off brings the checkbox back and restores the prior multi-selection.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node leaf selected checked cascaded">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_HOME%%</span></span>
+              <span class="node-label">Employees</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-check">%%CHECK%%</span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>Descendant (covered)</b><span>Rounded light bley check with no border and a primary tick, no row highlight: selected by an ancestor's descendant selector; locked until it is turned off.</span></span>
+        </div>
+
+        <div class="state-card">
+          <div class="tree-node selected checked cascaded">
+            <div class="node-row">
+              <span class="node-caret">%%CARET%%</span>
+              <span class="node-lead"><span class="node-icon grape">%%ICON_GROUP%%</span></span>
+              <span class="node-label">HR</span>
+              <span class="node-count">(0)</span>
+              <span class="node-actions"><span class="node-dual"><span class="node-descend">%%DESCEND%%</span><span class="node-check">%%CHECK%%</span></span></span>
+            </div>
+          </div>
+          <span class="state-caption"><b>Nested parent (covered)</b><span>Its control becomes the same "All" pill in the lighter held style, locked, while an ancestor's selector is on.</span></span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+<script>
+
+  // ---- Inline SVG assets injected into placeholders --------------------
+  const SVG = {
+    CARET: '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 15.5a.75.75 0 0 1-.53-1.28L11.19 10 6.97 5.78A.75.75 0 1 1 8.03 4.72l4.75 4.75a.75.75 0 0 1 0 1.06l-4.75 4.75a.75.75 0 0 1-.53.22Z" transform="rotate(90 10 10)"/></svg>',
+    CHECK: '<span class="box"><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8.25 13.5a.75.75 0 0 1-.53-.22l-3-3a.75.75 0 1 1 1.06-1.06l2.47 2.47 5.47-5.47a.75.75 0 1 1 1.06 1.06l-6 6a.75.75 0 0 1-.53.22Z"/></svg></span>',
+    ICON_STACK:  '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Zm4 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-8Z"/></svg>',
+    ICON_FINANCE:'<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h8v2h-3.1c.4.6.7 1.2.9 2H16v2h-2.2c-.4 2.3-2.4 4-4.8 4h-.3l4.6 4H10l-4-3.5V18h2c1.3 0 2.4-.8 2.8-2H8v-2h2.8c-.4-1.2-1.5-2-2.8-2H8V6Z"/></svg>',
+    ICON_HOME:   '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4 4 10v9a1 1 0 0 0 1 1h4v-5h6v5h4a1 1 0 0 0 1-1v-9l-8-6Z"/></svg>',
+    ICON_GROUP:  '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-8 2c-2.7 0-6 1.3-6 4v2h8v-2c0-1 .4-1.9 1.1-2.6C10.3 13.3 9 13 8 13Zm8 0c-.4 0-.9 0-1.4.1 1.1.9 1.4 2 1.4 2.9v2h6v-2c0-2.7-3.3-4-6-4Z"/></svg>',
+    ICON_SIGNAL: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-4.2-2.2a6 6 0 0 0 0 8.4l1.4-1.4a4 4 0 0 1 0-5.6L7.8 7.8Zm8.4 0-1.4 1.4a4 4 0 0 1 0 5.6l1.4 1.4a6 6 0 0 0 0-8.4Z"/></svg>',
+    ICON_HELP:   '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm.9 11.5h-1.8v-1.8h1.8v1.8Zm1.6-5c-.3.5-.8.9-1.2 1.2-.4.3-.5.5-.5.9v.4h-1.6v-.6c0-.8.3-1.3.9-1.8.4-.3.7-.6.7-1 0-.5-.4-.9-1-.9s-1 .4-1 1H9.3C9.3 8 10.5 7 12 7s2.6 1 2.6 2.3c0 .4-.1.8-.4 1.2Z"/></svg>',
+    ICON_GRID:   '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5h5v5H5V5Zm9 0h5v5h-5V5ZM5 14h5v5H5v-5Zm9 0h5v5h-5v-5Z"/></svg>',
+    ICON_LIST:   '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 6h11v2H9V6Zm0 5h11v2H9v-2Zm0 5h11v2H9v-2ZM4 6h3v2H4V6Zm0 5h3v2H4v-2Zm0 5h3v2H4v-2Z"/></svg>',
+    ICON_FINGER: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4a8 8 0 0 0-8 8v6h2v-6a6 6 0 0 1 12 0v6h2v-6a8 8 0 0 0-8-8Zm0 4a4 4 0 0 0-4 4v6h2v-6a2 2 0 0 1 4 0v6h2v-6a4 4 0 0 0-4-4Z"/></svg>',
+    ICON_BADGE:  '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m12 3 2.3 1.7 2.8-.3 1 2.6 2.4 1.5-.9 2.7.9 2.7-2.4 1.5-1 2.6-2.8-.3L12 21l-2.3-1.7-2.8.3-1-2.6-2.4-1.5.9-2.7-.9-2.7 2.4-1.5 1-2.6 2.8.3L12 3Zm-1 11.5 5-5-1.4-1.4L11 11.7 9.4 10 8 11.4l3 3.1Z"/></svg>',
+    ICON_BIN:    '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 4h6l1 2h4v2H4V6h4l1-2ZM6 9h12l-1 11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 9Z"/></svg>'
+  };
+
+  // Descendant selector: a box holding the custom all-children icon.
+  SVG.DESCEND = '<span class="box"><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12.6465C16.7761 12.6465 17 12.8704 17 13.1465C17 13.4226 16.7761 13.6465 16.5 13.6465H9.5C9.22388 13.6465 9.00003 13.4226 9 13.1465C9 12.8703 9.22386 12.6465 9.5 12.6465H16.5ZM11.5 5.14648C11.6953 4.95122 12.0118 4.95122 12.207 5.14648C12.4023 5.34175 12.4023 5.65826 12.207 5.85352L6.5 11.5C6.30474 11.6953 5.98725 11.6953 5.79199 11.5L3.14648 8.85352C2.95123 8.65826 2.95124 8.34175 3.14648 8.14648C3.34175 7.95122 3.65825 7.95122 3.85352 8.14648L6.14648 10.4395L11.5 5.14648ZM16.5 8.64648C16.7761 8.64651 17 8.87036 17 9.14648C17 9.42259 16.7761 9.64646 16.5 9.64648H12.5C12.2239 9.64648 12 9.4226 12 9.14648C12 8.87034 12.2239 8.64648 12.5 8.64648H16.5Z"/></svg></span>';
+
+  // Inject SVG markup into placeholders.
+  document.querySelectorAll('.node-caret, .node-check, .node-descend, .node-icon').forEach(el => {
+    const raw = el.textContent.trim();
+    const key = raw.replace(/%/g, '');
+    if (SVG[key]) el.innerHTML = SVG[key];
+  });
+
+
+  // ---- Move each checkbox into the actions area (right of the row) -----
+  // The checkbox reveals on the right-hand side, just before the ⋮ menu.
+  // Parent nodes also get the descendant selector, joined to the checkbox as a split control.
+  document.querySelectorAll('#tree .tree-node > .node-row').forEach(row => {
+    const check = row.querySelector(':scope > .node-lead > .node-check');
+    const actions = row.querySelector(':scope > .node-actions');
+    const menu = actions.querySelector('.node-menu');
+    actions.insertBefore(check, menu);
+
+    if (!row.parentElement.classList.contains('leaf')) {
+      const descend = document.createElement('span');
+      descend.className = 'node-descend';
+      descend.setAttribute('role', 'checkbox');
+      descend.setAttribute('aria-label', 'Select all descendant child classes');
+      descend.innerHTML = SVG.DESCEND;
+      const dual = document.createElement('span');
+      dual.className = 'node-dual';
+      actions.insertBefore(dual, check);
+      dual.append(descend, check);
+    }
+  });
+
+
+  // ---- Descendant selector tooltip ------------------------------------
+  // One shared tooltip, shown above whichever selector is hovered. It lives on <body>
+  // so the split control's overflow clipping can't cut it off.
+  const descendTip = document.createElement('div');
+  descendTip.className = 'tooltip top descend-tip';
+  descendTip.setAttribute('role', 'tooltip');
+  descendTip.textContent = 'Select all descendant child classes';
+  document.body.append(descendTip);
+
+  const hideDescendTip = () => descendTip.classList.remove('show');
+
+  document.querySelectorAll('#tree .node-descend').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      // A selector held by an ancestor's selector is locked, so it gets no prompt.
+      if (el.getAttribute('aria-disabled') === 'true') return;
+      const r = el.getBoundingClientRect();
+      descendTip.style.left = `${r.left + r.width / 2}px`;
+      descendTip.style.top = `${r.top}px`;
+      descendTip.classList.add('show');
+    });
+    el.addEventListener('mouseleave', hideDescendTip);
+  });
+  window.addEventListener('scroll', hideDescendTip, true);
+
+
+  // ---- Selection behaviour (per tree) ----------------------------------
+  function initTree(tree) {
+    const section = tree.closest('.tree-demo');
+    const selCount = section.querySelector('.count-pill');
+    const selLabel = section.querySelector('.sel-label');
+
+    // Selection is two layers:
+    //   picked   – nodes chosen directly (row click or regular checkbox).
+    //   cascades – parents whose descendant selector is on.
+    // A node is selected if it is picked, is a cascade parent, or sits under one.
+    // Turning a cascade off only removes that layer, so the picked state underneath returns.
+    const picked = new Set();
+    const cascades = new Set();
+    // Multi-select mode is entered via a checkbox and exited when nothing is selected.
+    let multiMode = false;
+
+    const selectedNodes = () => Array.from(tree.querySelectorAll('.tree-node.selected'));
+    // Nearest ancestor whose descendant selector is on (null if none).
+    const coveringCascade = (node) => {
+      let p = node.parentElement.closest('.tree-node');
+      while (p) {
+        if (cascades.has(p)) return p;
+        p = p.parentElement.closest('.tree-node');
+      }
+      return null;
+    };
+
+    function refresh() {
+      const nodes = Array.from(tree.querySelectorAll('.tree-node'));
+
+      // Resolve the effective selection first so the parent states below can read it.
+      nodes.forEach(n => {
+        const covered = !!coveringCascade(n);
+        n.classList.toggle('selected', picked.has(n) || cascades.has(n) || covered);
+        n.classList.toggle('cascaded', covered);
+        n.classList.toggle('cascade-on', cascades.has(n));
+      });
+
+      const selected = selectedNodes();
+      const count = selected.length;
+
+      // has-selection drives the hover-to-reveal checkbox on other nodes.
+      tree.classList.toggle('has-selection', count >= 1);
+      // multi-active drives the persistent checked boxes.
+      tree.classList.toggle('multi-active', multiMode);
+
+      // Checked / parent states only apply while multi-select is active.
+      nodes.forEach(n => {
+        const selectedHere = n.classList.contains('selected');
+        const hasSelectedChild = !!n.querySelector('.tree-node.selected');
+        n.classList.toggle('checked', multiMode && selectedHere);
+        // A parent (not selected) with any children selected shows the dash.
+        n.classList.toggle('indeterminate', multiMode && !selectedHere && hasSelectedChild);
+        n.querySelector(':scope > .node-row').setAttribute('aria-selected', String(selectedHere));
+        const descend = n.querySelector(':scope > .node-row .node-descend');
+        if (descend) {
+          // A covered parent's selector reads as on (everything beneath is held) but is locked.
+          descend.setAttribute('aria-checked', String(cascades.has(n) || n.classList.contains('cascaded')));
+          descend.setAttribute('aria-disabled', String(n.classList.contains('cascaded')));
+        }
+      });
+
+      // Summary bar.
+      selCount.textContent = count;
+      if (count === 0) selLabel.textContent = 'No nodes selected';
+      else selLabel.textContent = selected.map(n => n.querySelector('.node-label').textContent).join(', ');
+    }
+
+    function singleSelect(node) {
+      picked.clear();
+      cascades.clear();
+      picked.add(node);
+      multiMode = false;
+      refresh();
+    }
+
+    // Start a fresh multi-selection (used by the first checkbox / descendant click).
+    function enterMultiMode() {
+      multiMode = true;
+      picked.clear();
+      cascades.clear();
+    }
+
+    // Exit multi-select only when nothing is selected; the last node stays checked.
+    function settle() {
+      refresh();
+      if (multiMode && selectedNodes().length === 0) {
+        multiMode = false;
+        refresh();
+      }
+    }
+
+    // Checkbox click: starts multi-select, or toggles this node only while active.
+    // Nodes held by a descendant selector (the parent itself or anything beneath it)
+    // are locked until that selector is turned off.
+    function checkboxToggle(node) {
+      if (!multiMode) {
+        enterMultiMode();
+        picked.add(node);
+      } else if (cascades.has(node) || coveringCascade(node)) {
+        return;
+      } else if (picked.has(node)) {
+        picked.delete(node);
+      } else {
+        picked.add(node);
+      }
+      settle();
+    }
+
+    // Descendant selector click (parents only): on selects the parent and every
+    // descendant; off restores the picked state underneath.
+    function descendantToggle(node) {
+      if (coveringCascade(node)) return;
+      if (!multiMode) enterMultiMode();
+      if (cascades.has(node)) cascades.delete(node);
+      else cascades.add(node);
+      settle();
+    }
+
+    // ---- Accessibility + keyboard roving focus -----------------------
+    tree.setAttribute('role', 'tree');
+    tree.setAttribute('aria-multiselectable', 'true');
+
+    const allRows = () => Array.from(tree.querySelectorAll('.node-row'));
+
+    // A row is visible when none of its ancestor nodes are collapsed.
+    const isVisible = (node) => {
+      let p = node.parentElement.closest('.tree-node');
+      while (p) {
+        if (p.classList.contains('collapsed')) return false;
+        p = p.parentElement.closest('.tree-node');
+      }
+      return true;
+    };
+
+    const visibleRows = () => allRows().filter(r => isVisible(r.closest('.tree-node')));
+
+    function setRovingTarget(row) {
+      allRows().forEach(r => r.setAttribute('tabindex', '-1'));
+      if (row) row.setAttribute('tabindex', '0');
+    }
+
+    function focusRow(row) {
+      if (!row) return;
+      setRovingTarget(row);
+      row.focus();
+    }
+
+    function setExpanded(node, open) {
+      if (node.classList.contains('leaf')) return;
+      node.classList.toggle('collapsed', !open);
+      node.querySelector(':scope > .node-row').setAttribute('aria-expanded', String(open));
+    }
+
+    allRows().forEach(row => {
+      const node = row.closest('.tree-node');
+      row.setAttribute('role', 'treeitem');
+      row.setAttribute('tabindex', '-1');
+      if (!node.classList.contains('leaf'))
+        row.setAttribute('aria-expanded', String(!node.classList.contains('collapsed')));
+    });
+    setRovingTarget(visibleRows()[0]);
+
+    tree.addEventListener('keydown', (e) => {
+      const row = e.target.closest('.node-row');
+      if (!row) return;
+      const node = row.closest('.tree-node');
+      const vis = visibleRows();
+      const i = vis.indexOf(row);
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          focusRow(vis[Math.min(i + 1, vis.length - 1)]);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          focusRow(vis[Math.max(i - 1, 0)]);
+          break;
+        case 'Home':
+          e.preventDefault();
+          focusRow(vis[0]);
+          break;
+        case 'End':
+          e.preventDefault();
+          focusRow(vis[vis.length - 1]);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          if (node.classList.contains('leaf')) break;
+          if (node.classList.contains('collapsed')) setExpanded(node, true);
+          else focusRow(node.querySelector(':scope > .node-children > .tree-node > .node-row'));
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          if (!node.classList.contains('leaf') && !node.classList.contains('collapsed')) {
+            setExpanded(node, false);
+          } else {
+            const parent = node.parentElement.closest('.tree-node');
+            if (parent) focusRow(parent.querySelector(':scope > .node-row'));
+          }
+          break;
+        case 'Enter':
+          e.preventDefault();
+          singleSelect(node);
+          break;
+        case ' ':
+        case 'Spacebar':
+          e.preventDefault();
+          // Shift+Space drives the descendant selector on parent nodes.
+          if (e.shiftKey && !node.classList.contains('leaf')) descendantToggle(node);
+          else checkboxToggle(node);
+          break;
+      }
+    });
+
+    tree.addEventListener('click', (e) => {
+      // Expand / collapse via caret.
+      const caret = e.target.closest('.node-caret');
+      if (caret) {
+        const node = caret.closest('.tree-node');
+        if (!node.classList.contains('leaf')) setExpanded(node, node.classList.contains('collapsed'));
+        return;
+      }
+
+      // Menu button is inert in this prototype.
+      if (e.target.closest('.node-menu')) return;
+
+      const node = e.target.closest('.tree-node');
+      if (!node) return;
+      focusRow(node.querySelector(':scope > .node-row'));
+
+      // Clicking the descendant selector toggles the parent + all descendants.
+      if (e.target.closest('.node-descend')) {
+        descendantToggle(node);
+        return;
+      }
+
+      // Clicking the checkbox starts multi-select or toggles membership.
+      if (e.target.closest('.node-check')) {
+        checkboxToggle(node);
+        return;
+      }
+
+      // Clicking anywhere else on the row = single select.
+      singleSelect(node);
+    });
+
+    refresh();
+  }
+
+  document.querySelectorAll('.tree:not(.static)').forEach(initTree);
+
+</script>
+
+</body>
+</html>
